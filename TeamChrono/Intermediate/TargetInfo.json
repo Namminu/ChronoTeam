@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "TeamChrono",
+			"Path": "..\\Source\\TeamChrono.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "TeamChronoEditor",
+			"Path": "..\\Source\\TeamChronoEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

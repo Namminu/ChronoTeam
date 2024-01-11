@@ -1,0 +1,17 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-TeamChrono.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\TeamChronoEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.obj"
+"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\UnrealEditor\Development\TeamChrono\TeamChrono.init.gen.cpp.obj"
+"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\UnrealEditor\Development\TeamChrono\TeamChronoCharacter.gen.cpp.obj"
+"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\UnrealEditor\Development\TeamChrono\TeamChronoGameMode.gen.cpp.obj"
+"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\UnrealEditor\Development\TeamChrono\TeamChrono.cpp.obj"
+"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\UnrealEditor\Development\TeamChrono\TeamChronoCharacter.cpp.obj"
+"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\UnrealEditor\Development\TeamChrono\TeamChronoGameMode.cpp.obj"
+"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\UnrealEditor\Development\TeamChrono\Default.rc2.res"
+/OUT:"C:\Users\Y\Documents\Unreal Projects\TeamChrono\Intermediate\Build\Win64\x64\UnrealEditor\Development\TeamChrono\UnrealEditor-TeamChrono.lib"
