@@ -27,7 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{179A5609-1ABF-3AE8-AACF-009F017DFEB2}</ProjectGuid>
+    <ProjectGuid>{ECB7FF76-A897-35DF-BA62-24A176728C4D}</ProjectGuid>
     <RootNamespace>TeamChrono</RootNamespace>
   </PropertyGroup>
   <Import Project="UECommon.props" />

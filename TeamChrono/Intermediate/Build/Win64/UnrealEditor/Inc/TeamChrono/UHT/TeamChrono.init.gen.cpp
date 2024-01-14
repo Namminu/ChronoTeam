@@ -17,7 +17,7 @@ void EmptyLinkFunctionForGeneratedCodeTeamChrono_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0xDB45A802,
+				0x263E18D6,
 				0x015AF547,
 				METADATA_PARAMS(0, nullptr)
 			};
@@ -25,5 +25,5 @@ void EmptyLinkFunctionForGeneratedCodeTeamChrono_init() {}
 		}
 		return Z_Registration_Info_UPackage__Script_TeamChrono.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_TeamChrono(Z_Construct_UPackage__Script_TeamChrono, TEXT("/Script/TeamChrono"), Z_Registration_Info_UPackage__Script_TeamChrono, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xDB45A802, 0x015AF547));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_TeamChrono(Z_Construct_UPackage__Script_TeamChrono, TEXT("/Script/TeamChrono"), Z_Registration_Info_UPackage__Script_TeamChrono, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x263E18D6, 0x015AF547));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
