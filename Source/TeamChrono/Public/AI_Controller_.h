@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "AI_Controller_.generated.h"
 
 /**
@@ -14,4 +15,17 @@ class TEAMCHRONO_API AAI_Controller_ : public AAIController
 {
 	GENERATED_BODY()
 	
+public:
+	explicit AAI_Controller_(FObjectInitializer const& ObjectInitializer);
+
+protected:
+	virtual void OnPossess(APawn* InPawn) override;
+
+private:
+	class UAISenseConfig_Sight* SightConfig;
+
+	void SetupPerceptionSystem();
+
+	UFUNCTION()
+	void OnTargetDetected(AActor* actor, FAIStimulus const stimulus);
 };

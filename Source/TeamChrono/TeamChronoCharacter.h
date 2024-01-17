@@ -44,6 +44,10 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	class UAIPerceptionStimuliSourceComponent* StimulusSource;
+	
+	void SetupStimulusSource();
+
 public:
 	ATeamChronoCharacter();
 	
