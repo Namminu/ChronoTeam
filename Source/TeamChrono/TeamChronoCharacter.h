@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Animation/AnimMontage.h"
 #include "TeamChronoCharacter.generated.h"
 
 class USpringArmComponent;
@@ -44,9 +45,20 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Attack Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AttackAction;
+
+	// 남민우 - 애니메이션 몽타주 추가를 위한 변수 생성 -> #include "Animation/AnimMontage.h" 헤더 추가
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* Montage;
+
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;
 	
 	void SetupStimulusSource();
+	
+	//공격 애니메이션 호출 위한 함수
+	void OnAttack();
 
 public:
 	ATeamChronoCharacter();

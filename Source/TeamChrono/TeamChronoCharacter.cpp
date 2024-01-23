@@ -101,6 +101,9 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Look);
+
+		//Attacking
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::OnAttack);
 	}
 	else
 	{
@@ -141,5 +144,13 @@ void ATeamChronoCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void ATeamChronoCharacter::OnAttack()
+{
+	if (Montage)
+	{
+		PlayAnimMontage(Montage);
 	}
 }
