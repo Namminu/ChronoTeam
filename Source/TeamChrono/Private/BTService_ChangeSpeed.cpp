@@ -9,7 +9,7 @@
 UBTService_ChangeSpeed::UBTService_ChangeSpeed()
 {
 	bNotifyBecomeRelevant = true;
-	NodeName = TEXT("Chane Speed");
+	NodeName = TEXT("Change Speed");
 }
 
 void UBTService_ChangeSpeed::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -20,6 +20,7 @@ void UBTService_ChangeSpeed::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp,
 		if (auto* const Monster = Cast<ABaseMonster>(Cont->GetPawn()))
 		{
 			Monster->GetCharacterMovement()->MaxWalkSpeed = chaseSpeed;
+			//Monster->GetCharacterMovement()->MaxWalkSpeed = chaseSpeed * Monster->GetMonSpeed();
 		}
 	}
 }

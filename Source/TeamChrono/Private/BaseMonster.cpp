@@ -37,3 +37,17 @@ UBehaviorTree* ABaseMonster::GetBehaviorTree() const
 	return BTree;
 }
 
+UAnimMontage* ABaseMonster::GetMontage() const
+{
+	return Montage;
+}
+
+int ABaseMonster::MeleeAttack_Implementation()
+{
+	if (Montage)
+	{
+		PlayAnimMontage(Montage);
+	}
+	return 0;
+}
+
