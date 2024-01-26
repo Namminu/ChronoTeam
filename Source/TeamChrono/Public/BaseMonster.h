@@ -26,20 +26,31 @@ public:
 
 	UBehaviorTree* GetBehaviorTree() const;
 
-	UAnimMontage* GetMontage() const;
+	UAnimMontage* GetAtkMontage() const;
 
 	int MeleeAttack_Implementation() override;
+
+	int Creating_Implementation() override;
+
+	int Shouting_Implementation() override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 private:
+	//비헤이비어 트리
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* BTree;
-
+	//공격 애니메이션 몽타주
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta =(AllowPrivateAccess = "true"))
-	UAnimMontage* Montage;
+	UAnimMontage* AtkMontage;
+	//생성 애니메이션 몽타주
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* CreateMontage;
+	//포효 애니메이션 몽타주
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* ShoutingMontage;
 
 	//몬스터 최대 체력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
@@ -62,4 +73,5 @@ public:
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonAtk() const { return monAtk; }
+
 };

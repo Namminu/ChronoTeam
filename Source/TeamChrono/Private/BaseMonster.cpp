@@ -32,22 +32,40 @@ void ABaseMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
-UBehaviorTree* ABaseMonster::GetBehaviorTree() const
-{
-	return BTree;
-}
-
-UAnimMontage* ABaseMonster::GetMontage() const
-{
-	return Montage;
-}
-
 int ABaseMonster::MeleeAttack_Implementation()
 {
-	if (Montage)
+	if (AtkMontage)
 	{
-		PlayAnimMontage(Montage);
+		PlayAnimMontage(AtkMontage);
 	}
 	return 0;
+}
+
+int ABaseMonster::Creating_Implementation()
+{
+	if (CreateMontage)
+	{
+		PlayAnimMontage(CreateMontage);
+	}
+	return 0;
+}
+
+int ABaseMonster::Shouting_Implementation()
+{
+	if (ShoutingMontage)
+	{
+		PlayAnimMontage(ShoutingMontage);
+	}
+	return 0;
+}
+
+UAnimMontage* ABaseMonster::GetAtkMontage() const
+{ 
+	return AtkMontage; 
+}
+
+UBehaviorTree* ABaseMonster::GetBehaviorTree() const
+{ 
+	return BTree;
 }
 
