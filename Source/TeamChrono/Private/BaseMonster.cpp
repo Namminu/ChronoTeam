@@ -15,7 +15,13 @@ ABaseMonster::ABaseMonster()
 void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//시작 시 애니메이션 재생
+	Creating();	//일어서는 애니메이션
+	if (MontageHasFinished())	//Creating 이 종료된 경우
+	{
+		Shouting();	//포효 애니메이션 재생
+	}
 }
 
 // Called every frame
@@ -69,3 +75,12 @@ UBehaviorTree* ABaseMonster::GetBehaviorTree() const
 	return BTree;
 }
 
+bool ABaseMonster::MontageHasFinished()
+{
+	return GetMesh()->GetAnimInstance()->Montage_GetIsStopped(GetCreateMontage());
+}
+
+UAnimMontage* ABaseMonster::GetCreateMontage() const
+{
+	return CreateMontage;
+}

@@ -26,7 +26,11 @@ public:
 
 	UBehaviorTree* GetBehaviorTree() const;
 
+	bool MontageHasFinished();
+
 	UAnimMontage* GetAtkMontage() const;
+
+	UAnimMontage* GetCreateMontage() const;
 
 	int MeleeAttack_Implementation() override;
 
