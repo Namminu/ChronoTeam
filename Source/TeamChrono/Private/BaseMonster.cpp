@@ -9,6 +9,7 @@ ABaseMonster::ABaseMonster()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	
 }
 
 // Called when the game starts or when spawned
@@ -17,11 +18,7 @@ void ABaseMonster::BeginPlay()
 	Super::BeginPlay();
 
 	//시작 시 애니메이션 재생
-	Creating();	//일어서는 애니메이션
-	if (MontageHasFinished())	//Creating 이 종료된 경우
-	{
-		Shouting();	//포효 애니메이션 재생
-	}
+	PlayAnimMontage(CreateMontage);
 }
 
 // Called every frame
@@ -47,24 +44,6 @@ int ABaseMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
-int ABaseMonster::Creating_Implementation()
-{
-	if (CreateMontage)
-	{
-		PlayAnimMontage(CreateMontage);
-	}
-	return 0;
-}
-
-int ABaseMonster::Shouting_Implementation()
-{
-	if (ShoutingMontage)
-	{
-		PlayAnimMontage(ShoutingMontage);
-	}
-	return 0;
-}
-
 UAnimMontage* ABaseMonster::GetAtkMontage() const
 { 
 	return AtkMontage; 
@@ -73,14 +52,4 @@ UAnimMontage* ABaseMonster::GetAtkMontage() const
 UBehaviorTree* ABaseMonster::GetBehaviorTree() const
 { 
 	return BTree;
-}
-
-bool ABaseMonster::MontageHasFinished()
-{
-	return GetMesh()->GetAnimInstance()->Montage_GetIsStopped(GetCreateMontage());
-}
-
-UAnimMontage* ABaseMonster::GetCreateMontage() const
-{
-	return CreateMontage;
 }

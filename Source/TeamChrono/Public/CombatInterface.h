@@ -26,11 +26,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
 	int MeleeAttack();
 
-	//积己 葛记 override
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
-	int Creating();
-
-	//器瓤 葛记 override
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
-	int Shouting();
+	////积己 葛记 override
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
+	//int Creating();
 };

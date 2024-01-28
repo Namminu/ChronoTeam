@@ -26,17 +26,9 @@ public:
 
 	UBehaviorTree* GetBehaviorTree() const;
 
-	bool MontageHasFinished();
-
 	UAnimMontage* GetAtkMontage() const;
 
-	UAnimMontage* GetCreateMontage() const;
-
 	int MeleeAttack_Implementation() override;
-
-	int Creating_Implementation() override;
-
-	int Shouting_Implementation() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -52,9 +44,9 @@ private:
 	//생성 애니메이션 몽타주
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* CreateMontage;
-	//포효 애니메이션 몽타주
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* ShoutingMontage;
+	////포효 애니메이션 몽타주
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	//UAnimMontage* ShoutingMontage;
 
 	//몬스터 최대 체력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))

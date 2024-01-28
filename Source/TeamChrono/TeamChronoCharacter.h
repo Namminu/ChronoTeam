@@ -49,7 +49,7 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AttackAction;
 
-	// 남민우 - 애니메이션 몽타주 추가를 위한 변수 생성 -> #include "Animation/AnimMontage.h" 헤더 추가
+	//애니메이션 몽타주 추가를 위한 변수 생성 -> #include "Animation/AnimMontage.h" 헤더 추가
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* Montage;
 
