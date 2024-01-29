@@ -17,7 +17,7 @@ void AMonsterSpawner::BeginPlay()
 	Super::BeginPlay();
 	
 	//임시용 몬스터 생성 확인
-	SpawnMonster();
+	//SpawnMonster();
 }
 
 // Called every frame

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "MonsterSpawner.h"
 #include "SpawnerNotifier.generated.h"
 
 UCLASS()
@@ -23,6 +24,13 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* CollisionBox;	
+
+	//신호를 보낼 Spawner 배열 -> 에디터에서 할당할 수 있도록
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SetSpawner", meta = (AllowPrivateAccess = "true"))
+	TArray<AMonsterSpawner*> SpawnerArray;
+
+	//1회용성 작동을 위한 bool 변수
+	bool isGetWorked = false;
 
 public:	
 	// Called every frame
