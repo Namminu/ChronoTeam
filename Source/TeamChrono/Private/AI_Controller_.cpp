@@ -54,7 +54,7 @@ void AAI_Controller_::SetupPerceptionSystem()
 //플레이어(Target)이 감지됐을 때 호출되는 함수
 void AAI_Controller_::OnTargetDetected(AActor* actor, FAIStimulus const stimulus)
 {
-	if (auto* const ch = Cast<ATeamChronoCharacter>(actor)) //<> 안에는 플레이어 캐릭터가 들어가야함
+	if (auto* const ch = Cast<ATeamChronoCharacter>(actor))
 	{
 		//플레이어가 감지되면 true, 사라지면/안보이면 false
 		GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", stimulus.WasSuccessfullySensed());
