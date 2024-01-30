@@ -29,6 +29,6 @@ private:
 	UFUNCTION()
 	void OnTargetDetected(AActor* actor, FAIStimulus const stimulus);
 
-	UFUNCTION()
-	void IsMonsterBorned(AActor* actor, FAIStimulus const stimulus);
+	//UFUNCTION()
+	//void IsMonsterBorned(AActor* actor, FAIStimulus const stimulus);
 };
