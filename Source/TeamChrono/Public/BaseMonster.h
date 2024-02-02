@@ -30,11 +30,21 @@ public:
 
 	int MeleeAttack_Implementation() override;
 
+	//생성 시 투명도 조절 함수
+	bool Create_Opacity();
+
+	//사망 애니메이션 호출 함수
+	//void Dead_Animation();
+
+	void AttackStart() const;
+	void AttackEnd() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 private: 
+///
 	//비헤이비어 트리
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* BTree;
@@ -44,10 +54,28 @@ private:
 	//생성 애니메이션 몽타주
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* CreateMontage;
-	////포효 애니메이션 몽타주
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
-	//UAnimMontage* ShoutingMontage;
 
+///
+	//공격 히트박스 //현재는 오른손 -> 추후 무기 셋업 후 무기 쪽으로 변경 예정
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* RightFirstCollisionBox;
+
+///
+	UFUNCTION()
+	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult);
+
+	UFUNCTION()
+	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex);
+
+///
 	//몬스터 최대 체력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	int monMaxHp;
@@ -63,6 +91,10 @@ private:
 	//몬스터 공격력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	int monAtk;
+
+	//투명도 조절 시간
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	float duration;
 
 public:
 	int GetMonSpeed() const { return monSpeed; }	
