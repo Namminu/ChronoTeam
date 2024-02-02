@@ -39,15 +39,15 @@ void ABaseMonster::BeginPlay()
 	PlayAnimMontage(CreateMontage);
 }
 
-void ABaseMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent, 
-	AActor* const otherActor, 
-	UPrimitiveComponent* const OtherComponent, 
-	int const OtherBodyIndex, bool const FromSweep, 
+void ABaseMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	AActor* const otherActor,
+	UPrimitiveComponent* const OtherComponent,
+	int const OtherBodyIndex, bool const FromSweep,
 	FHitResult const& SweepResult)
 {
 	if (otherActor == this) return;		//히트박스가 자기 자신에게 닿았을 경우 아무 영향x
 
-	if (auto const Enemy = Cast<ATeamChronoCharacter>(otherActor))	//히트박스가 플레이어에게 닿았을 경우 = 플레이어 공격 시
+	if (otherActor->ActorHasTag("PLAYER"))	//히트박스가 플레이어에게 닿았을 경우 = 플레이어 공격 시
 	{
 		//auto const NewHealth = Enemy->GetHealth() - Enemy->GetMaxHealth() * 0.1f;
 		//Enemy->SetHealth(NewHealth);
