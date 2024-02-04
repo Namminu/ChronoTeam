@@ -67,6 +67,13 @@ void ATeamChronoCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	// 애니 이벤트 바인딩
+	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+	if (pAnimInst != nullptr)
+	{
+		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &ATeamChronoCharacter::HandleOnMontageNotifyBegin);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -77,9 +84,9 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		// Dodging
+		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Dodge);
+		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
@@ -126,5 +133,32 @@ void ATeamChronoCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+// 구르기
+void ATeamChronoCharacter::Dodge()
+{
+		UE_LOG(LogTemp, Warning, TEXT("123"));
+	if (!m_bIsDodging)
+	{
+		UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+		if (pAnimInst != nullptr)
+		{
+			m_bIsDodging = true;
+
+			pAnimInst->Montage_Play(m_pDodgeMontage);
+			//LaunchCharacter(GetActorForwardVector() * 2500, true, true);
+		}
+	}
+}
+
+
+void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)
+{
+	// 구르기 애니메이션 알람 확인
+	if (a_nNotifyName.ToString() == "Dodge")
+	{
+		m_bIsDodging = false;
 	}
 }
