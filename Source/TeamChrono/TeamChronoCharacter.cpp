@@ -12,6 +12,8 @@
 #include "InputActionValue.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
+#include "DamageEvents.generated.h"
+#include "BaseMonster.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -104,6 +106,9 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		//Attacking
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::OnAttack);
+
+		//Debuging
+		EnhancedInputComponent->BindAction(DebugAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::OnDebug);
 	}
 	else
 	{
@@ -153,4 +158,10 @@ void ATeamChronoCharacter::OnAttack()
 	{
 		PlayAnimMontage(Montage);
 	}
+}
+
+void ATeamChronoCharacter::OnDebug_Implementation()
+{
+	auto const monster = Cast<ABaseMonster>(GetOwner());
+	monster->GotHit();
 }

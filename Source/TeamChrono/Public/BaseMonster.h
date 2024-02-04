@@ -38,6 +38,9 @@ public:
 
 	void AttackStart() const;
 	void AttackEnd() const;
+	
+	//몬스터 피격 호출 함수
+	void GotHit();
 
 protected:
 	// Called when the game starts or when spawned

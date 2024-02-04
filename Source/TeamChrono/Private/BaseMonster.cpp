@@ -30,12 +30,16 @@ void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//몬스터 초기 체력 초기화
+	monNowHp = monMaxHp;
+
 	RightFirstCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	RightFirstCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
 
 	//시작 시 애니메이션 재생
 	//Create_Opacity();
 	//if (Create_Opacity()) { PlayAnimMontage(CreateMontage); }
+
 	PlayAnimMontage(CreateMontage);
 }
 
@@ -51,7 +55,7 @@ void ABaseMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 	{
 		//auto const NewHealth = Enemy->GetHealth() - Enemy->GetMaxHealth() * 0.1f;
 		//Enemy->SetHealth(NewHealth);
-
+	
 		UE_LOG(LogTemp, Warning, TEXT("Monster hit Player"));
 	}
 }
@@ -149,6 +153,13 @@ void ABaseMonster::AttackEnd() const
 {
 	RightFirstCollisionBox->SetCollisionProfileName("Fist");
 	RightFirstCollisionBox->SetNotifyRigidBodyCollision(false);
+}
+
+void ABaseMonster::GotHit()
+{
+	UE_LOG(LogTemp, Error, TEXT("Monster got hit!"));
+
+
 }
 
 UAnimMontage* ABaseMonster::GetAtkMontage() const

@@ -49,6 +49,10 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AttackAction;
 
+	/** Debug->Set Monster Hp Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DebugAction;
+
 	//애니메이션 몽타주 추가를 위한 변수 생성 -> #include "Animation/AnimMontage.h" 헤더 추가
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* Montage;
@@ -85,5 +89,9 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	//디버그 액션 호출 위한 함수
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnDebug();
 };
 
