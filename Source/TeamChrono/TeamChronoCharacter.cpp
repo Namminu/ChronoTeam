@@ -91,8 +91,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Look);
+		
 	}
 	else
 	{
@@ -105,7 +104,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && !m_bIsDodging)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -123,18 +122,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	}
 }
 
-void ATeamChronoCharacter::Look(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
-	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-	}
-}
 
 // ±¸¸£±â
 void ATeamChronoCharacter::Dodge()
@@ -148,7 +136,7 @@ void ATeamChronoCharacter::Dodge()
 			m_bIsDodging = true;
 
 			pAnimInst->Montage_Play(m_pDodgeMontage);
-			//LaunchCharacter(GetActorForwardVector() * 2500, true, true);
+			//LaunchCharacter(GetActorForwardVector() * DodgeSpeed, true, true);
 		}
 	}
 }

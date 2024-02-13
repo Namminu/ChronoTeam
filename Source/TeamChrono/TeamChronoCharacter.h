@@ -51,6 +51,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	UAnimMontage* m_pDodgeMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dodge")
+	float DodgeSpeed = 2000;
 	// 회피 기능
 	void Dodge();
 	bool m_bIsDodging = false;
