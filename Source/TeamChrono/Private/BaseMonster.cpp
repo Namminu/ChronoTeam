@@ -3,7 +3,10 @@
 
 #include "BaseMonster.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include <TeamChrono/TeamChronoCharacter.h>
+#include "AI_Controller_.h"
 
 // Sets default values
 ABaseMonster::ABaseMonster() : RightFirstCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("RightFirstCollisionBox")) }
@@ -73,6 +76,10 @@ void ABaseMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
+	{	
+		mon_Death();
+	}
 }
 
 // Called to bind functionality to input
@@ -159,6 +166,17 @@ void ABaseMonster::GotHit()
 {
 	UE_LOG(LogTemp, Error, TEXT("Monster got hit!"));
 
+
+}
+
+void ABaseMonster::mon_Death()
+{
+	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
+	monsterAI->StopAI();	//Stop BT 
+	GetCharacterMovement()->SetMovementMode(MOVE_None);	//Stop Movement
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	//Can't Collision
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
+	PlayAnimMontage(DeathMontage);	//Death Animation
 
 }
 

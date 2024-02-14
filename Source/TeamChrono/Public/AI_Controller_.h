@@ -18,6 +18,8 @@ class TEAMCHRONO_API AAI_Controller_ : public AAIController
 public:
 	explicit AAI_Controller_(FObjectInitializer const& ObjectInitializer);
 
+	void StopAI();
+
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 

@@ -33,14 +33,14 @@ public:
 	//생성 시 투명도 조절 함수
 	bool Create_Opacity();
 
-	//사망 애니메이션 호출 함수
-	//void Dead_Animation();
-
 	void AttackStart() const;
 	void AttackEnd() const;
 	
 	//몬스터 피격 호출 함수
 	void GotHit();
+
+	//몬스터 사망 호출 함수
+	void mon_Death();
 
 protected:
 	// Called when the game starts or when spawned
@@ -57,6 +57,9 @@ private:
 	//생성 애니메이션 몽타주
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* CreateMontage;
+	//사망 애니메이션 몽타주
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* DeathMontage;
 
 ///
 	//공격 히트박스 //현재는 오른손 -> 추후 무기 셋업 후 무기 쪽으로 변경 예정

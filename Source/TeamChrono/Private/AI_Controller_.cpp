@@ -13,6 +13,15 @@ AAI_Controller_::AAI_Controller_(FObjectInitializer const& ObjectInitializer)
 	SetupPerceptionSystem();
 }
 
+void AAI_Controller_::StopAI()
+{
+	auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
+	if (nullptr != BehaviorTreeComponent)
+	{
+		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+	}
+}
+
 //Monster BT 설정 함수
 void AAI_Controller_::OnPossess(APawn* InPawn)
 {
