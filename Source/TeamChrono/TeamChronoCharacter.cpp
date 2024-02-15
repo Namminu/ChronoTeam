@@ -163,5 +163,4 @@ void ATeamChronoCharacter::OnAttack()
 void ATeamChronoCharacter::OnDebug_Implementation()
 {
 	auto const monster = Cast<ABaseMonster>(GetOwner());
-	monster->GotHit();
 }

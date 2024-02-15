@@ -7,6 +7,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <TeamChrono/TeamChronoCharacter.h>
 #include "AI_Controller_.h"
+#include "Engine/World.h"
+#include "GameFramework/Actor.h"
 
 // Sets default values
 ABaseMonster::ABaseMonster() : RightFirstCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("RightFirstCollisionBox")) }
@@ -38,9 +40,10 @@ void ABaseMonster::BeginPlay()
 
 	RightFirstCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	RightFirstCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
+	//GetOwner()->OnTakeAnyDamage.Broadcast(this, &ABaseMonster::TakeDamage);
 
 	//시작 시 애니메이션 재생
-	//Create_Opacity();
+	//Change_Opacity(0,1);
 	//if (Create_Opacity()) { PlayAnimMontage(CreateMontage); }
 
 	PlayAnimMontage(CreateMontage);
@@ -76,10 +79,6 @@ void ABaseMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
-	{	
-		mon_Death();
-	}
 }
 
 // Called to bind functionality to input
@@ -98,7 +97,7 @@ int ABaseMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
-bool ABaseMonster::Create_Opacity()
+bool ABaseMonster::Change_Opacity(float StartAlpha, float EndAlpha)
 {
 	//투명도 애니메이션 시작
 	SetActorHiddenInGame(true);
@@ -107,8 +106,6 @@ bool ABaseMonster::Create_Opacity()
 
 	// 투명도 변화 시작
 	float CurrentTime = 0.0f;
-	float StartAlpha = 0.0f;
-	float EndAlpha = 1.0f;
 
 	TArray<UMaterialInstanceDynamic*> DynamicMaterials;
 
@@ -135,7 +132,7 @@ bool ABaseMonster::Create_Opacity()
 			DynamicMaterial->SetScalarParameterValue(TEXT("Opacity"), Alpha);
 		}
 
-		// 경과 시간 업데이트
+		// 경과 시간 업데이트 
 		CurrentTime += GetWorld()->GetDeltaSeconds();
 
 		// 다음 프레임까지 대기
@@ -146,6 +143,8 @@ bool ABaseMonster::Create_Opacity()
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
 	SetActorTickEnabled(true);
+
+	UE_LOG(LogTemp, Error, TEXT("Change Opacity has taken"));
 
 	return true;	//투명도 조절이 끝나면 true 값 반환 -> 생성 애니메이션 재생
 }
@@ -162,11 +161,15 @@ void ABaseMonster::AttackEnd() const
 	RightFirstCollisionBox->SetNotifyRigidBodyCollision(false);
 }
 
-void ABaseMonster::GotHit()
+float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	UE_LOG(LogTemp, Error, TEXT("Monster got hit!"));
+	monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
+	if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
+	{
+		mon_Death();
+	}
 
-
+	return DamageAmount;
 }
 
 void ABaseMonster::mon_Death()
@@ -176,8 +179,20 @@ void ABaseMonster::mon_Death()
 	GetCharacterMovement()->SetMovementMode(MOVE_None);	//Stop Movement
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	//Can't Collision
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
-	PlayAnimMontage(DeathMontage);	//Death Animation
 
+	PlayAnimMontage(DeathMontage);	//Death Animation
+	
+	//Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
+
+	FTimerHandle TimerHandle;
+	float delay = 3.3f;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);	//Destory Actor After DeathDelay
+
+}
+
+void ABaseMonster::mon_Destroy()
+{
+	Destroy();	
 }
 
 UAnimMontage* ABaseMonster::GetAtkMontage() const

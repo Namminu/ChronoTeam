@@ -9,6 +9,7 @@
 #include "Animation/AnimMontage.h"
 #include "BaseMonster.generated.h"
 
+
 UCLASS()
 class TEAMCHRONO_API ABaseMonster : public ACharacter, public ICombatInterface
 {
@@ -31,16 +32,23 @@ public:
 	int MeleeAttack_Implementation() override;
 
 	//생성 시 투명도 조절 함수
-	bool Create_Opacity();
+	bool Change_Opacity(float StartAlpha, float EndAlpha);
 
 	void AttackStart() const;
 	void AttackEnd() const;
-	
-	//몬스터 피격 호출 함수
-	void GotHit();
+
+	float TakeDamage(float DamageAmount,
+		struct FDamageEvent const& DamageEvent, 
+		AController* EventInstigator, 
+		AActor* DamageCauser);
+
+	/*UFUNCTION()
+	void TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigateBy, AActor* DamageCauser);*/
 
 	//몬스터 사망 호출 함수
 	void mon_Death();
+
+	void mon_Destroy();
 
 protected:
 	// Called when the game starts or when spawned
