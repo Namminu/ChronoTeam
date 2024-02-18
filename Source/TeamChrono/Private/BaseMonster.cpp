@@ -11,22 +11,22 @@
 #include "GameFramework/Actor.h"
 
 // Sets default values
-ABaseMonster::ABaseMonster() : RightFirstCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("RightFirstCollisionBox")) }
+ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollisionBox")) }
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	if (RightFirstCollisionBox)	//히트박스 설정
+	if (WeaponCollisionBox)	//Weapon 히트박스 설정
 	{
-		RightFirstCollisionBox->SetBoxExtent(FVector(5.f));
+		WeaponCollisionBox->SetBoxExtent(FVector(5.f));
 		FAttachmentTransformRules const Rules{
 			EAttachmentRule::SnapToTarget,	//location
 			EAttachmentRule::SnapToTarget,	//rotation
 			EAttachmentRule::KeepWorld,		//World Scale
 			false	// Not default Attach to body
 		};
-		RightFirstCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
-		RightFirstCollisionBox->SetRelativeLocation(FVector(-7.f, 0.f, 0.f));
+		WeaponCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
+		WeaponCollisionBox->SetRelativeLocation(FVector(-7.f, 0.f, 0.f));
 	}
 }
 
@@ -38,8 +38,11 @@ void ABaseMonster::BeginPlay()
 	//몬스터 초기 체력 초기화
 	monNowHp = monMaxHp;
 
-	RightFirstCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
-	RightFirstCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
+	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
+	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
+	
+	//시작 시 무기 소지한 채로 시작
+	AttachWeapon(monsterWeapon, "Weapon_R");
 
 	//시작 시 애니메이션 재생
 	Change_Opacity(0,1);
@@ -150,14 +153,14 @@ int ABaseMonster::MeleeAttack_Implementation()
 
 void ABaseMonster::AttackStart() const
 {
-	RightFirstCollisionBox->SetCollisionProfileName("Fist");
-	RightFirstCollisionBox->SetNotifyRigidBodyCollision(true);
+	WeaponCollisionBox->SetCollisionProfileName("Fist");
+	WeaponCollisionBox->SetNotifyRigidBodyCollision(true);
 }
 
 void ABaseMonster::AttackEnd() const
 {
-	RightFirstCollisionBox->SetCollisionProfileName("Fist");
-	RightFirstCollisionBox->SetNotifyRigidBodyCollision(false);
+	WeaponCollisionBox->SetCollisionProfileName("Fist");
+	WeaponCollisionBox->SetNotifyRigidBodyCollision(false);
 }
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

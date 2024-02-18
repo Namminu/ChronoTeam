@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "CombatInterface.h"
 #include "Animation/AnimMontage.h"
+#include "Monster_Weapon.h"
 #include "BaseMonster.generated.h"
 
 
@@ -47,9 +48,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Change_Opacity(float StartAlpha, float EndAlpha);
 
+	//무기 장착 호출 함수
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void AttachWeapon(TSubclassOf<AActor> Weapon, FName socketName);
+
 	//몬스터 사망 호출 함수
 	void mon_Death();
-
 	void mon_Destroy();
 
 protected:
@@ -72,10 +76,12 @@ private:
 	UAnimMontage* DeathMontage;
 
 ///
-	//공격 히트박스 //현재는 오른손 -> 추후 무기 셋업 후 무기 쪽으로 변경 예정
+	//공격 히트박스
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* RightFirstCollisionBox;
-
+	class UBoxComponent* WeaponCollisionBox;
+	//무기
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> monsterWeapon;
 ///
 	UFUNCTION()
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
