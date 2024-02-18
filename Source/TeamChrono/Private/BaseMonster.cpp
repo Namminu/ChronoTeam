@@ -42,7 +42,7 @@ void ABaseMonster::BeginPlay()
 	RightFirstCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
 
 	//시작 시 애니메이션 재생
-	//Change_Opacity(0,1);
+	Change_Opacity(0,1);
 	//if (Create_Opacity()) { PlayAnimMontage(CreateMontage); }
 
 	PlayAnimMontage(CreateMontage);
@@ -96,57 +96,57 @@ int ABaseMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
-bool ABaseMonster::Change_Opacity(float StartAlpha, float EndAlpha)
-{
-	//투명도 애니메이션 시작
-	SetActorHiddenInGame(true);
-	SetActorEnableCollision(false);
-	SetActorTickEnabled(false);
-
-	// 투명도 변화 시작
-	float CurrentTime = 0.0f;
-
-	TArray<UMaterialInstanceDynamic*> DynamicMaterials;
-
-	// 메시의 모든 메테리얼 인스턴스 가져오기
-	TArray<UMaterialInterface*> BaseMaterials;
-	BaseMaterials = GetMesh()->GetMaterials();
-	for (UMaterialInterface* BaseMaterial : BaseMaterials)
-	{
-		UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, GetOwner());
-		if (DynamicMaterial)
-		{
-			DynamicMaterials.Add(DynamicMaterial);
-		}
-	}
-
-	while (CurrentTime < duration)
-	{
-		// 투명도 보간
-		float Alpha = FMath::Lerp(StartAlpha, EndAlpha, CurrentTime / duration);
-
-		// 메테리얼 인스턴스의 투명도 설정
-		for (UMaterialInstanceDynamic* DynamicMaterial : DynamicMaterials)
-		{
-			DynamicMaterial->SetScalarParameterValue(TEXT("Opacity"), Alpha);
-		}
-
-		// 경과 시간 업데이트 
-		CurrentTime += GetWorld()->GetDeltaSeconds();
-
-		// 다음 프레임까지 대기
-		GetOwner()->GetWorld()->Tick(ELevelTick::LEVELTICK_All, GetWorld()->GetDeltaSeconds());
-	}
-
-	// 투명도 애니메이션 종료
-	SetActorHiddenInGame(false);
-	SetActorEnableCollision(true);
-	SetActorTickEnabled(true);
-
-	UE_LOG(LogTemp, Error, TEXT("Change Opacity has taken"));
-
-	return true;	//투명도 조절이 끝나면 true 값 반환 -> 생성 애니메이션 재생
-}
+//bool ABaseMonster::Change_Opacity(float StartAlpha, float EndAlpha)
+//{
+//	//투명도 애니메이션 시작
+//	SetActorHiddenInGame(true);
+//	SetActorEnableCollision(false);
+//	SetActorTickEnabled(false);
+//
+//	// 투명도 변화 시작
+//	float CurrentTime = 0.0f;
+//
+//	TArray<UMaterialInstanceDynamic*> DynamicMaterials;
+//
+//	// 메시의 모든 메테리얼 인스턴스 가져오기
+//	TArray<UMaterialInterface*> BaseMaterials;
+//	BaseMaterials = GetMesh()->GetMaterials();
+//	for (UMaterialInterface* BaseMaterial : BaseMaterials)
+//	{
+//		UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, GetOwner());
+//		if (DynamicMaterial)
+//		{
+//			DynamicMaterials.Add(DynamicMaterial);
+//		}
+//	}
+//
+//	while (CurrentTime < duration)
+//	{
+//		// 투명도 보간
+//		float Alpha = FMath::Lerp(StartAlpha, EndAlpha, CurrentTime / duration);
+//
+//		// 메테리얼 인스턴스의 투명도 설정
+//		for (UMaterialInstanceDynamic* DynamicMaterial : DynamicMaterials)
+//		{
+//			DynamicMaterial->SetScalarParameterValue(TEXT("Opacity"), Alpha);
+//		}
+//
+//		// 경과 시간 업데이트 
+//		CurrentTime += GetWorld()->GetDeltaSeconds();
+//
+//		// 다음 프레임까지 대기
+//		GetOwner()->GetWorld()->Tick(ELevelTick::LEVELTICK_All, GetWorld()->GetDeltaSeconds());
+//	}
+//
+//	// 투명도 애니메이션 종료
+//	SetActorHiddenInGame(false);
+//	SetActorEnableCollision(true);
+//	SetActorTickEnabled(true);
+//
+//	UE_LOG(LogTemp, Error, TEXT("Change Opacity has taken"));
+//
+//	return true;	//투명도 조절이 끝나면 true 값 반환 -> 생성 애니메이션 재생
+//}
 
 void ABaseMonster::AttackStart() const
 {
@@ -188,7 +188,7 @@ void ABaseMonster::mon_Death()
 
 	PlayAnimMontage(DeathMontage);	//Death Animation
 	
-	//Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
+	Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
 
 	FTimerHandle TimerHandle;
 	float delay = 3.3f;

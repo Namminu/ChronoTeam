@@ -31,9 +31,6 @@ public:
 
 	int MeleeAttack_Implementation() override;
 
-	//생성 시 투명도 조절 함수
-	bool Change_Opacity(float StartAlpha, float EndAlpha);
-
 	void AttackStart() const;
 	void AttackEnd() const;
 
@@ -45,6 +42,10 @@ public:
 	//Damage Flash 함수 - 반짝임
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void DamageFlash();
+
+	//생성 시 투명도 조절 함수
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Change_Opacity(float StartAlpha, float EndAlpha);
 
 	//몬스터 사망 호출 함수
 	void mon_Death();
