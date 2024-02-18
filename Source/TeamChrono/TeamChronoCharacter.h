@@ -44,6 +44,8 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+
+
 public:
 	ATeamChronoCharacter();
 	
@@ -57,6 +59,8 @@ public:
 	void Dodge();
 	bool m_bIsDodging = false;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void RollAnimation();
 
 protected:
 
@@ -82,5 +86,7 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+
 };
 

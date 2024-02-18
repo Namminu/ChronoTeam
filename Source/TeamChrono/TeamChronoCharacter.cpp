@@ -21,7 +21,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
-	// Don't rotate when the controller rotates. Let that just affect the camera.
+	// Don't rotate when the con	troller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
@@ -85,7 +85,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Dodging
-		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Dodge);
+		 EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Dodge);
 		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
@@ -139,8 +139,8 @@ void ATeamChronoCharacter::Dodge()
 		if (pAnimInst != nullptr)
 		{
 			m_bIsDodging = true;
-
-			pAnimInst->Montage_Play(m_pDodgeMontage);
+			RollAnimation();
+			//pAnimInst->Montage_Play(m_pDodgeMontage);
 			//LaunchCharacter(GetActorForwardVector() * DodgeSpeed, true, true);
 		}
 	}
