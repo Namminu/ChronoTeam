@@ -40,10 +40,11 @@ public:
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent, 
 		AController* EventInstigator, 
-		AActor* DamageCauser);
+		AActor* DamageCauser) override;
 
-	/*UFUNCTION()
-	void TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigateBy, AActor* DamageCauser);*/
+	//Damage Flash 함수 - 반짝임
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void DamageFlash();
 
 	//몬스터 사망 호출 함수
 	void mon_Death();
@@ -109,6 +110,10 @@ private:
 	//투명도 조절 시간
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	float duration;
+
+	//데미지 반짝임 반복 횟수
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
+	float flashCount;
 
 public:
 	int GetMonSpeed() const { return monSpeed; }	

@@ -40,7 +40,6 @@ void ABaseMonster::BeginPlay()
 
 	RightFirstCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	RightFirstCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
-	//GetOwner()->OnTakeAnyDamage.Broadcast(this, &ABaseMonster::TakeDamage);
 
 	//시작 시 애니메이션 재생
 	//Change_Opacity(0,1);
@@ -163,6 +162,13 @@ void ABaseMonster::AttackEnd() const
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	//변수만큼 반짝임 반복
+	for (int i = 0; i < flashCount; i++)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Damage Flash Count : %d"), i+1);
+		DamageFlash();
+	}
+
 	monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
 	if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
 	{
