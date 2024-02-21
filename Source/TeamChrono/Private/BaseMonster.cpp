@@ -46,8 +46,6 @@ void ABaseMonster::BeginPlay()
 
 	//시작 시 애니메이션 재생
 	Change_Opacity(0,1);
-	//if (Create_Opacity()) { PlayAnimMontage(CreateMontage); }
-
 	PlayAnimMontage(CreateMontage);
 }
 
@@ -165,12 +163,14 @@ void ABaseMonster::AttackEnd() const
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	//변수만큼 반짝임 반복
-	for (int i = 0; i < flashCount; i++)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Damage Flash Count : %d"), i+1);
-		DamageFlash();
-	}
+	DamageFlash();
+
+	////변수만큼 반짝임 반복
+	//for (int i = 0; i < flashCount; i++)
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("Damage Flash Count : %d"), i+1);
+	//	DamageFlash();
+	//}
 
 	monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
 	if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
@@ -189,8 +189,7 @@ void ABaseMonster::mon_Death()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	//Can't Collision
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 
-	PlayAnimMontage(DeathMontage);	//Death Animation
-	
+	PlayAnimMontage(DeathMontage);	//Death Animation	
 	Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
 
 	FTimerHandle TimerHandle;

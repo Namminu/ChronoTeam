@@ -22,5 +22,19 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+///
+	//Damage Flash 함수 - 반짝임
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void DamageFlash();
 
+	//생성 시 투명도 조절 함수
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Change_Opacity(float StartAlpha, float EndAlpha);
+///
+	void Wp_Destroy();
+	void Wp_Death();
+
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Weapon;
 };

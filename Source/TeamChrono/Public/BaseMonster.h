@@ -50,7 +50,7 @@ public:
 
 	//무기 장착 호출 함수
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void AttachWeapon(TSubclassOf<AActor> Weapon, FName socketName);
+	void AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName);
 
 	//몬스터 사망 호출 함수
 	void mon_Death();
@@ -81,7 +81,9 @@ private:
 	class UBoxComponent* WeaponCollisionBox;
 	//무기
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> monsterWeapon;
+	TSubclassOf<AMonster_Weapon> monsterWeapon;
+	AMonster_Weapon* WeaponInstance;
+
 ///
 	UFUNCTION()
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
