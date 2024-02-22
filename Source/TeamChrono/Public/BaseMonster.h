@@ -56,6 +56,9 @@ public:
 	void mon_Death();
 	void mon_Destroy();
 
+	//Create Dynamic Material Instance Function
+	void CreateMTI();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -76,6 +79,17 @@ private:
 	UAnimMontage* DeathMontage;
 
 ///
+	//Fst Material Instance Date
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
+	UMaterialInstanceDynamic* Fst_MTI;
+
+	//Snd Material Instance Data
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
+	UMaterialInstanceDynamic* Snd_MTI;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
+	TArray<UMaterialInstanceDynamic*> MTIArray;
+///
 	//공격 히트박스
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* WeaponCollisionBox;
@@ -84,6 +98,7 @@ private:
 	TSubclassOf<AMonster_Weapon> monsterWeapon;
 	AMonster_Weapon* WeaponInstance;
 
+	
 ///
 	UFUNCTION()
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,

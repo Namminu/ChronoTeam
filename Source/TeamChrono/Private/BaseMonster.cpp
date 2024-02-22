@@ -35,6 +35,9 @@ void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Create Dynamic Material Instance
+	CreateMTI();
+
 	//몬스터 초기 체력 초기화
 	monNowHp = monMaxHp;
 
@@ -97,58 +100,6 @@ int ABaseMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
-//bool ABaseMonster::Change_Opacity(float StartAlpha, float EndAlpha)
-//{
-//	//투명도 애니메이션 시작
-//	SetActorHiddenInGame(true);
-//	SetActorEnableCollision(false);
-//	SetActorTickEnabled(false);
-//
-//	// 투명도 변화 시작
-//	float CurrentTime = 0.0f;
-//
-//	TArray<UMaterialInstanceDynamic*> DynamicMaterials;
-//
-//	// 메시의 모든 메테리얼 인스턴스 가져오기
-//	TArray<UMaterialInterface*> BaseMaterials;
-//	BaseMaterials = GetMesh()->GetMaterials();
-//	for (UMaterialInterface* BaseMaterial : BaseMaterials)
-//	{
-//		UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, GetOwner());
-//		if (DynamicMaterial)
-//		{
-//			DynamicMaterials.Add(DynamicMaterial);
-//		}
-//	}
-//
-//	while (CurrentTime < duration)
-//	{
-//		// 투명도 보간
-//		float Alpha = FMath::Lerp(StartAlpha, EndAlpha, CurrentTime / duration);
-//
-//		// 메테리얼 인스턴스의 투명도 설정
-//		for (UMaterialInstanceDynamic* DynamicMaterial : DynamicMaterials)
-//		{
-//			DynamicMaterial->SetScalarParameterValue(TEXT("Opacity"), Alpha);
-//		}
-//
-//		// 경과 시간 업데이트 
-//		CurrentTime += GetWorld()->GetDeltaSeconds();
-//
-//		// 다음 프레임까지 대기
-//		GetOwner()->GetWorld()->Tick(ELevelTick::LEVELTICK_All, GetWorld()->GetDeltaSeconds());
-//	}
-//
-//	// 투명도 애니메이션 종료
-//	SetActorHiddenInGame(false);
-//	SetActorEnableCollision(true);
-//	SetActorTickEnabled(true);
-//
-//	UE_LOG(LogTemp, Error, TEXT("Change Opacity has taken"));
-//
-//	return true;	//투명도 조절이 끝나면 true 값 반환 -> 생성 애니메이션 재생
-//}
-
 void ABaseMonster::AttackStart() const
 {
 	WeaponCollisionBox->SetCollisionProfileName("Fist");
@@ -201,6 +152,34 @@ void ABaseMonster::mon_Death()
 void ABaseMonster::mon_Destroy()
 {
 	Destroy();	
+}
+
+void ABaseMonster::CreateMTI()
+{
+	//UMaterialInstanceDynamic* DynamicMaterialInstance = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(i), this);
+	//MTIArray.Add(DynamicMaterialInstance);
+
+	//Get 1st Material Instance
+	Fst_MTI = GetMesh()->CreateDynamicMaterialInstance(0);
+	if (Fst_MTI != nullptr)
+	{
+		MTIArray.Add(Fst_MTI);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("First Material is null"));
+	}
+	
+	//Get 2nd Material Instance
+	Snd_MTI = GetMesh()->CreateDynamicMaterialInstance(1);
+	if (Snd_MTI != nullptr)
+	{
+		MTIArray.Add(Snd_MTI);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Second Material is null"));
+	}
 }
 
 UAnimMontage* ABaseMonster::GetAtkMontage() const
