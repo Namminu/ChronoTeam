@@ -38,6 +38,8 @@ void AMonster_Weapon::Tick(float DeltaTime)
 void AMonster_Weapon::Wp_Death()
 {	
 	Weapon->SetSimulatePhysics(true);
+	bool bIsSimulate = Weapon->IsSimulatingPhysics();
+	UE_LOG(LogTemp, Error, TEXT("Weapon Simulate Physics : %s"), bIsSimulate);
 	Change_Opacity(1, 0);
 
 	FTimerHandle TimerHandle;

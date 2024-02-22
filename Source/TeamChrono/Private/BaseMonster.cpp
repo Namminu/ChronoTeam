@@ -156,14 +156,20 @@ void ABaseMonster::mon_Destroy()
 
 void ABaseMonster::CreateMTI()
 {
-	//UMaterialInstanceDynamic* DynamicMaterialInstance = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(i), this);
-	//MTIArray.Add(DynamicMaterialInstance);
-
 	//Get 1st Material Instance
 	Fst_MTI = GetMesh()->CreateDynamicMaterialInstance(0);
 	if (Fst_MTI != nullptr)
 	{
 		MTIArray.Add(Fst_MTI);
+
+		/*		추후 코드 수정 시 참고 바람
+		* 
+		* 		FLinearColor Fst_Init_Color;	//Fst_Init_~에 Fst_MTI의 초기값을 저장하고자 함
+		Fst_MTI->GetVectorParameterValue(FName("EmissiveColor"), Fst_Init_Color);
+		float Fst_Init_Multiplier;
+		Fst_MTI->GetScalarParameterValue(FName("EmissiveMutiplier"), Fst_Init_Multiplier);
+
+		*/
 	}
 	else
 	{
