@@ -49,7 +49,7 @@ public:
 	void Change_Opacity(float StartAlpha, float EndAlpha);
 
 	//무기 장착 호출 함수
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable)
 	void AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName);
 
 	//몬스터 사망 호출 함수
@@ -95,7 +95,6 @@ private:
 	class UBoxComponent* WeaponCollisionBox;
 	//무기
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AMonster_Weapon> monsterWeapon;
 	AMonster_Weapon* WeaponInstance;
 
 	

@@ -45,7 +45,7 @@ void ABaseMonster::BeginPlay()
 	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
 	
 	//시작 시 무기 소지한 채로 시작
-	AttachWeapon(monsterWeapon, "Weapon_R");
+	//AttachWeapon(monsterWeapon, "Weapon_R");
 
 	//시작 시 애니메이션 재생
 	Change_Opacity(0,1);
@@ -104,12 +104,18 @@ void ABaseMonster::AttackStart() const
 {
 	WeaponCollisionBox->SetCollisionProfileName("Fist");
 	WeaponCollisionBox->SetNotifyRigidBodyCollision(true);
+	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	UE_LOG(LogTemp, Error, TEXT("Attack Start"));
 }
 
 void ABaseMonster::AttackEnd() const
 {
 	WeaponCollisionBox->SetCollisionProfileName("Fist");
 	WeaponCollisionBox->SetNotifyRigidBodyCollision(false);
+	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+	UE_LOG(LogTemp, Error, TEXT("Attack End"));
 }
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -130,6 +136,14 @@ float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	}
 
 	return DamageAmount;
+}
+
+void ABaseMonster::AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName)
+{
+	//AMonster_Weapon* monsterWP
+	WeaponInstance = GetWorld()->SpawnActor<AMonster_Weapon>(Weapon, GetMesh()->GetSocketTransform(socketName, ERelativeTransformSpace::RTS_World));
+
+	WeaponInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
 }
 
 void ABaseMonster::mon_Death()
