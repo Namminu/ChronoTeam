@@ -118,6 +118,11 @@ void ABaseMonster::AttackEnd() const
 	UE_LOG(LogTemp, Error, TEXT("Attack End"));
 }
 
+void ABaseMonster::FireArrow() const
+{
+	UE_LOG(LogTemp, Warning, TEXT("Achor Launch Arrow"));
+}
+
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	DamageFlash();

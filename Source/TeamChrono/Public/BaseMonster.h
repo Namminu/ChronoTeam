@@ -32,8 +32,12 @@ public:
 
 	int MeleeAttack_Implementation() override;
 
+	//기본 공격 함수
 	void AttackStart() const;
 	void AttackEnd() const;
+
+	//아처 전용 - 화살 발사 함수
+	void FireArrow() const;
 
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent, 
@@ -129,6 +133,9 @@ private:
 	//몬스터 공격력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	int monAtk;
+	//아처 몬스터 화살 거리
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER_ACHOR", meta = (AllowPrivateAccess = "true"))
+	float arrow_Distance;
 
 	//투명도 조절 시간
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
@@ -143,5 +150,6 @@ public:
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonAtk() const { return monAtk; }
+	float GetArrowDistance() const { return arrow_Distance; }
 
 };
