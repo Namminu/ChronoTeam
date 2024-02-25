@@ -35,6 +35,8 @@ void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
+	arrow_Distance = 6000.f;
+
 	//Create Dynamic Material Instance
 	CreateMTI();
 
@@ -121,6 +123,8 @@ void ABaseMonster::AttackEnd() const
 void ABaseMonster::FireArrow() const
 {
 	UE_LOG(LogTemp, Warning, TEXT("Achor Launch Arrow"));
+
+
 }
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

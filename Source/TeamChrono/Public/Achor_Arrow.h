@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <GameFramework/ProjectileMovementComponent.h>
 #include "Achor_Arrow.generated.h"
 
 UCLASS()
@@ -16,7 +17,7 @@ public:
 	AAchor_Arrow();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void LaunchForward(float distance);
+	void DestoryByDistance(float distance);
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,6 +28,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* Root;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Arrow;
+
+	UPROPERTY(EditAnywhere)
+	UProjectileMovementComponent* ProjectileComponent;
+
+	//Arrow Target Distance
+	float arrowDistance;
+	//Arrow Start Location
+	FVector StartPosition;
+	//Arrow Current Location
+	FVector CurrentPosition;
 };

@@ -151,5 +151,5 @@ public:
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonAtk() const { return monAtk; }
 	float GetArrowDistance() const { return arrow_Distance; }
-
+	
 };
