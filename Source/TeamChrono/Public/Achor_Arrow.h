@@ -55,6 +55,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* ProjectileComponent;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageType> DamageType;
+
 	////Arrow Target Distance
 	//float arrowDistance;
 	////Arrow Start Location
@@ -62,4 +65,5 @@ private:
 	////Arrow Current Location
 	//FVector CurrentPosition;
 
+	float damageAmount;
 };

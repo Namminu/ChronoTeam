@@ -4,6 +4,7 @@
 #include "Achor_Arrow.h"
 #include "BaseMonster.h"
 #include "Components/CapsuleComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 AAchor_Arrow::AAchor_Arrow()
@@ -38,7 +39,18 @@ void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Arrow hits Player"));
-		//applyDamage()~;
+		
+		if (ABaseMonster* const mon = Cast<ABaseMonster>(GetOwner()))	//Get AtkDamage from BaseMonster
+		{
+			damageAmount = mon->GetMonAtk();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Arrow Cast Failed to BaseMonster For Get DamageAmount"));
+		}
+
+		AController* MonsterC = GetInstigator()->GetController();	//Get Controller
+		UGameplayStatics::ApplyDamage(otherActor, damageAmount, MonsterC, this, DamageType);
 	}
 
 	UE_LOG(LogTemp, Error, TEXT("Arrow Destory by overlap"));
