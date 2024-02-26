@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "Animation/AnimMontage.h"
 #include "TeamChronoCharacter.generated.h"
 
 class USpringArmComponent;
@@ -33,9 +32,9 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
 
-	/** Jump Input Action */
+	/** Dodge Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
+	UInputAction* DodgeAction;
 
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -45,29 +44,53 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
-	/** Attack Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* AttackAction;
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent* StaminaBar;
 
-	/** Debug->Set Monster Hp Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* DebugAction;
+private:
 
-	//애니메이션 몽타주 추가를 위한 변수 생성 -> #include "Animation/AnimMontage.h" 헤더 추가
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* Montage;
+	// 움직이는 스테미나 표시 할 변수
+	float pcMoveStamina;
 
-	class UAIPerceptionStimuliSourceComponent* StimulusSource;
-	
-	void SetupStimulusSource();
-	
-	//공격 애니메이션 호출 위한 함수
-	void OnAttack();
+	//스테미나 타이머
+	FTimerHandle StaminaTimerHandle;
 
+	void SetStamina();
+
+	bool Steminerdecreasing = false;
 public:
 	ATeamChronoCharacter();
 	
+	// 구르기 몽타주
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* m_pDodgeMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dodge")
+	float DodgeSpeed = 2000;
+	// 회피 기능
+	void Dodge();
+	bool m_bIsDodging = false;
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void RollAnimation();
+
+	//최대 스테미너
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcMaxStamina = 100;
+	// 현재 스테미너
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcStamina = 100;
+	// 스테미너UI 부드럽게 변경 시간
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcStaminaTimer = 0.05f;
+
+
+	// 자동 회복
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcRecStamina = 2.0f;
+	//구르기 스테미너
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcDodgeStamina = 20.0f;
 protected:
 
 	/** Called for movement input */
@@ -85,13 +108,14 @@ protected:
 	virtual void BeginPlay();
 
 public:
+	UFUNCTION()
+	void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	//디버그 액션 호출 위한 함수
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnDebug();
+
 };
 

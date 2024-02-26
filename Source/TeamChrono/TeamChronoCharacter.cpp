@@ -10,10 +10,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "Perception/AIPerceptionStimuliSourceComponent.h"
-#include "Perception/AISense_Sight.h"
-#include "DamageEvents.generated.h"
-#include "BaseMonster.h"
+#include "Components/WidgetComponent.h"
+#include "StaminaWidget.h"
+#include <algorithm>
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -25,7 +24,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
-	// Don't rotate when the controller rotates. Let that just affect the camera.
+	// Don't rotate when the con	troller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
@@ -57,17 +56,20 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
-	SetupStimulusSource();
-}
 
-//AI(monster)에 감지될 자극 소스 생성 함수
-void ATeamChronoCharacter::SetupStimulusSource()
-{
-	StimulusSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus"));
-	if (StimulusSource)
+	StaminaBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("StaminaBar"));
+	StaminaBar->SetupAttachment(GetMesh()); 
+
+	// 월드공간 기준으로 배치될지(3D UI), 스크린 좌표 기준으로 배치될지(2D UI) 결정
+	// Screen은 절대로 화면 밖으로 짤리지 않는다
+	StaminaBar->SetWidgetSpace(EWidgetSpace::Screen);
+
+	// ConstructorHelpers로 파일을 불러들여서 설정하는 익숙한 그것
+	static ConstructorHelpers::FClassFinder<UUserWidget> UW = TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/WB_Stamina.WB_Stamina_C'");
+	if (UW.Succeeded())
 	{
-		StimulusSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
-		StimulusSource->RegisterWithPerceptionSystem();
+		StaminaBar->SetWidgetClass(UW.Class);
+		StaminaBar->SetDrawSize(FVector2D(-100.f, 200.f));
 	}
 }
 
@@ -84,7 +86,21 @@ void ATeamChronoCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	// 애니 이벤트 바인딩
+	UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+	if (pAnimInst != nullptr)
+	{
+		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &ATeamChronoCharacter::HandleOnMontageNotifyBegin);
+	}
+
+	// 스테미나
+	pcMoveStamina = pcStamina;
+	GetWorldTimerManager().SetTimer(StaminaTimerHandle, this, &ATeamChronoCharacter::SetStamina, pcStaminaTimer, true);
+	pcStamina = FMath::Clamp(pcStamina, 0, pcMaxStamina);
 }
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -94,21 +110,14 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		// Dodging
+		 EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Dodge);
+		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Look);
-
-		//Attacking
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::OnAttack);
-
-		//Debuging
-		EnhancedInputComponent->BindAction(DebugAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::OnDebug);
+		
 	}
 	else
 	{
@@ -121,8 +130,12 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && !m_bIsDodging)
 	{
+		// 몽타주 종료
+		/*UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+		pAnimInst->Montage_Stop(0);*/
+
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -132,6 +145,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		
 
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
@@ -139,28 +153,68 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	}
 }
 
-void ATeamChronoCharacter::Look(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+
+// 구르기
+void ATeamChronoCharacter::Dodge()
+{
+	if (!m_bIsDodging)
 	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		UE_LOG(LogTemp, Warning, TEXT("123"));
+		// 현재 스테미너가 구르기 스테미너보다 있으면
+		if (pcStamina >= pcDodgeStamina)
+		{
+			
+
+			UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+			if (pAnimInst != nullptr)
+			{
+				m_bIsDodging = true;
+				RollAnimation();
+				pcStamina -= pcDodgeStamina;
+				Steminerdecreasing = true;
+				//pAnimInst->Montage_Play(m_pDodgeMontage);
+				//LaunchCharacter(GetActorForwardVector() * DodgeSpeed, true, true);
+			}
+		}
+		
 	}
 }
 
-void ATeamChronoCharacter::OnAttack()
+
+void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)
 {
-	if (Montage)
+	// 구르기 애니메이션 알람 확인
+	if (a_nNotifyName.ToString() == "Dodge")
 	{
-		PlayAnimMontage(Montage);
+		m_bIsDodging = false;
 	}
 }
 
-void ATeamChronoCharacter::OnDebug_Implementation()
+void ATeamChronoCharacter::SetStamina()
 {
-	auto const monster = Cast<ABaseMonster>(GetOwner());
+	pcMoveStamina = FMath::Clamp(pcMoveStamina, pcStamina, pcMaxStamina);
+	
+	if (Steminerdecreasing)
+	{
+		pcMoveStamina -= 2;
+		if (pcMoveStamina <= pcStamina)
+			Steminerdecreasing = false;
+	}
+	else if(pcStamina <= pcMaxStamina)
+	{
+		pcStamina = (pcRecStamina * pcStaminaTimer) + pcStamina;
+
+		if (pcMoveStamina >= pcMaxStamina)
+		{
+
+		}
+	}
+
+	auto staminaWidget = Cast<UStaminaWidget>(StaminaBar->GetUserWidgetObject());
+	if (staminaWidget)
+	{
+		staminaWidget->StaminaBarPercent = (float)pcMoveStamina / (float)pcMaxStamina;
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+	}
 }
