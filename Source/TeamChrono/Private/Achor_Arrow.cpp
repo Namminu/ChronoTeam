@@ -3,6 +3,7 @@
 
 #include "Achor_Arrow.h"
 #include "BaseMonster.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AAchor_Arrow::AAchor_Arrow()
@@ -18,37 +19,73 @@ AAchor_Arrow::AAchor_Arrow()
 	Arrow = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Arrow"));
 	Arrow->SetupAttachment(Root);
 
+	//CollisionBox Setup
+	CollisionBox = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Collision Box"));
+	CollisionBox->SetupAttachment(Arrow);
+
 	//Projectile Setup
 	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Component"));
 }
 
-void AAchor_Arrow::DestoryByDistance_Implementation(float distance)
+void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent, 
+	AActor* const otherActor,
+	UPrimitiveComponent* const OtherComponent,
+	int const OtherBodyIndex, bool const FromSweep, 
+	FHitResult const& SweepResult)
 {
-	//Every Tick for Current Arrow Location
-	CurrentPosition = GetActorLocation();
+	if (otherActor == this) return;
 
-	//if ((CurrentPosition - StartPosition).X > distance)
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("Arrow Destory Time"));
-	//	Destroy();
-	//}
+	if (otherActor->ActorHasTag("PLAYER"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Arrow hits Player"));
+		//applyDamage()~;
+	}
 
-	UE_LOG(LogTemp, Warning, TEXT("%f"), arrowDistance);
+	UE_LOG(LogTemp, Error, TEXT("Arrow Destory by overlap"));
+	Destroy();	//destory when hits actor
 }
+
+void AAchor_Arrow::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
+{
+}
+
+//void AAchor_Arrow::DestoryByDistance_Implementation(float distance)
+//{
+//	//Every Tick for Current Arrow Location
+//	CurrentPosition = GetActorLocation();
+//
+//	//if ((CurrentPosition - StartPosition).X > distance)
+//	//{
+//	//	UE_LOG(LogTemp, Error, TEXT("Arrow Destory Time"));
+//	//	Destroy();
+//	//}
+//
+//
+//}
 
 // Called when the game starts or when spawned
 void AAchor_Arrow::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//Set Actor begin vector
-	StartPosition = GetActorLocation();
+	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapBegin);
+	CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapEnd);
 
-	//Get Arrow Distance by BaseMonster
-	if (ABaseMonster* mon = Cast<ABaseMonster>(GetOwner()))
-	{
-		arrowDistance = mon->GetArrowDistance();
-	}
+	////Set Actor begin vector
+	//StartPosition = GetActorLocation();
+	//UE_LOG(LogTemp, Warning, TEXT("First Arrow Distance = %f"), arrowDistance);
+	////Get Arrow Distance by BaseMonster
+	//if (ABaseMonster* const mon = Cast<ABaseMonster>(GetOwner()))
+	//{
+	//	arrowDistance = mon->GetArrowDistance();
+	//	UE_LOG(LogTemp, Warning, TEXT("After Casting Arrow Distance = %f"), arrowDistance);
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("Arrow Cast to BaseMonster has Failed!"));
+	//}
+
 
 }
 
@@ -57,6 +94,6 @@ void AAchor_Arrow::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DestoryByDistance_Implementation(arrowDistance);
+	//DestoryByDistance_Implementation(arrowDistance);
 }
 

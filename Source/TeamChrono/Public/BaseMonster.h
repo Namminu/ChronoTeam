@@ -133,9 +133,10 @@ private:
 	//몬스터 공격력
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	int monAtk;
-	//아처 몬스터 화살 거리
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER_ACHOR", meta = (AllowPrivateAccess = "true"))
-	float arrow_Distance;
+
+	////아처 몬스터 화살 거리
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER_ACHOR", meta = (AllowPrivateAccess = "true"))
+	//float arrow_Distance;
 
 	//투명도 조절 시간
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
@@ -150,6 +151,7 @@ public:
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonAtk() const { return monAtk; }
-	float GetArrowDistance() const { return arrow_Distance; }
+
+	//float GetArrowDistance() const { return arrow_Distance; }
 	
 };

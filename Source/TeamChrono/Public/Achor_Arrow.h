@@ -16,8 +16,23 @@ public:
 	// Sets default values for this actor's properties
 	AAchor_Arrow();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void DestoryByDistance(float distance);
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	//void DestoryByDistance(float distance);
+
+	UFUNCTION()
+	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult);
+
+	UFUNCTION()
+	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex);
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,13 +49,17 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Arrow;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
+	class UCapsuleComponent* CollisionBox;
+
 	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* ProjectileComponent;
 
-	//Arrow Target Distance
-	float arrowDistance;
-	//Arrow Start Location
-	FVector StartPosition;
-	//Arrow Current Location
-	FVector CurrentPosition;
+	////Arrow Target Distance
+	//float arrowDistance;
+	////Arrow Start Location
+	//FVector StartPosition;
+	////Arrow Current Location
+	//FVector CurrentPosition;
+
 };

@@ -35,8 +35,6 @@ void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
-	arrow_Distance = 6000.f;
-
 	//Create Dynamic Material Instance
 	CreateMTI();
 
@@ -68,6 +66,7 @@ void ABaseMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 		//Enemy->SetHealth(NewHealth);
 	
 		UE_LOG(LogTemp, Warning, TEXT("Monster hit Player"));
+		//applyDamage()~;
 	}
 }
 
