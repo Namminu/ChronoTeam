@@ -37,7 +37,8 @@ public:
 	void AttackEnd() const;
 
 	//아처 전용 - 화살 발사 함수
-	void FireArrow() const;
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FireArrow();
 
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent, 
