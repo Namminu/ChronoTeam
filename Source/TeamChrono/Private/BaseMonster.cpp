@@ -9,6 +9,7 @@
 #include "AI_Controller_.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollisionBox")) }
@@ -38,8 +39,8 @@ void ABaseMonster::BeginPlay()
 	//Create Dynamic Material Instance
 	CreateMTI();
 
-	//몬스터 초기 체력 초기화
 	monNowHp = monMaxHp;
+	monAtk = 1;
 
 	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
@@ -62,11 +63,9 @@ void ABaseMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 
 	if (otherActor->ActorHasTag("PLAYER"))	//히트박스가 플레이어에게 닿았을 경우 = 플레이어 공격 시
 	{
-		//auto const NewHealth = Enemy->GetHealth() - Enemy->GetMaxHealth() * 0.1f;
-		//Enemy->SetHealth(NewHealth);
-	
 		UE_LOG(LogTemp, Warning, TEXT("Monster hit Player"));
-		//applyDamage()~;
+
+		UGameplayStatics::ApplyDamage(otherActor, monAtk, nullptr, this, DamageType);
 	}
 }
 

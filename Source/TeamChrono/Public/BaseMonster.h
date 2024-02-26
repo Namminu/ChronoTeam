@@ -131,7 +131,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	int monAtkRange;
 	//몬스터 공격력
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	int monAtk;
 
 	////아처 몬스터 화살 거리
@@ -146,12 +146,15 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	float flashCount;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageType> DamageType;
+
 public:
 	int GetMonSpeed() const { return monSpeed; }	
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonAtk() const { return monAtk; }
-
+	// 
 	//float GetArrowDistance() const { return arrow_Distance; }
 	
 };

@@ -38,22 +38,12 @@ void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Arrow hits Player"));
-		
-		//if (ABaseMonster* const mon = Cast<ABaseMonster>(GetOwner()))	//Get AtkDamage from BaseMonster
-		//{
-		//	damageAmount = mon->GetMonAtk();
-		//}
-		//else
-		//{
-		//	UE_LOG(LogTemp, Error, TEXT("Arrow Cast Failed to BaseMonster For Get DamageAmount"));
-		//}
+		UE_LOG(LogTemp, Warning, TEXT("Arrow : hits Player"));
 
-		//AController* MonsterC = GetInstigator()->GetController();	//Get Controller
-		//UGameplayStatics::ApplyDamage(otherActor, damageAmount, MonsterC, this, DamageType);
+		UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
 	}
 
-	UE_LOG(LogTemp, Error, TEXT("Arrow Destory by overlap"));
+	UE_LOG(LogTemp, Warning, TEXT("Arrow : Destory by overlap"));
 	Destroy();	//destory when hits actor
 }
 
@@ -81,24 +71,10 @@ void AAchor_Arrow::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	damageAmount = 1;
+
 	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapBegin);
 	CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapEnd);
-
-	////Set Actor begin vector
-	//StartPosition = GetActorLocation();
-	//UE_LOG(LogTemp, Warning, TEXT("First Arrow Distance = %f"), arrowDistance);
-	////Get Arrow Distance by BaseMonster
-	//if (ABaseMonster* const mon = Cast<ABaseMonster>(GetOwner()))
-	//{
-	//	arrowDistance = mon->GetArrowDistance();
-	//	UE_LOG(LogTemp, Warning, TEXT("After Casting Arrow Distance = %f"), arrowDistance);
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("Arrow Cast to BaseMonster has Failed!"));
-	//}
-
-
 }
 
 // Called every frame

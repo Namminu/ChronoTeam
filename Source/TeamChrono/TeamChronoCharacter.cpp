@@ -216,6 +216,12 @@ void ATeamChronoCharacter::SetStamina()
 	if (staminaWidget)
 	{
 		staminaWidget->StaminaBarPercent = (float)pcMoveStamina / (float)pcMaxStamina;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	}
 }
+
+float ATeamChronoCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Player hit by : %s, and Damage Amount : %f"), *DamageCauser->GetName(), DamageAmount);
+	return 0.0f;
+} 
