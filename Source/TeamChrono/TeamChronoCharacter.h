@@ -44,8 +44,20 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent* StaminaBar;
 
+private:
 
+	// 움직이는 스테미나 표시 할 변수
+	float pcMoveStamina;
+
+	//스테미나 타이머
+	FTimerHandle StaminaTimerHandle;
+
+	void SetStamina();
+
+	bool Steminerdecreasing = false;
 public:
 	ATeamChronoCharacter();
 	
@@ -62,6 +74,23 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
 
+	//최대 스테미너
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcMaxStamina = 100;
+	// 현재 스테미너
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcStamina = 100;
+	// 스테미너UI 부드럽게 변경 시간
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcStaminaTimer = 0.05f;
+
+
+	// 자동 회복
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcRecStamina = 2.0f;
+	//구르기 스테미너
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcDodgeStamina = 20.0f;
 protected:
 
 	/** Called for movement input */

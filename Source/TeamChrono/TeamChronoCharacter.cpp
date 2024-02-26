@@ -10,6 +10,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Components/WidgetComponent.h"
+#include "StaminaWidget.h"
+#include <algorithm>
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,6 +55,22 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+
+	StaminaBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("StaminaBar"));
+	StaminaBar->SetupAttachment(GetMesh()); 
+
+	// 월드공간 기준으로 배치될지(3D UI), 스크린 좌표 기준으로 배치될지(2D UI) 결정
+	// Screen은 절대로 화면 밖으로 짤리지 않는다
+	StaminaBar->SetWidgetSpace(EWidgetSpace::Screen);
+
+	// ConstructorHelpers로 파일을 불러들여서 설정하는 익숙한 그것
+	static ConstructorHelpers::FClassFinder<UUserWidget> UW = TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/WB_Stamina.WB_Stamina_C'");
+	if (UW.Succeeded())
+	{
+		StaminaBar->SetWidgetClass(UW.Class);
+		StaminaBar->SetDrawSize(FVector2D(-100.f, 200.f));
+	}
 }
 
 void ATeamChronoCharacter::BeginPlay()
@@ -74,7 +93,14 @@ void ATeamChronoCharacter::BeginPlay()
 	{
 		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &ATeamChronoCharacter::HandleOnMontageNotifyBegin);
 	}
+
+	// 스테미나
+	pcMoveStamina = pcStamina;
+	GetWorldTimerManager().SetTimer(StaminaTimerHandle, this, &ATeamChronoCharacter::SetStamina, pcStaminaTimer, true);
+	pcStamina = FMath::Clamp(pcStamina, 0, pcMaxStamina);
 }
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -119,9 +145,10 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		
 
 		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);	
+		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
@@ -131,18 +158,26 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 // 구르기
 void ATeamChronoCharacter::Dodge()
 {
-		UE_LOG(LogTemp, Warning, TEXT("123"));
 	if (!m_bIsDodging)
 	{
-
-		UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-		if (pAnimInst != nullptr)
+		UE_LOG(LogTemp, Warning, TEXT("123"));
+		// 현재 스테미너가 구르기 스테미너보다 있으면
+		if (pcStamina >= pcDodgeStamina)
 		{
-			m_bIsDodging = true;
-			RollAnimation();
-			//pAnimInst->Montage_Play(m_pDodgeMontage);
-			//LaunchCharacter(GetActorForwardVector() * DodgeSpeed, true, true);
+			
+
+			UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
+			if (pAnimInst != nullptr)
+			{
+				m_bIsDodging = true;
+				RollAnimation();
+				pcStamina -= pcDodgeStamina;
+				Steminerdecreasing = true;
+				//pAnimInst->Montage_Play(m_pDodgeMontage);
+				//LaunchCharacter(GetActorForwardVector() * DodgeSpeed, true, true);
+			}
 		}
+		
 	}
 }
 
@@ -153,5 +188,32 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 	if (a_nNotifyName.ToString() == "Dodge")
 	{
 		m_bIsDodging = false;
+	}
+}
+
+void ATeamChronoCharacter::SetStamina()
+{
+	pcMoveStamina = FMath::Clamp(pcMoveStamina, pcStamina, pcMaxStamina);
+	
+	if (Steminerdecreasing)
+	{
+		pcMoveStamina -= 2;
+		if (pcMoveStamina <= pcStamina)
+			Steminerdecreasing = false;
+	}
+	else if(pcStamina <= pcMaxStamina)
+	{
+		pcStamina = (pcRecStamina * pcStaminaTimer) + pcStamina;
+		if (pcMoveStamina >= pcMaxStamina)
+		{
+
+		}
+	}
+
+	auto staminaWidget = Cast<UStaminaWidget>(StaminaBar->GetUserWidgetObject());
+	if (staminaWidget)
+	{
+		staminaWidget->StaminaBarPercent = (float)pcMoveStamina / (float)pcMaxStamina;
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	}
 }
