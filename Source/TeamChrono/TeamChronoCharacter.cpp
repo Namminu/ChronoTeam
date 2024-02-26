@@ -10,6 +10,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
+#include "DamageEvents.generated.h"
+#include "BaseMonster.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,6 +56,19 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	SetupStimulusSource();
+}
+
+//AI(monster)에 감지될 자극 소스 생성 함수
+void ATeamChronoCharacter::SetupStimulusSource()
+{
+	StimulusSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus"));
+	if (StimulusSource)
+	{
+		StimulusSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimulusSource->RegisterWithPerceptionSystem();
+	}
 }
 
 void ATeamChronoCharacter::BeginPlay()
@@ -86,6 +103,12 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Look);
+
+		//Attacking
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::OnAttack);
+
+		//Debuging
+		EnhancedInputComponent->BindAction(DebugAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::OnDebug);
 	}
 	else
 	{
@@ -127,4 +150,17 @@ void ATeamChronoCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void ATeamChronoCharacter::OnAttack()
+{
+	if (Montage)
+	{
+		PlayAnimMontage(Montage);
+	}
+}
+
+void ATeamChronoCharacter::OnDebug_Implementation()
+{
+	auto const monster = Cast<ABaseMonster>(GetOwner());
 }
