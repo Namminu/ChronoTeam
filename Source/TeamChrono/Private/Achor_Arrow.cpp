@@ -40,17 +40,17 @@ void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Arrow hits Player"));
 		
-		if (ABaseMonster* const mon = Cast<ABaseMonster>(GetOwner()))	//Get AtkDamage from BaseMonster
-		{
-			damageAmount = mon->GetMonAtk();
-		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("Arrow Cast Failed to BaseMonster For Get DamageAmount"));
-		}
+		//if (ABaseMonster* const mon = Cast<ABaseMonster>(GetOwner()))	//Get AtkDamage from BaseMonster
+		//{
+		//	damageAmount = mon->GetMonAtk();
+		//}
+		//else
+		//{
+		//	UE_LOG(LogTemp, Error, TEXT("Arrow Cast Failed to BaseMonster For Get DamageAmount"));
+		//}
 
-		AController* MonsterC = GetInstigator()->GetController();	//Get Controller
-		UGameplayStatics::ApplyDamage(otherActor, damageAmount, MonsterC, this, DamageType);
+		//AController* MonsterC = GetInstigator()->GetController();	//Get Controller
+		//UGameplayStatics::ApplyDamage(otherActor, damageAmount, MonsterC, this, DamageType);
 	}
 
 	UE_LOG(LogTemp, Error, TEXT("Arrow Destory by overlap"));
