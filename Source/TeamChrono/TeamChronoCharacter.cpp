@@ -204,6 +204,7 @@ void ATeamChronoCharacter::SetStamina()
 	else if(pcStamina <= pcMaxStamina)
 	{
 		pcStamina = (pcRecStamina * pcStaminaTimer) + pcStamina;
+
 		if (pcMoveStamina >= pcMaxStamina)
 		{
 
