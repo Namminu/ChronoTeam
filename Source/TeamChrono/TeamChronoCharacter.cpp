@@ -171,6 +171,7 @@ void ATeamChronoCharacter::Dodge()
 			{
 				m_bIsDodging = true;
 				RollAnimation();
+
 				pcStamina -= pcDodgeStamina;
 				Steminerdecreasing = true;
 				//pAnimInst->Montage_Play(m_pDodgeMontage);
