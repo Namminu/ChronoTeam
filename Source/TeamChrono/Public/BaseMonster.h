@@ -57,6 +57,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName);
 
+	//나이아가라 이펙트 호출 함수
+	UFUNCTION(BlueprintCallable)
+	void CallNiagaraEffect();
+
 	//몬스터 사망 호출 함수
 	void mon_Death();
 	void mon_Destroy();
@@ -103,8 +107,8 @@ private:
 	AMonster_Weapon* WeaponInstance;
 
 ///
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
-	//class UNiagaraComponent* ArrowLaunchEffect;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* NiagaraEffect;
 
 ///
 	UFUNCTION()

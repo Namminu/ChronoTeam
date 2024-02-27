@@ -11,8 +11,8 @@
 #include "GameFramework/Actor.h"
 #include <Kismet/GameplayStatics.h>
 #include "Achor_Arrow.h"
-//#include "NiagaraComponent.h"
-//#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollisionBox")) }
@@ -33,10 +33,9 @@ ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxCo
 		WeaponCollisionBox->SetRelativeLocation(FVector(-7.f, 0.f, 0.f));
 	}
 
-	////Niagara Effect Component
-	//ArrowLaunchEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara Effect"));
-	//ArrowLaunchEffect->SetupAttachment(GetCapsuleComponent());
-
+	//Niagara Effect Component
+	NiagaraEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara Effect"));
+	NiagaraEffect->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +43,8 @@ void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Begin With Deactivate Niagara Effect
+	NiagaraEffect->Deactivate();
 	//Create Dynamic Material Instance
 	CreateMTI();
 
@@ -152,6 +153,11 @@ void ABaseMonster::AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socke
 	WeaponInstance = GetWorld()->SpawnActor<AMonster_Weapon>(Weapon, GetMesh()->GetSocketTransform(socketName, ERelativeTransformSpace::RTS_World));
 
 	WeaponInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
+}
+
+void ABaseMonster::CallNiagaraEffect()
+{
+	NiagaraEffect->Activate();
 }
 
 void ABaseMonster::mon_Death()
