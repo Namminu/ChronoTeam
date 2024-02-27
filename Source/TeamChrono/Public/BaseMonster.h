@@ -104,7 +104,7 @@ private:
 
 ///
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
-	//UNiagaraComponent* ArrowLaunchEffect;
+	//class UNiagaraComponent* ArrowLaunchEffect;
 
 ///
 	UFUNCTION()

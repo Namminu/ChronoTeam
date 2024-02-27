@@ -12,6 +12,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "Achor_Arrow.h"
 //#include "NiagaraComponent.h"
+//#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollisionBox")) }
