@@ -11,7 +11,7 @@
 #include "GameFramework/Actor.h"
 #include <Kismet/GameplayStatics.h>
 #include "Achor_Arrow.h"
-
+//#include "NiagaraComponent.h"
 
 // Sets default values
 ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollisionBox")) }
@@ -31,6 +31,11 @@ ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxCo
 		WeaponCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
 		WeaponCollisionBox->SetRelativeLocation(FVector(-7.f, 0.f, 0.f));
 	}
+
+	////Niagara Effect Component
+	//ArrowLaunchEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara Effect"));
+	//ArrowLaunchEffect->SetupAttachment(GetCapsuleComponent());
+
 }
 
 // Called when the game starts or when spawned

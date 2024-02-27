@@ -102,7 +102,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	AMonster_Weapon* WeaponInstance;
 
-	
+///
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	//UNiagaraComponent* ArrowLaunchEffect;
+
 ///
 	UFUNCTION()
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
