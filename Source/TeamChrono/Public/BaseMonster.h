@@ -103,8 +103,11 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* WeaponCollisionBox;
 	//무기
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	AMonster_Weapon* WeaponInstance;
+	//공격범위 히트박스
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
+	class USphereComponent* AttackRangeBox;
 
 ///
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
@@ -121,6 +124,20 @@ private:
 
 	UFUNCTION()
 	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex);
+
+	UFUNCTION()
+	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult);
+
+	UFUNCTION()
+	void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
@@ -156,6 +173,14 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
+
+	//공격 범위 float
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
+	float AttakRange;
+
+	//BlackBoard Key Name
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
+	FName AttackRangeKey;
 
 public:
 	int GetMonSpeed() const { return monSpeed; }	

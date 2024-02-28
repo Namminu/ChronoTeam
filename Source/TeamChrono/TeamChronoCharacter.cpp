@@ -160,7 +160,7 @@ void ATeamChronoCharacter::Dodge()
 {
 	if (!m_bIsDodging)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("123"));
+		//UE_LOG(LogTemp, Warning, TEXT("123"));
 		// 현재 스테미너가 구르기 스테미너보다 있으면
 		if (pcStamina >= pcDodgeStamina)
 		{

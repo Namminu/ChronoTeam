@@ -40,7 +40,7 @@ void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 	int const OtherBodyIndex, bool const FromSweep, 
 	FHitResult const& SweepResult)
 {
-	if (otherActor == this) return;
+	if (otherActor == this||otherActor->ActorHasTag("MONSTER")) return;
 
 	CallNiagaraEffect();	//Niaraga Effect when Arrow hit Something / Without this
 
