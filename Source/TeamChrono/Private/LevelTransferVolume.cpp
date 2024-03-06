@@ -20,8 +20,17 @@ void ALevelTransferVolume::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	if (OtherActor->ActorHasTag("PLAYER"))
 	{
-		UGameplayStatics::OpenLevel(this, TransferLevelName);
+		//FadeOut();
+		ChangeLevel();
+		//FTimerHandle TimerHandle;
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ALevelTransferVolume::ChangeLevel, 0.5f, false);
+		//UE_LOG(LogTemp, Warning, TEXT("Level Changed"));
 	}
+}
+
+void ALevelTransferVolume::ChangeLevel()
+{
+	UGameplayStatics::OpenLevel(this, TransferLevelName);
 }
 
 // Called when the game starts or when spawned

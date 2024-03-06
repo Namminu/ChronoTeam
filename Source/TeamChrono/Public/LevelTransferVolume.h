@@ -18,6 +18,11 @@ public:
 	UFUNCTION()
 	void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
+	void ChangeLevel();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void FadeOut();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -32,4 +37,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* TransferVolume;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WIDGET", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> FadeWZ;
 };
