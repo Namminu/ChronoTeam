@@ -141,6 +141,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
+
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
@@ -166,7 +167,6 @@ void ATeamChronoCharacter::Dodge()
 		// 현재 스테미너가 구르기 스테미너보다 있으면
 		if (pcStamina >= pcDodgeStamina)
 		{
-			
 
 			UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
 			if (pAnimInst != nullptr)
