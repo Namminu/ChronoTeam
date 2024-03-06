@@ -13,6 +13,7 @@
 #include "Components/WidgetComponent.h"
 #include "StaminaWidget.h"
 #include <algorithm>
+#include "ABAnimInstance.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -71,6 +72,30 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 		StaminaBar->SetWidgetClass(UW.Class);
 		StaminaBar->SetDrawSize(FVector2D(-100.f, 200.f));
 	}
+
+
+	MaxCombo = 3;
+	AttackEndComboState();
+}
+
+void ATeamChronoCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	ABAnim = Cast<UABAnimInstance>(GetMesh()->GetAnimInstance());
+
+	ABAnim->OnMontageEnded.AddDynamic(this, &ATeamChronoCharacter::OnAttackMontageEnded);
+
+	ABAnim->OnNextAttackCheck.AddLambda([this]() -> void
+		{
+			CanNextCombo = false;
+			if (IsComboInputOn)
+			{
+			
+				AttackStartComboState();
+				ABAnim->JumpToAttackMontageSection(CurrentCombo);
+				
+			}
+		});
 }
 
 void ATeamChronoCharacter::BeginPlay()
@@ -118,7 +143,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
 		//Acttak
-		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Dodge);
+		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Attack);
 	}
 	else
 	{
@@ -126,21 +151,59 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	}
 }
 
+void ATeamChronoCharacter::Attack()
+{
+	if (IsAttacking)
+	{
+		if (CanNextCombo)
+		{
+			IsComboInputOn = true;
+			
+		}
+	}
+	else
+	{
+		AttackStartComboState();
+		ABAnim->PlayAttackMontage();
+		ABAnim->JumpToAttackMontageSection(CurrentCombo);
+		IsAttacking = true;
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("!!!!!!!")));
+}
+
+void ATeamChronoCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	IsAttacking = false;
+	AttackEndComboState();
+}
+
+void ATeamChronoCharacter::AttackStartComboState()
+{
+	CanNextCombo = true;
+	IsComboInputOn = false;
+	CurrentCombo = FMath::Clamp<int32>(CurrentCombo + 1, 1, MaxCombo);
+}
+
+void ATeamChronoCharacter::AttackEndComboState()
+{
+	IsComboInputOn = false;
+	CanNextCombo = false;
+	CurrentCombo = 0;
+}
+
+
 void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !m_bIsDodging)
+	if (Controller != nullptr && !m_bIsDodging && !IsAttacking)
 	{
-		// 몽타주 종료
-		/*UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-		pAnimInst->Montage_Stop(0);*/
 
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
+		
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
@@ -148,6 +211,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		
+		GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), ForwardDirection.Y));
 
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
@@ -160,7 +224,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 // 구르기
 void ATeamChronoCharacter::Dodge()
 {
-	GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+	//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	if (!m_bIsDodging)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("123"));
@@ -225,6 +289,6 @@ void ATeamChronoCharacter::SetStamina()
 	if (staminaWidget)
 	{
 		staminaWidget->StaminaBarPercent = pcMoveStamina / pcMaxStamina;
-		GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+		//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	}
 }
