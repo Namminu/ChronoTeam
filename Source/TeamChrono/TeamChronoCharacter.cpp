@@ -111,13 +111,14 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Dodging
-		 EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Dodge);
+		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Dodge);
 		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
-		
+		//Acttak
+		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Dodge);
 	}
 	else
 	{
@@ -158,6 +159,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 // 구르기
 void ATeamChronoCharacter::Dodge()
 {
+	GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	if (!m_bIsDodging)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("123"));
@@ -192,30 +194,37 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 	}
 }
 
+
+//스테미나 UI
 void ATeamChronoCharacter::SetStamina()
 {
 	pcMoveStamina = FMath::Clamp(pcMoveStamina, pcStamina, pcMaxStamina);
-	
+
+	auto staminaWidget = Cast<UStaminaWidget>(StaminaBar->GetUserWidgetObject());
+
 	if (Steminerdecreasing)
 	{
+		if(staminaWidget->GetVisibility() == ESlateVisibility::Hidden)
+			staminaWidget->SetVisibility(ESlateVisibility::Visible);
+
 		pcMoveStamina -= 2;
 		if (pcMoveStamina <= pcStamina)
 			Steminerdecreasing = false;
 	}
-	else if(pcStamina <= pcMaxStamina)
+	else if(pcStamina < pcMaxStamina)
 	{
 		pcStamina = (pcRecStamina * pcStaminaTimer) + pcStamina;
 
-		if (pcMoveStamina >= pcMaxStamina)
-		{
-
-		}
+		
 	}
-
-	auto staminaWidget = Cast<UStaminaWidget>(StaminaBar->GetUserWidgetObject());
+	else if (pcMoveStamina >= pcMaxStamina)
+	{
+		staminaWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
 	if (staminaWidget)
 	{
-		staminaWidget->StaminaBarPercent = (float)pcMoveStamina / (float)pcMaxStamina;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+		staminaWidget->StaminaBarPercent = pcMoveStamina / pcMaxStamina;
+		GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	}
 }
