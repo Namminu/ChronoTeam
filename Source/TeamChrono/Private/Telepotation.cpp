@@ -1,0 +1,50 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Telepotation.h"
+#include "Components/BoxComponent.h"
+#include "Components/ArrowComponent.h"
+
+// Sets default values
+ATelepotation::ATelepotation()
+{
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Overlap Box"));
+	SetRootComponent(collider);
+
+	arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Target Location Arrow"));
+	arrow->SetupAttachment(collider);
+}
+
+void ATelepotation::Teleport(AActor* actor)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Target Name : %s"), *actor->GetName());
+	//Set collision actor location to arrow(target) location
+	actor->SetActorRelativeLocation(arrow->GetRelativeLocation());
+}
+
+void ATelepotation::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	if (OtherActor->ActorHasTag("PLAYER"))
+	{
+		//FadeIn();
+		Teleport(OtherActor);
+	}
+}
+
+// Called when the game starts or when spawned
+void ATelepotation::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+// Called every frame
+void ATelepotation::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
