@@ -21,7 +21,7 @@ ATelepotation::ATelepotation()
 void ATelepotation::Teleport(AActor* actor)
 {
 	//Set collision actor location to arrow(target) location
-	actor->SetActorRelativeLocation(arrowTarget->GetRelativeLocation());
+	actor->SetActorRelativeLocation(arrowTarget->GetComponentLocation());
 }
 
 void ATelepotation::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -38,7 +38,7 @@ void ATelepotation::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	DrawDebugDirectionalArrow(GetWorld(), collider->GetRelativeLocation(), arrowTarget->GetRelativeLocation(), 140.f, FColor::Blue, true, -1.f, 0, 2.f);
+	DrawDebugDirectionalArrow(GetWorld(), collider->GetComponentLocation(), arrowTarget->GetComponentLocation(), 140.f, FColor::Blue, true, -1.f, 0, 2.f);
 }
 
 // Called every frame
