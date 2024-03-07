@@ -12,24 +12,23 @@ ATelepotation::ATelepotation()
 	PrimaryActorTick.bCanEverTick = true;
 
 	collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Overlap Box"));
-	SetRootComponent(collider);
+	RootComponent = collider;
 
-	arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Target Location Arrow"));
-	arrow->SetupAttachment(collider);
+	arrowTarget = CreateDefaultSubobject<UArrowComponent>(TEXT("Target Location Arrow"));
+	arrowTarget->SetupAttachment(collider);
 }
 
 void ATelepotation::Teleport(AActor* actor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Target Name : %s"), *actor->GetName());
 	//Set collision actor location to arrow(target) location
-	actor->SetActorRelativeLocation(arrow->GetRelativeLocation());
+	actor->SetActorRelativeLocation(arrowTarget->GetRelativeLocation());
 }
 
 void ATelepotation::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	if (OtherActor->ActorHasTag("PLAYER"))
 	{
-		//FadeIn();
+		FadeIn();
 		Teleport(OtherActor);
 	}
 }
@@ -39,6 +38,7 @@ void ATelepotation::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	DrawDebugDirectionalArrow(GetWorld(), collider->GetRelativeLocation(), arrowTarget->GetRelativeLocation(), 140.f, FColor::Blue, true, -1.f, 0, 2.f);
 }
 
 // Called every frame

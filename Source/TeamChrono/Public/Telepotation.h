@@ -33,10 +33,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	UPROPERTY()
+	USceneComponent* Root;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TELEPORT", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* collider;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TELEPORT", meta = (AllowPrivateAccess = "true"))
-	class UArrowComponent* arrow;
+	class UArrowComponent* arrowTarget;
 
 };
