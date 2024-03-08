@@ -44,6 +44,9 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ActtackAction;
+
 	UPROPERTY(VisibleAnywhere)
 	class UWidgetComponent* StaminaBar;
 
@@ -76,10 +79,10 @@ public:
 
 	//최대 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcMaxStamina = 100;
+	float pcMaxStamina = 100.0f;
 	// 현재 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcStamina = 100;
+	float pcStamina = 100.0f;
 	// 스테미너UI 부드럽게 변경 시간
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcStaminaTimer = 0.05f;
