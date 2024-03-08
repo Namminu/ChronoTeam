@@ -73,7 +73,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 		StaminaBar->SetDrawSize(FVector2D(-100.f, 200.f));
 	}
 
-	FName WeaponSocket(TEXT("Weapon_Sword"));
+	FName WeaponSocket(TEXT("Weapon_Sword_Idle"));
 	if (GetMesh()->DoesSocketExist(WeaponSocket))
 	{
 		Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON"));
@@ -168,48 +168,36 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATeamChronoCharacter::Attack()
 {
-	if (!m_bIsDodging)
+	if (IsAttacking)
 	{
-		if (IsAttacking)
+		if (CanNextCombo)
 		{
-			if (CanNextCombo)
-			{
-				IsComboInputOn = true;
-
-			}
-		}
-		else
-		{
-			AttackStartComboState();
-			ABAnim->PlayAttackMontage();
-			ABAnim->JumpToAttackMontageSection(CurrentCombo);
-			IsAttacking = true;
+			IsComboInputOn = true;
 
 		}
 	}
-	
+	else
+	{
+		AttackStartComboState();
+		ABAnim->PlayAttackMontage();
+		ABAnim->JumpToAttackMontageSection(CurrentCombo);
+		IsAttacking = true;
+
+	}
 	// GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("!!!!!!!")));
 }
 
 void ATeamChronoCharacter::AttackClickStart()
 {
-	if (!m_bIsDodging)
-	{
-		IsComboInputOn = true;
-		ABAnim->NextAttacking = true;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
-	}
-	
+	IsComboInputOn = true;
+	ABAnim->NextAttacking = true;
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
 }
 void ATeamChronoCharacter::AttackClickEnd()
 {
-	if (!m_bIsDodging)
-	{
-		IsComboInputOn = false;
-		ABAnim->NextAttacking = false;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickEnd")));
-	}
-	
+	IsComboInputOn = false;
+	ABAnim->NextAttacking = false;
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickEnd")));
 }
 
 void ATeamChronoCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
