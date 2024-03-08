@@ -24,7 +24,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the con	troller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -59,7 +59,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 
 
 	StaminaBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("StaminaBar"));
-	StaminaBar->SetupAttachment(GetMesh()); 
+	StaminaBar->SetupAttachment(GetMesh());
 
 	// 월드공간 기준으로 배치될지(3D UI), 스크린 좌표 기준으로 배치될지(2D UI) 결정
 	// Screen은 절대로 화면 밖으로 짤리지 않는다
@@ -71,6 +71,18 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 	{
 		StaminaBar->SetWidgetClass(UW.Class);
 		StaminaBar->SetDrawSize(FVector2D(-100.f, 200.f));
+	}
+
+	FName WeaponSocket(TEXT("Weapon_Sword_Idle"));
+	if (GetMesh()->DoesSocketExist(WeaponSocket))
+	{
+		Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON"));
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> SW(TEXT("/Script/Engine.StaticMesh'/Game/All_Asset/Fantastic_Dungeon_Pack/meshes/props/tools/SM_PROP_weapon_sword_dungeon_01.SM_PROP_weapon_sword_dungeon_01'"));
+		if (SW.Succeeded())
+		{
+			Weapon->SetStaticMesh(SW.Object);
+		}
+		Weapon->SetupAttachment(GetMesh(), WeaponSocket);
 	}
 
 
@@ -87,13 +99,14 @@ void ATeamChronoCharacter::PostInitializeComponents()
 
 	ABAnim->OnNextAttackCheck.AddLambda([this]() -> void
 		{
+
 			CanNextCombo = false;
 			if (IsComboInputOn)
 			{
-			
+
 				AttackStartComboState();
 				ABAnim->JumpToAttackMontageSection(CurrentCombo);
-				
+
 			}
 		});
 }
@@ -134,7 +147,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+
 		// Dodging
 		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Dodge);
 		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -143,7 +156,9 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
 		//Acttak
-		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Attack);
+		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
+		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
 	}
 	else
 	{
@@ -158,7 +173,7 @@ void ATeamChronoCharacter::Attack()
 		if (CanNextCombo)
 		{
 			IsComboInputOn = true;
-			
+
 		}
 	}
 	else
@@ -167,8 +182,22 @@ void ATeamChronoCharacter::Attack()
 		ABAnim->PlayAttackMontage();
 		ABAnim->JumpToAttackMontageSection(CurrentCombo);
 		IsAttacking = true;
+
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("!!!!!!!")));
+	// GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("!!!!!!!")));
+}
+
+void ATeamChronoCharacter::AttackClickStart()
+{
+	IsComboInputOn = true;
+	ABAnim->NextAttacking = true;
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
+}
+void ATeamChronoCharacter::AttackClickEnd()
+{
+	IsComboInputOn = false;
+	ABAnim->NextAttacking = false;
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickEnd")));
 }
 
 void ATeamChronoCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
@@ -187,6 +216,7 @@ void ATeamChronoCharacter::AttackStartComboState()
 void ATeamChronoCharacter::AttackEndComboState()
 {
 	IsComboInputOn = false;
+
 	CanNextCombo = false;
 	CurrentCombo = 0;
 }
@@ -203,14 +233,14 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		
+
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
+
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		
+
 		GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), ForwardDirection.Y));
 
 		// add movement 
@@ -244,7 +274,7 @@ void ATeamChronoCharacter::Dodge()
 				//LaunchCharacter(GetActorForwardVector() * DodgeSpeed, true, true);
 			}
 		}
-		
+
 	}
 }
 
@@ -268,24 +298,24 @@ void ATeamChronoCharacter::SetStamina()
 
 	if (Steminerdecreasing)
 	{
-		if(staminaWidget->GetVisibility() == ESlateVisibility::Hidden)
+		if (staminaWidget->GetVisibility() == ESlateVisibility::Hidden)
 			staminaWidget->SetVisibility(ESlateVisibility::Visible);
 
 		pcMoveStamina -= 2;
 		if (pcMoveStamina <= pcStamina)
 			Steminerdecreasing = false;
 	}
-	else if(pcStamina < pcMaxStamina)
+	else if (pcStamina < pcMaxStamina)
 	{
 		pcStamina = (pcRecStamina * pcStaminaTimer) + pcStamina;
 
-		
+
 	}
 	else if (pcMoveStamina >= pcMaxStamina)
 	{
 		staminaWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
-	
+
 	if (staminaWidget)
 	{
 		staminaWidget->StaminaBarPercent = pcMoveStamina / pcMaxStamina;
