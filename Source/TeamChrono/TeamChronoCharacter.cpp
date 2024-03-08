@@ -168,7 +168,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATeamChronoCharacter::Attack()
 {
-	if (!m_bIsDodgingEnd)
+	if (!m_bIsDodging)
 	{
 		if (IsAttacking)
 		{
@@ -193,7 +193,7 @@ void ATeamChronoCharacter::Attack()
 
 void ATeamChronoCharacter::AttackClickStart()
 {
-	if (!m_bIsDodgingEnd && IsAttacking)
+	if (!m_bIsDodging)
 	{
 		IsComboInputOn = true;
 		ABAnim->NextAttacking = true;
@@ -203,7 +203,7 @@ void ATeamChronoCharacter::AttackClickStart()
 }
 void ATeamChronoCharacter::AttackClickEnd()
 {
-	if (!m_bIsDodgingEnd && IsAttacking)
+	if (!m_bIsDodging)
 	{
 		IsComboInputOn = false;
 		ABAnim->NextAttacking = false;
@@ -278,7 +278,6 @@ void ATeamChronoCharacter::Dodge()
 			if (pAnimInst != nullptr)
 			{
 				m_bIsDodging = true;
-				m_bIsDodgingEnd = true;
 				RollAnimation();
 
 				pcStamina -= pcDodgeStamina;
@@ -298,11 +297,6 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 	if (a_nNotifyName.ToString() == "Dodge")
 	{
 		m_bIsDodging = false;
-	}
-	if (a_nNotifyName.ToString() == "DodgeEnd")
-	{
-		m_bIsDodgingEnd = false;
-
 	}
 }
 
