@@ -47,6 +47,44 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere)
 	class UWidgetComponent* StaminaBar;
 
+
+	void Attack();
+
+	// 공격 몽타주 종료 시
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	// 공격 시작 콤보 상태
+	void AttackStartComboState();
+
+	// 공격 종료 콤보 상태
+	void AttackEndComboState();
+
+	// 공격중인지 확인
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsAttacking;
+
+	// 다음 콤보
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool CanNextCombo;
+
+	// 콤보 입력이 켜져 있는지 여부
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsComboInputOn;
+
+	// 현재 콤보
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	int32 CurrentCombo;
+
+	// 맥스 콤보
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	int32 MaxCombo;
+
+	UPROPERTY()
+	class UABAnimInstance* ABAnim;
+
+
+
 private:
 
 	// 움직이는 스테미나 표시 할 변수
@@ -106,6 +144,8 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+
+	virtual void PostInitializeComponents();
 
 public:
 	UFUNCTION()
