@@ -13,6 +13,7 @@
 #include "Components/WidgetComponent.h"
 #include "StaminaWidget.h"
 #include <algorithm>
+#include "ABAnimInstance.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -23,7 +24,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the con	troller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -58,7 +59,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 
 
 	StaminaBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("StaminaBar"));
-	StaminaBar->SetupAttachment(GetMesh()); 
+	StaminaBar->SetupAttachment(GetMesh());
 
 	// 월드공간 기준으로 배치될지(3D UI), 스크린 좌표 기준으로 배치될지(2D UI) 결정
 	// Screen은 절대로 화면 밖으로 짤리지 않는다
@@ -71,6 +72,43 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 		StaminaBar->SetWidgetClass(UW.Class);
 		StaminaBar->SetDrawSize(FVector2D(-100.f, 200.f));
 	}
+
+	FName WeaponSocket(TEXT("Weapon_Sword"));
+	if (GetMesh()->DoesSocketExist(WeaponSocket))
+	{
+		Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON"));
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> SW(TEXT("/Script/Engine.StaticMesh'/Game/All_Asset/Fantastic_Dungeon_Pack/meshes/props/tools/SM_PROP_weapon_sword_dungeon_01.SM_PROP_weapon_sword_dungeon_01'"));
+		if (SW.Succeeded())
+		{
+			Weapon->SetStaticMesh(SW.Object);
+		}
+		Weapon->SetupAttachment(GetMesh(), WeaponSocket);
+	}
+
+
+	MaxCombo = 3;
+	AttackEndComboState();
+}
+
+void ATeamChronoCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	ABAnim = Cast<UABAnimInstance>(GetMesh()->GetAnimInstance());
+
+	ABAnim->OnMontageEnded.AddDynamic(this, &ATeamChronoCharacter::OnAttackMontageEnded);
+
+	ABAnim->OnNextAttackCheck.AddLambda([this]() -> void
+		{
+
+			CanNextCombo = false;
+			if (IsComboInputOn)
+			{
+
+				AttackStartComboState();
+				ABAnim->JumpToAttackMontageSection(CurrentCombo);
+
+			}
+		});
 }
 
 void ATeamChronoCharacter::BeginPlay()
@@ -109,15 +147,18 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+
 		// Dodging
-		 EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Dodge);
+		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Dodge);
 		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
-		
+		//Acttak
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
 	}
 	else
 	{
@@ -125,27 +166,94 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	}
 }
 
+void ATeamChronoCharacter::Attack()
+{
+	if (!m_bIsDodgingEnd)
+	{
+		if (IsAttacking)
+		{
+			if (CanNextCombo)
+			{
+				IsComboInputOn = true;
+
+			}
+		}
+		else
+		{
+			AttackStartComboState();
+			ABAnim->PlayAttackMontage();
+			ABAnim->JumpToAttackMontageSection(CurrentCombo);
+			IsAttacking = true;
+
+		}
+	}
+	
+	// GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("!!!!!!!")));
+}
+
+void ATeamChronoCharacter::AttackClickStart()
+{
+	if (!m_bIsDodgingEnd && IsAttacking)
+	{
+		IsComboInputOn = true;
+		ABAnim->NextAttacking = true;
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
+	}
+	
+}
+void ATeamChronoCharacter::AttackClickEnd()
+{
+	if (!m_bIsDodgingEnd && IsAttacking)
+	{
+		IsComboInputOn = false;
+		ABAnim->NextAttacking = false;
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickEnd")));
+	}
+	
+}
+
+void ATeamChronoCharacter::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	IsAttacking = false;
+	AttackEndComboState();
+}
+
+void ATeamChronoCharacter::AttackStartComboState()
+{
+	CanNextCombo = true;
+	IsComboInputOn = false;
+	CurrentCombo = FMath::Clamp<int32>(CurrentCombo + 1, 1, MaxCombo);
+}
+
+void ATeamChronoCharacter::AttackEndComboState()
+{
+	IsComboInputOn = false;
+
+	CanNextCombo = false;
+	CurrentCombo = 0;
+}
+
+
 void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !m_bIsDodging)
+	if (Controller != nullptr && !m_bIsDodging && !IsAttacking)
 	{
-		// 몽타주 종료
-		/*UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-		pAnimInst->Montage_Stop(0);*/
 
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
+
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
+
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		
+
+		GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), ForwardDirection.Y));
 
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
@@ -158,18 +266,19 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 // 구르기
 void ATeamChronoCharacter::Dodge()
 {
+	//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	if (!m_bIsDodging)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("123"));
+		UE_LOG(LogTemp, Warning, TEXT("123"));
 		// 현재 스테미너가 구르기 스테미너보다 있으면
 		if (pcStamina >= pcDodgeStamina)
 		{
-			
 
 			UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
 			if (pAnimInst != nullptr)
 			{
 				m_bIsDodging = true;
+				m_bIsDodgingEnd = true;
 				RollAnimation();
 
 				pcStamina -= pcDodgeStamina;
@@ -178,7 +287,7 @@ void ATeamChronoCharacter::Dodge()
 				//LaunchCharacter(GetActorForwardVector() * DodgeSpeed, true, true);
 			}
 		}
-		
+
 	}
 }
 
@@ -190,38 +299,44 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 	{
 		m_bIsDodging = false;
 	}
+	if (a_nNotifyName.ToString() == "DodgeEnd")
+	{
+		m_bIsDodgingEnd = false;
+
+	}
 }
 
+
+//스테미나 UI
 void ATeamChronoCharacter::SetStamina()
 {
 	pcMoveStamina = FMath::Clamp(pcMoveStamina, pcStamina, pcMaxStamina);
-	
+
+	auto staminaWidget = Cast<UStaminaWidget>(StaminaBar->GetUserWidgetObject());
+
 	if (Steminerdecreasing)
 	{
+		if (staminaWidget->GetVisibility() == ESlateVisibility::Hidden)
+			staminaWidget->SetVisibility(ESlateVisibility::Visible);
+
 		pcMoveStamina -= 2;
 		if (pcMoveStamina <= pcStamina)
 			Steminerdecreasing = false;
 	}
-	else if(pcStamina <= pcMaxStamina)
+	else if (pcStamina < pcMaxStamina)
 	{
 		pcStamina = (pcRecStamina * pcStaminaTimer) + pcStamina;
 
-		if (pcMoveStamina >= pcMaxStamina)
-		{
 
-		}
+	}
+	else if (pcMoveStamina >= pcMaxStamina)
+	{
+		staminaWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 
-	auto staminaWidget = Cast<UStaminaWidget>(StaminaBar->GetUserWidgetObject());
 	if (staminaWidget)
 	{
-		staminaWidget->StaminaBarPercent = (float)pcMoveStamina / (float)pcMaxStamina;
-		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+		staminaWidget->StaminaBarPercent = pcMoveStamina / pcMaxStamina;
+		//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	}
 }
-
-float ATeamChronoCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Player hit by : %s, and Damage Amount : %f"), *DamageCauser->GetName(), DamageAmount);
-	return 0.0f;
-} 

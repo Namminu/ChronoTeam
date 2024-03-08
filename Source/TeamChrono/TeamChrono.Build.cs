@@ -17,8 +17,7 @@ public class TeamChrono : ModuleRules
 			"AIModule",
 			"GameplayTasks",
 			"NavigationSystem",
-			"UMG",
-			"Niagara"
+			"UMG"
 		});
 	}
 }
