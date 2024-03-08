@@ -156,9 +156,9 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
 		//Acttak
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
+		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
+		EnhancedInputComponent->BindAction(ActtackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
 	}
 	else
 	{

@@ -45,7 +45,7 @@ class ATeamChronoCharacter : public ACharacter
 	UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* AttackAction;
+	UInputAction* ActtackAction;
 
 	UPROPERTY(VisibleAnywhere)
 	class UWidgetComponent* StaminaBar;
