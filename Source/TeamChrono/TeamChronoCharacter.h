@@ -113,7 +113,7 @@ public:
 	// 회피 기능
 	void Dodge();
 	bool m_bIsDodging = false;
-
+	bool m_bIsDodgingEnd = false;
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
 
