@@ -13,6 +13,7 @@
 #include "Components/WidgetComponent.h"
 #include "StaminaWidget.h"
 #include <algorithm>
+#include "ABAnimInstance.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -148,17 +149,16 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
 		// Dodging
-		 EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Dodge);
+		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Dodge);
 		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
-		//Attak
+		//Acttak
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
-
 	}
 	else
 	{
@@ -233,20 +233,19 @@ void ATeamChronoCharacter::AttackEndComboState()
 	CurrentCombo = 0;
 }
 
+
 void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !m_bIsDodging)
+	if (Controller != nullptr && !m_bIsDodging && !IsAttacking)
 	{
-		// 몽타주 종료
-		/*UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
-		pAnimInst->Montage_Stop(0);*/
 
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
@@ -267,13 +266,13 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 // 구르기
 void ATeamChronoCharacter::Dodge()
 {
+	//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	if (!m_bIsDodging)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("123"));
+		UE_LOG(LogTemp, Warning, TEXT("123"));
 		// 현재 스테미너가 구르기 스테미너보다 있으면
 		if (pcStamina >= pcDodgeStamina)
 		{
-			
 
 			UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
 			if (pAnimInst != nullptr)
@@ -307,10 +306,14 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 	}
 }
 
+
+//스테미나 UI
 void ATeamChronoCharacter::SetStamina()
 {
 	pcMoveStamina = FMath::Clamp(pcMoveStamina, pcStamina, pcMaxStamina);
-	
+
+	auto staminaWidget = Cast<UStaminaWidget>(StaminaBar->GetUserWidgetObject());
+
 	if (Steminerdecreasing)
 	{
 		if (staminaWidget->GetVisibility() == ESlateVisibility::Hidden)
@@ -320,7 +323,6 @@ void ATeamChronoCharacter::SetStamina()
 		if (pcMoveStamina <= pcStamina)
 			Steminerdecreasing = false;
 	}
-
 	else if (pcStamina < pcMaxStamina)
 	{
 		pcStamina = (pcRecStamina * pcStaminaTimer) + pcStamina;
@@ -332,27 +334,9 @@ void ATeamChronoCharacter::SetStamina()
 		staminaWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 
-	else if(pcStamina <= pcMaxStamina)
-	{
-		pcStamina = (pcRecStamina * pcStaminaTimer) + pcStamina;
-
-		if (pcMoveStamina >= pcMaxStamina)
-		{
-
-		}
-	}
-
-	auto staminaWidget = Cast<UStaminaWidget>(StaminaBar->GetUserWidgetObject());
-
 	if (staminaWidget)
 	{
-		staminaWidget->StaminaBarPercent = (float)pcMoveStamina / (float)pcMaxStamina;
-		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+		staminaWidget->StaminaBarPercent = pcMoveStamina / pcMaxStamina;
+		//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
 	}
 }
-
-float ATeamChronoCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Player hit by : %s, and Damage Amount : %f"), *DamageCauser->GetName(), DamageAmount);
-	return 0.0f;
-} 
