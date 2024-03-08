@@ -4,11 +4,18 @@
 #include "BaseMonster.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <TeamChrono/TeamChronoCharacter.h>
 #include "AI_Controller_.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
+#include <Kismet/GameplayStatics.h>
+#include "Achor_Arrow.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include <Blueprint/AIBlueprintHelperLibrary.h>
 
 // Sets default values
 ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollisionBox")) }
@@ -28,6 +35,13 @@ ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxCo
 		WeaponCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
 		WeaponCollisionBox->SetRelativeLocation(FVector(-7.f, 0.f, 0.f));
 	}
+	//Attack Range - Capsule Component Setup
+	AttackRangeBox = CreateDefaultSubobject<USphereComponent>(TEXT("Attack Range Box"));
+	AttackRangeBox->SetupAttachment(GetCapsuleComponent());
+
+	//Niagara Effect Component
+	NiagaraEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara Effect"));
+	NiagaraEffect->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned
@@ -35,15 +49,19 @@ void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Begin With Deactivate Niagara Effect
+	NiagaraEffect->Deactivate();
 	//Create Dynamic Material Instance
 	CreateMTI();
 
-	//몬스터 초기 체력 초기화
 	monNowHp = monMaxHp;
+	monAtk = 1;
 
 	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
-	
+	AttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
+	AttackRangeBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
+
 	//시작 시 무기 소지한 채로 시작
 	//AttachWeapon(monsterWeapon, "Weapon_R");
 
@@ -62,11 +80,9 @@ void ABaseMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 
 	if (otherActor->ActorHasTag("PLAYER"))	//히트박스가 플레이어에게 닿았을 경우 = 플레이어 공격 시
 	{
-		//auto const NewHealth = Enemy->GetHealth() - Enemy->GetMaxHealth() * 0.1f;
-		//Enemy->SetHealth(NewHealth);
-	
 		UE_LOG(LogTemp, Warning, TEXT("Monster hit Player"));
-		//applyDamage()~;
+
+		UGameplayStatics::ApplyDamage(otherActor, monAtk, nullptr, this, DamageType);
 	}
 }
 
@@ -76,6 +92,32 @@ void ABaseMonster::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedCompo
 	int const OtherBodyIndex)
 {
 
+}
+
+void ABaseMonster::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	AActor* const otherActor, UPrimitiveComponent* const OtherComponent,
+	int const OtherBodyIndex, bool const FromSweep,
+	FHitResult const& SweepResult)
+{
+	if (otherActor == this) return;
+
+	if (otherActor->ActorHasTag("PLAYER"))
+	{
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
+		UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
+	}
+}
+
+void ABaseMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	AActor* const otherActor,
+	UPrimitiveComponent* const OtherComponent,
+	int const OtherBodyIndex)
+{
+	if (otherActor->ActorHasTag("PLAYER"))
+	{
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
+		UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
+	}
 }
 
 // Called every frame
@@ -94,6 +136,7 @@ void ABaseMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 int ABaseMonster::MeleeAttack_Implementation()
 {
+	UE_LOG(LogTemp, Error, TEXT("Monster get attack"));
 	if (AtkMontage)
 	{
 		PlayAnimMontage(AtkMontage);
@@ -117,13 +160,6 @@ void ABaseMonster::AttackEnd() const
 	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	UE_LOG(LogTemp, Error, TEXT("Attack End"));
-}
-
-void ABaseMonster::FireArrow() const
-{
-	UE_LOG(LogTemp, Warning, TEXT("Achor Launch Arrow"));
-
-
 }
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -152,6 +188,11 @@ void ABaseMonster::AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socke
 	WeaponInstance = GetWorld()->SpawnActor<AMonster_Weapon>(Weapon, GetMesh()->GetSocketTransform(socketName, ERelativeTransformSpace::RTS_World));
 
 	WeaponInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
+}
+
+void ABaseMonster::CallNiagaraEffect()
+{
+	NiagaraEffect->Activate();
 }
 
 void ABaseMonster::mon_Death()

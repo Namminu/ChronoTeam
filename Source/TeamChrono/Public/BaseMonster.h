@@ -37,7 +37,8 @@ public:
 	void AttackEnd() const;
 
 	//아처 전용 - 화살 발사 함수
-	void FireArrow() const;
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FireArrow();
 
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent, 
@@ -55,6 +56,10 @@ public:
 	//무기 장착 호출 함수
 	UFUNCTION(BlueprintCallable)
 	void AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName);
+
+	//나이아가라 이펙트 호출 함수
+	UFUNCTION(BlueprintCallable)
+	void CallNiagaraEffect();
 
 	//몬스터 사망 호출 함수
 	void mon_Death();
@@ -98,10 +103,16 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* WeaponCollisionBox;
 	//무기
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	AMonster_Weapon* WeaponInstance;
+	//공격범위 히트박스
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
+	class USphereComponent* AttackRangeBox;
 
-	
+///
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* NiagaraEffect;
+
 ///
 	UFUNCTION()
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
@@ -113,6 +124,20 @@ private:
 
 	UFUNCTION()
 	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex);
+
+	UFUNCTION()
+	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult);
+
+	UFUNCTION()
+	void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
@@ -131,7 +156,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	int monAtkRange;
 	//몬스터 공격력
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	int monAtk;
 
 	////아처 몬스터 화살 거리
@@ -146,12 +171,23 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	float flashCount;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageType> DamageType;
+
+	//공격 범위 float
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
+	float AttakRange;
+
+	//BlackBoard Key Name
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
+	FName AttackRangeKey;
+
 public:
 	int GetMonSpeed() const { return monSpeed; }	
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonAtk() const { return monAtk; }
-
+	// 
 	//float GetArrowDistance() const { return arrow_Distance; }
 	
 };

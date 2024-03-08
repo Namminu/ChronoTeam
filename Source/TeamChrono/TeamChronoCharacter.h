@@ -90,6 +90,9 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsComboInputOn;
 
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent* StaminaBar;
+
 private:
 
 	// 움직이는 스테미나 표시 할 변수
@@ -119,10 +122,10 @@ public:
 
 	//최대 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcMaxStamina = 100.0f;
+	float pcMaxStamina = 100;
 	// 현재 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcStamina = 100.0f;
+	float pcStamina = 100;
 	// 스테미너UI 부드럽게 변경 시간
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcStaminaTimer = 0.05f;
@@ -155,8 +158,6 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
-	virtual void PostInitializeComponents();
-
 public:
 	UFUNCTION()
 	void HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload);
@@ -166,5 +167,7 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	//Minwoo_for Debug - Take Damage Function
+	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 
 };

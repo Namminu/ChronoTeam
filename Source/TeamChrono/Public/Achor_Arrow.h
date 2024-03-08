@@ -11,8 +11,8 @@ UCLASS()
 class TEAMCHRONO_API AAchor_Arrow : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AAchor_Arrow();
 
@@ -33,12 +33,16 @@ public:
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
 
+	UFUNCTION(BlueprintCallable)
+	void CallNiagaraEffect();
+
+	void arrowDestroy();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -58,6 +62,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* NiagaraEffect;
+
 	////Arrow Target Distance
 	//float arrowDistance;
 	////Arrow Start Location
@@ -66,4 +73,7 @@ private:
 	//FVector CurrentPosition;
 
 	float damageAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	float delay;
 };
