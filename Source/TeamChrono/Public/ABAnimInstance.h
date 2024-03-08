@@ -12,13 +12,13 @@ DECLARE_MULTICAST_DELEGATE(FOnNextAttackCheckDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
 
 /**
- * 
+ *
  */
 UCLASS()
 class TEAMCHRONO_API UABAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
-	
+
 public:
 	UABAnimInstance();
 	void PlayAttackMontage();
@@ -27,6 +27,10 @@ public:
 	FOnNextAttackCheckDelegate OnNextAttackCheck;
 	FOnAttackHitCheckDelegate  OnAttackHitCheck;
 
+	UFUNCTION(BlueprintCallable)
+	void NextAttackCheck();
+
+	bool NextAttacking = false;
 private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
@@ -34,9 +38,9 @@ private:
 
 	UFUNCTION()
 	void AnimNotify_AttackHitCheck();
-
 	UFUNCTION()
 	void AnimNotify_NextAttackCheck();
+
 
 
 	FName GetAttackMontageSectionName(int32 Section);

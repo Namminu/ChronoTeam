@@ -15,7 +15,7 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-UCLASS(config=Game)
+UCLASS(config = Game)
 class ATeamChronoCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -27,7 +27,7 @@ class ATeamChronoCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
-	
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
@@ -45,14 +45,15 @@ class ATeamChronoCharacter : public ACharacter
 	UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ActtackAction;
+	UInputAction* AttackAction;
 
 	UPROPERTY(VisibleAnywhere)
 	class UWidgetComponent* StaminaBar;
 
 
 	void Attack();
-
+	void AttackClickStart();
+	void AttackClickEnd();
 	// 공격 몽타주 종료 시
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
@@ -71,9 +72,7 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool CanNextCombo;
 
-	// 콤보 입력이 켜져 있는지 여부
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-	bool IsComboInputOn;
+
 
 	// 현재 콤보
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
@@ -86,7 +85,10 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY()
 	class UABAnimInstance* ABAnim;
 
-
+public:
+	// 콤보 입력이 켜져 있는지 여부
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsComboInputOn;
 
 private:
 
@@ -101,7 +103,7 @@ private:
 	bool Steminerdecreasing = false;
 public:
 	ATeamChronoCharacter();
-	
+
 	// 구르기 몽타주
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	UAnimMontage* m_pDodgeMontage;
@@ -111,7 +113,7 @@ public:
 	// 회피 기능
 	void Dodge();
 	bool m_bIsDodging = false;
-
+	bool m_bIsDodgingEnd = false;
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
 
@@ -132,6 +134,11 @@ public:
 	//구르기 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcDodgeStamina = 20.0f;
+
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Weapon;
+
 protected:
 
 	/** Called for movement input */
@@ -139,12 +146,12 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+
 
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
 	// To add mapping context
 	virtual void BeginPlay();
 
@@ -161,4 +168,3 @@ public:
 
 
 };
-
