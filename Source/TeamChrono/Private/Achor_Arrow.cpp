@@ -5,6 +5,8 @@
 #include "BaseMonster.h"
 #include "Components/CapsuleComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 AAchor_Arrow::AAchor_Arrow()
@@ -26,6 +28,10 @@ AAchor_Arrow::AAchor_Arrow()
 
 	//Projectile Setup
 	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Component"));
+
+	//Niagara Effect
+	NiagaraEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara Component"));
+	NiagaraEffect->SetupAttachment(Root);
 }
 
 void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent, 
@@ -34,32 +40,37 @@ void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 	int const OtherBodyIndex, bool const FromSweep, 
 	FHitResult const& SweepResult)
 {
-	if (otherActor == this) return;
+	if (otherActor == this||otherActor->ActorHasTag("MONSTER")) return;
+
+	CallNiagaraEffect();	//Niaraga Effect when Arrow hit Something / Without this
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Arrow hits Player"));
-		
-		//if (ABaseMonster* const mon = Cast<ABaseMonster>(GetOwner()))	//Get AtkDamage from BaseMonster
-		//{
-		//	damageAmount = mon->GetMonAtk();
-		//}
-		//else
-		//{
-		//	UE_LOG(LogTemp, Error, TEXT("Arrow Cast Failed to BaseMonster For Get DamageAmount"));
-		//}
+		UE_LOG(LogTemp, Warning, TEXT("Arrow : hits Player"));
 
-		//AController* MonsterC = GetInstigator()->GetController();	//Get Controller
-		//UGameplayStatics::ApplyDamage(otherActor, damageAmount, MonsterC, this, DamageType);
+		UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
 	}
-
-	UE_LOG(LogTemp, Error, TEXT("Arrow Destory by overlap"));
-	Destroy();	//destory when hits actor
+	
+	UE_LOG(LogTemp, Warning, TEXT("Arrow : Destory by overlap"));
+	ProjectileComponent->Deactivate();
+	//Destroy();	//destory when hits actor
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AAchor_Arrow::arrowDestroy, delay, false);
 }
 
 void AAchor_Arrow::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
+}
+
+void AAchor_Arrow::CallNiagaraEffect()
+{
+	NiagaraEffect->Activate();
+}
+
+void AAchor_Arrow::arrowDestroy()
+{
+	Destroy();
 }
 
 //void AAchor_Arrow::DestoryByDistance_Implementation(float distance)
@@ -81,24 +92,13 @@ void AAchor_Arrow::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//Begin With Deactivate Niagara Effect
+	NiagaraEffect->Deactivate();
+
+	damageAmount = 1;
+
 	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapBegin);
 	CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapEnd);
-
-	////Set Actor begin vector
-	//StartPosition = GetActorLocation();
-	//UE_LOG(LogTemp, Warning, TEXT("First Arrow Distance = %f"), arrowDistance);
-	////Get Arrow Distance by BaseMonster
-	//if (ABaseMonster* const mon = Cast<ABaseMonster>(GetOwner()))
-	//{
-	//	arrowDistance = mon->GetArrowDistance();
-	//	UE_LOG(LogTemp, Warning, TEXT("After Casting Arrow Distance = %f"), arrowDistance);
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("Arrow Cast to BaseMonster has Failed!"));
-	//}
-
-
 }
 
 // Called every frame
