@@ -255,8 +255,12 @@ UAnimMontage* ABaseMonster::GetAtkMontage() const
 { 
 	return AtkMontage; 
 }
+UAnimMontage* ABaseMonster::GetCreateMontage() const
+{
+	return CreateMontage;
+}
 
 UBehaviorTree* ABaseMonster::GetBehaviorTree() const
-{ 
+{
 	return BTree;
 }

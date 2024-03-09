@@ -30,6 +30,8 @@ public:
 
 	UAnimMontage* GetAtkMontage() const;
 
+	UAnimMontage* GetCreateMontage() const;
+
 	int MeleeAttack_Implementation() override;
 
 	//기본 공격 함수
