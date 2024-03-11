@@ -261,6 +261,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
+	MoveRotation(MovementVector);
 	if (Controller != nullptr && !m_bIsDodging && !IsAttacking)
 	{
 
@@ -281,9 +282,10 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
-		//AddMovementInput(RightDirection, MovementVector.X);
+		AddMovementInput(RightDirection, MovementVector.X);
 		
-		GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("APlayerController.Rotation = %f"), GetActorRotation().Yaw));
+
+		GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("MovementVector.X = %f,  MovementVector.Y = %f"), MovementVector.X, MovementVector.Y));
 	}
 }
 
@@ -303,6 +305,9 @@ void ATeamChronoCharacter::Dodge()
 			UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
 			if (pAnimInst != nullptr)
 			{
+				ABAnim->Montage_Stop(0);
+
+				SetActorRotation(DodgeRotation);
 				m_bIsDodging = true;
 				m_bIsDodgingEnd = true;
 				RollAnimation();
@@ -364,5 +369,42 @@ void ATeamChronoCharacter::SetStamina()
 	{
 		staminaWidget->StaminaBarPercent = pcMoveStamina / pcMaxStamina;
 		//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+	}
+}
+
+// 누른 방향 (구르기 방향)
+void ATeamChronoCharacter::MoveRotation(FVector2D MovementVector)
+{
+	if (MovementVector.X == 1 && MovementVector.Y == 1)
+	{
+		DodgeRotation.Yaw = 90;
+	}
+	else if (MovementVector.X == 1 && MovementVector.Y == -1)
+	{
+		DodgeRotation.Yaw = 180;
+	}
+	else if (MovementVector.X == -1 && MovementVector.Y == -1)
+	{
+		DodgeRotation.Yaw = -90;
+	}
+	else if (MovementVector.X == -1 && MovementVector.Y == 1)
+	{
+		DodgeRotation.Yaw = 0;
+	}
+	else if (MovementVector.X == 1 && MovementVector.Y == 0)
+	{
+		DodgeRotation.Yaw = 135;
+	}
+	else if (MovementVector.X == -1 && MovementVector.Y == 0)
+	{
+		DodgeRotation.Yaw = -45;
+	}
+	else if (MovementVector.X == 0 && MovementVector.Y == 1)
+	{
+		DodgeRotation.Yaw = 45;
+	}
+	else if (MovementVector.X == 0 && MovementVector.Y == -1)
+	{
+		DodgeRotation.Yaw = -135;
 	}
 }

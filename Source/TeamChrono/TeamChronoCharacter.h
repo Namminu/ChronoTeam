@@ -109,6 +109,12 @@ private:
 	void SetStamina();
 
 	bool Steminerdecreasing = false;
+
+	void MoveRotation(FVector2D MovementVector);
+
+	//구르는 방향 저장
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = MoveRotation, Meta = (AllowPrivateAccess = true))
+	FRotator DodgeRotation;
 public:
 	ATeamChronoCharacter();
 
