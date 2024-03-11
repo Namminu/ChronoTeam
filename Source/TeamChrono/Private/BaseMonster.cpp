@@ -53,7 +53,7 @@ void ABaseMonster::BeginPlay()
 	NiagaraEffect->Deactivate();
 	//Create Dynamic Material Instance
 	CreateMTI();
-
+	 
 	monNowHp = monMaxHp;
 	monAtk = 1;
 
@@ -104,7 +104,7 @@ void ABaseMonster::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComp
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
-		UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
+		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
 	}
 }
 
@@ -116,7 +116,7 @@ void ABaseMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompon
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
-		UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
+		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
 	}
 }
 

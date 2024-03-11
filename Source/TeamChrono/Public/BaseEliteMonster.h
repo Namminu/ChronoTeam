@@ -21,8 +21,34 @@ public:
 
 	int MeleeAttack_Implementation() override;
 
+	//강한 공격 관련 정의 - in BP
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BigAttackFunc();
+
+/// Overlap Event Function 
+	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult);
+
+	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex);
+
+	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult);
+
+	void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex);
 
 private:
 /// 강한 공격 부분 변수
@@ -39,4 +65,8 @@ private:
 	UAnimMontage* BigAtkMontage_Fst;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* BigAtkMontage_Snd;
+
+///
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
+	AMonster_Weapon* WeaponInstance2;
 };
