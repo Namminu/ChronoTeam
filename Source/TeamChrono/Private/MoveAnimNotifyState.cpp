@@ -2,6 +2,7 @@
 
 
 #include "MoveAnimNotifyState.h"
+#include <TeamChrono/TeamChronoCharacter.h>
 
 UMoveAnimNotifyState::UMoveAnimNotifyState()
 {
@@ -14,11 +15,12 @@ void UMoveAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSe
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
 
 	Owner = MeshComp->GetOwner();
+	player = Cast<ATeamChronoCharacter>(MeshComp->GetOwner());
 	StartLocation = Owner->GetActorLocation();
 	TotalDistance = TotalDuration * MoveDistancePerSec; // 전체 이동 거리
 	// Begin 부터 End 까지 걸리는 시간이 TotalDuration 으로 넘어온다
 	TotalTime = TotalDuration;
-
+	
 	if (Owner != nullptr)
 	{
 		Owner->GetWorld()->GetTimerManager().ClearTimer(MoveTimerHandle);
