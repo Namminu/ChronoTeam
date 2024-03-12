@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BigAttackFunc();
 
+	UFUNCTION(BlueprintCallable)
+	void AttachMoreWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName);
+
 /// Overlap Event Function 
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,

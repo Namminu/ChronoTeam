@@ -7,7 +7,6 @@ ABaseEliteMonster::ABaseEliteMonster()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-
 }
 
 void ABaseEliteMonster::BeginPlay()
@@ -50,7 +49,13 @@ int ABaseEliteMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
-void ABaseEliteMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent, 
+void ABaseEliteMonster::AttachMoreWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName)
+{
+	WeaponInstance2 = GetWorld()->SpawnActor<AMonster_Weapon>(Weapon, GetMesh()->GetSocketTransform(socketName, ERelativeTransformSpace::RTS_World));
+	WeaponInstance2->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
+}
+
+void ABaseEliteMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
 	int const OtherBodyIndex, bool const FromSweep, 
 	FHitResult const& SweepResult)

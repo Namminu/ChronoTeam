@@ -184,9 +184,8 @@ float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 
 void ABaseMonster::AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName)
 {
-	//AMonster_Weapon* monsterWP
+	//AMonster_Weapon* monsterWP	
 	WeaponInstance = GetWorld()->SpawnActor<AMonster_Weapon>(Weapon, GetMesh()->GetSocketTransform(socketName, ERelativeTransformSpace::RTS_World));
-
 	WeaponInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
 }
 
@@ -197,11 +196,12 @@ void ABaseMonster::CallNiagaraEffect()
 
 void ABaseMonster::mon_Death()
 {
-	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
-	monsterAI->StopAI();	//Stop BT 
 	GetCharacterMovement()->SetMovementMode(MOVE_None);	//Stop Movement
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	//Can't Collision
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
+
+	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
+	monsterAI->StopAI();	//Stop BT 
 
 	PlayAnimMontage(DeathMontage);	//Death Animation	
 	Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
