@@ -19,7 +19,6 @@ UCLASS(config = Game)
 class ATeamChronoCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
@@ -85,10 +84,19 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY()
 	class UABAnimInstance* ABAnim;
 
+	// 검 엑터
+	// static AActor* CurrentSword;
+
+
 public:
 	// 콤보 입력이 켜져 있는지 여부
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsComboInputOn;
+
+
+
+	// UPROPERTY(VisibleAnywhere, Category = Weapon)
+	// class AABWeapon* CurrentWeapon;
 
 private:
 
@@ -101,15 +109,16 @@ private:
 	void SetStamina();
 
 	bool Steminerdecreasing = false;
+
+	void MoveRotation(FVector2D MovementVector);
+
+	//구르는 방향 저장
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = MoveRotation, Meta = (AllowPrivateAccess = true))
+	FRotator DodgeRotation;
 public:
 	ATeamChronoCharacter();
 
-	// 구르기 몽타주
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	UAnimMontage* m_pDodgeMontage;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dodge")
-	float DodgeSpeed = 2000;
 	// 회피 기능
 	void Dodge();
 	bool m_bIsDodging = false;

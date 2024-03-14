@@ -14,6 +14,7 @@
 #include "StaminaWidget.h"
 #include <algorithm>
 #include "ABAnimInstance.h"
+#include "ASword.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -77,7 +78,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 	if (GetMesh()->DoesSocketExist(WeaponSocket))
 	{
 		Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON"));
-		static ConstructorHelpers::FObjectFinder<UStaticMesh> SW(TEXT("/Script/Engine.StaticMesh'/Game/All_Asset/Fantastic_Dungeon_Pack/meshes/props/tools/SM_PROP_weapon_sword_dungeon_01.SM_PROP_weapon_sword_dungeon_01'"));
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> SW(TEXT("/Game/PlayerCharacter/SM_PROP_weapon_sword_dungeon_1.SM_PROP_weapon_sword_dungeon_1"));
 		if (SW.Succeeded())
 		{
 			Weapon->SetStaticMesh(SW.Object);
@@ -136,6 +137,20 @@ void ATeamChronoCharacter::BeginPlay()
 	pcMoveStamina = pcStamina;
 	GetWorldTimerManager().SetTimer(StaminaTimerHandle, this, &ATeamChronoCharacter::SetStamina, pcStaminaTimer, true);
 	pcStamina = FMath::Clamp(pcStamina, 0, pcMaxStamina);
+
+
+	FName WeaponSocket(TEXT("Weapon_Sword_Hand"));
+
+	auto CurrentWeapon = GetWorld()->SpawnActor<AASword>(FVector::ZeroVector, FRotator::ZeroRotator);
+
+
+
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->AttachToComponent(GetMesh(),
+			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+			WeaponSocket);
+	}
 }
 
 
@@ -151,7 +166,6 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		// Dodging
 		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Dodge);
 		//EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
@@ -185,6 +199,14 @@ void ATeamChronoCharacter::Attack()
 			ABAnim->JumpToAttackMontageSection(CurrentCombo);
 			IsAttacking = true;
 
+
+			/*FName WeaponSocket(TEXT("Weapon_Sword_Hand"));
+			if (CurrentSword)
+			{
+				CurrentSword->AttachToComponent(GetMesh(),
+					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+					WeaponSocket);
+			}*/
 		}
 	}
 	
@@ -239,6 +261,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
+	MoveRotation(MovementVector);
 	if (Controller != nullptr && !m_bIsDodging && !IsAttacking)
 	{
 
@@ -249,15 +272,20 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
+		
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), ForwardDirection.Y));
+		//GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("RightDirection.Rotation = %f"), RightDirection.Rotation().Yaw));
+		
+
 
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+		
+
+		GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("MovementVector.X = %f,  MovementVector.Y = %f"), MovementVector.X, MovementVector.Y));
 	}
 }
 
@@ -277,6 +305,9 @@ void ATeamChronoCharacter::Dodge()
 			UAnimInstance* pAnimInst = GetMesh()->GetAnimInstance();
 			if (pAnimInst != nullptr)
 			{
+				ABAnim->Montage_Stop(0);
+
+				SetActorRotation(DodgeRotation);
 				m_bIsDodging = true;
 				m_bIsDodgingEnd = true;
 				RollAnimation();
@@ -338,5 +369,42 @@ void ATeamChronoCharacter::SetStamina()
 	{
 		staminaWidget->StaminaBarPercent = pcMoveStamina / pcMaxStamina;
 		//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
+	}
+}
+
+// 누른 방향 (구르기 방향)
+void ATeamChronoCharacter::MoveRotation(FVector2D MovementVector)
+{
+	if (MovementVector.X == 1 && MovementVector.Y == 1)
+	{
+		DodgeRotation.Yaw = 90;
+	}
+	else if (MovementVector.X == 1 && MovementVector.Y == -1)
+	{
+		DodgeRotation.Yaw = 180;
+	}
+	else if (MovementVector.X == -1 && MovementVector.Y == -1)
+	{
+		DodgeRotation.Yaw = -90;
+	}
+	else if (MovementVector.X == -1 && MovementVector.Y == 1)
+	{
+		DodgeRotation.Yaw = 0;
+	}
+	else if (MovementVector.X == 1 && MovementVector.Y == 0)
+	{
+		DodgeRotation.Yaw = 135;
+	}
+	else if (MovementVector.X == -1 && MovementVector.Y == 0)
+	{
+		DodgeRotation.Yaw = -45;
+	}
+	else if (MovementVector.X == 0 && MovementVector.Y == 1)
+	{
+		DodgeRotation.Yaw = 45;
+	}
+	else if (MovementVector.X == 0 && MovementVector.Y == -1)
+	{
+		DodgeRotation.Yaw = -135;
 	}
 }
