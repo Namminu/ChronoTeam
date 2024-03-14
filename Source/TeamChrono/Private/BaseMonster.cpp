@@ -44,7 +44,7 @@ ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxCo
 	NiagaraEffect->SetupAttachment(GetCapsuleComponent());
 }
 
-// Called when the game starts or when spawned
+// Called when the game starts or when spawned  
 void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();

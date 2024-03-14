@@ -40,7 +40,7 @@ void UMoveAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSe
 void UMoveAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
-	if (Owner != nullpt)
+	if (Owner != nullptr)    
 	{
 		if (Owner->GetWorld()->GetTimerManager().IsTimerActive(MoveTimerHandle))
 		{
