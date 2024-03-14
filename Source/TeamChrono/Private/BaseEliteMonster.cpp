@@ -34,7 +34,6 @@ int ABaseEliteMonster::MeleeAttack_Implementation()
 {
 	if (isBigAttack)	//강한 공격을 사용하는 경우 처리
 	{
-		UE_LOG(LogTemp, Error, TEXT("This Monster has Big Attack"));
 		BigAttackFunc();	//BP에서 정의
 
 		//currentAtkCount++;
@@ -50,7 +49,6 @@ int ABaseEliteMonster::MeleeAttack_Implementation()
 	}
 	else	//강한 공격을 사용하지 않는 경우 처리
 	{
-		UE_LOG(LogTemp, Error, TEXT("This Monster doesn't has Big Attack"));
 		PlayAnimMontage(GetAtkMontage());	//일반 공격
 	}
 	return 0;

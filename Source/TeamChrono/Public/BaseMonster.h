@@ -185,13 +185,16 @@ private:
 	FName AttackRangeKey;
 
 public:
+/// Property Getter
 	int GetMonSpeed() const { return monSpeed; }	
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonAtk() const { return monAtk; }
-
+/// Component Getter
 	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
-	// 
+	UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
+	USphereComponent* GetAttackRangeColl() const { return AttackRangeBox; }
+
 	//float GetArrowDistance() const { return arrow_Distance; }
 	
 };

@@ -203,9 +203,13 @@ void ABaseMonster::CallNiagaraEffect(UNiagaraComponent* NiaEffect)
 
 void ABaseMonster::mon_Death()
 {
-	GetCharacterMovement()->SetMovementMode(MOVE_None);	//Stop Movement
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	//Can't Collision
+	//Stop Movement
+	GetCharacterMovement()->SetMovementMode(MOVE_None);	
+	//Stop Collision
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
+	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
