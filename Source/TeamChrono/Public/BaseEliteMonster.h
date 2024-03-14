@@ -55,7 +55,7 @@ public:
 
 private:
 /// 강한 공격 부분 변수
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	bool isBigAttack;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	int BigAttackCount;
@@ -72,4 +72,8 @@ private:
 ///
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	AMonster_Weapon* WeaponInstance2;
+
+///
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* SpecificEffect;
 };

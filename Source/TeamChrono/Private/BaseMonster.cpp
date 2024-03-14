@@ -40,8 +40,8 @@ ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxCo
 	AttackRangeBox->SetupAttachment(GetCapsuleComponent());
 
 	//Niagara Effect Component
-	NiagaraEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara Effect"));
-	NiagaraEffect->SetupAttachment(GetCapsuleComponent());
+	NiagaraAttackEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Attack Effect"));
+	NiagaraAttackEffect->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned
@@ -50,7 +50,11 @@ void ABaseMonster::BeginPlay()
 	Super::BeginPlay();
 
 	//Begin With Deactivate Niagara Effect
-	NiagaraEffect->Deactivate();
+	if (GetAttackEffect() != nullptr)
+	{
+		GetAttackEffect()->Deactivate();
+	}
+
 	//Create Dynamic Material Instance
 	CreateMTI();
 	 
@@ -189,9 +193,12 @@ void ABaseMonster::AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socke
 	WeaponInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
 }
 
-void ABaseMonster::CallNiagaraEffect()
+void ABaseMonster::CallNiagaraEffect(UNiagaraComponent* NiaEffect)
 {
-	NiagaraEffect->Activate();
+	if (NiaEffect != nullptr)
+	{
+		NiaEffect->Activate();
+	}
 }
 
 void ABaseMonster::mon_Death()

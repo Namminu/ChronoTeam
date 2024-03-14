@@ -29,9 +29,10 @@ EBTNodeResult::Type UBTTask_LookatPlayer::ExecuteTask(UBehaviorTreeComponent& Ow
 				auto const Origin = ai->GetActorLocation();
 
 				FRotator changeRotation = UKismetMathLibrary::FindLookAtRotation(Origin, playerLocation);
-
+				FRotator newRotation = FRotator(0, changeRotation.Yaw, changeRotation.Roll);
 				//Set Ai rotation to Look at Player
-				ai->SetActorRotation(changeRotation);
+				ai->SetActorRotation(newRotation);
+				//ai->SetActorRelativeRotation(newRotation);
 			}
 		}
 		else

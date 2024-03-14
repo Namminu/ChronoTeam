@@ -2,11 +2,16 @@
 
 
 #include "BaseEliteMonster.h"
+#include "Components/CapsuleComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 ABaseEliteMonster::ABaseEliteMonster()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	SpecificEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Specific Effect"));
+	SpecificEffect->SetupAttachment(GetCapsuleComponent());
 }
 
 void ABaseEliteMonster::BeginPlay()
@@ -16,6 +21,7 @@ void ABaseEliteMonster::BeginPlay()
 	//변수 초기화
 	currentAtkCount = 0;
 
+	SpecificEffect->Deactivate();
 }
 
 void ABaseEliteMonster::Tick(float DeltaTime)
@@ -28,6 +34,7 @@ int ABaseEliteMonster::MeleeAttack_Implementation()
 {
 	if (isBigAttack)	//강한 공격을 사용하는 경우 처리
 	{
+		UE_LOG(LogTemp, Error, TEXT("This Monster has Big Attack"));
 		BigAttackFunc();	//BP에서 정의
 
 		//currentAtkCount++;
@@ -40,10 +47,10 @@ int ABaseEliteMonster::MeleeAttack_Implementation()
 		//	PlayAnimMontage(BigAtkMontage);	//강한 공격
 		//	currentAtkCount = 0;	//공격 횟수 초기화
 		//}
-
 	}
 	else	//강한 공격을 사용하지 않는 경우 처리
 	{
+		UE_LOG(LogTemp, Error, TEXT("This Monster doesn't has Big Attack"));
 		PlayAnimMontage(GetAtkMontage());	//일반 공격
 	}
 	return 0;

@@ -61,7 +61,7 @@ public:
 
 	//나이아가라 이펙트 호출 함수
 	UFUNCTION(BlueprintCallable)
-	void CallNiagaraEffect();
+	void CallNiagaraEffect(UNiagaraComponent* NiaEffect);
 
 	//몬스터 사망 호출 함수
 	void mon_Death();
@@ -112,8 +112,8 @@ private:
 	class USphereComponent* AttackRangeBox;
 
 ///
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
-	class UNiagaraComponent* NiagaraEffect;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* NiagaraAttackEffect;
 
 ///
 	UFUNCTION()
@@ -189,6 +189,8 @@ public:
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonAtk() const { return monAtk; }
+
+	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
 	// 
 	//float GetArrowDistance() const { return arrow_Distance; }
 	
