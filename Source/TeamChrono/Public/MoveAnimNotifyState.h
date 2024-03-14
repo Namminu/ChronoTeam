@@ -38,5 +38,4 @@ private:
 	// 이동 타이머
 	FTimerHandle MoveTimerHandle;
 
-	ATeamChronoCharacter* player;
 };
