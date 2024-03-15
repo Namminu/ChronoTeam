@@ -115,6 +115,47 @@ private:
 	//구르는 방향 저장
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = MoveRotation, Meta = (AllowPrivateAccess = true))
 	FRotator DodgeRotation;
+
+	// 최대 체력의 최대
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = HP, Meta = (AllowPrivateAccess = true))
+	int p_FullMaxHp = 12;
+
+	// 현재 최대 체력
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = HP, Meta = (AllowPrivateAccess = true))
+	int P_MaxHP = 4;
+
+	// 현재 체력
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = HP, Meta = (AllowPrivateAccess = true))
+	int P_CurrentHP;
+
+	//최대 스테미너
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcMaxStamina = 100.0f;
+	// 현재 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float pcStamina = 100.0f;
+	// 스테미너UI 부드럽게 변경 시간
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcStaminaTimer = 0.05f;
+
+	// 자동 회복
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcRecStamina = 2.0f;
+	//구르기 스테미너
+	UPROPERTY(EditAnywhere, Category = "Stamina")
+	float pcDodgeStamina = 20.0f;
+
+	// e 스킬 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	float ESkillStamina = 25.0f;
+
+	// e 스킬 쿨타임
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	int ESkillCoolTime = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	int ESkillBackTime = 4;
+
 public:
 	ATeamChronoCharacter();
 
@@ -126,28 +167,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
 
-	//최대 스테미너
-	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcMaxStamina = 100.0f;
-	// 현재 스테미너
-	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcStamina = 100.0f;
-	// 스테미너UI 부드럽게 변경 시간
-	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcStaminaTimer = 0.05f;
-
-
-	// 자동 회복
-	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcRecStamina = 2.0f;
-	//구르기 스테미너
-	UPROPERTY(EditAnywhere, Category = "Stamina")
-	float pcDodgeStamina = 20.0f;
-
-
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Weapon;
-
 protected:
 
 	/** Called for movement input */
