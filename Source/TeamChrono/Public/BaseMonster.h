@@ -194,7 +194,8 @@ public:
 	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
 	UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
 	USphereComponent* GetAttackRangeColl() const { return AttackRangeBox; }
-
+///
+	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }
 	//float GetArrowDistance() const { return arrow_Distance; }
 	
 };

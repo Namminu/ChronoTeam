@@ -25,6 +25,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BigAttackFunc();
 
+	//엘리트 몬스터 기믹 관련 정의 - in BP
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void EliteGimic();
+
 	UFUNCTION(BlueprintCallable)
 	void AttachMoreWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName);
 
@@ -53,6 +57,13 @@ public:
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
 
+	float TakeDamage(float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser) override;
+/// 
+
+
 private:
 /// 강한 공격 부분 변수
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
@@ -76,4 +87,18 @@ private:
 ///
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* SpecificEffect;
+
+///
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	float call_FstGimicHp;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	float call_SndGimicHp;
+
+	UPROPERTY()
+	bool isInvincible;
+
+
+///Setter
+public:
+	void SetInvincible(bool newBollSet) { isInvincible = newBollSet; }
 };
