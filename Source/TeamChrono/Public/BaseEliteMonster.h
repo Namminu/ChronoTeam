@@ -32,6 +32,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AttachMoreWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName);
 
+	UFUNCTION(BlueprintCallable)
+	void PlayGimicMontage();
+
+	//기믹 전 사전 동작 함수
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void beforeGimic();
+
 /// Overlap Event Function 
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
@@ -80,6 +87,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* BigAtkMontage_Snd;
 
+	//기믹용 애니메이션 몽타주
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC ANIMATION", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* Gimic_Montage;
 ///
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	AMonster_Weapon* WeaponInstance2;
@@ -97,8 +107,13 @@ private:
 	UPROPERTY()
 	bool isInvincible;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	float BarrierHp;
 
 ///Setter
 public:
 	void SetInvincible(bool newBollSet) { isInvincible = newBollSet; }
+
+///Getter
+	UAnimMontage* GetGimicMontage() { return Gimic_Montage; }
 };

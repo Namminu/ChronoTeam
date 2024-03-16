@@ -16,4 +16,6 @@ class TEAMCHRONO_API UBTTask_LookatPlayer : public UBTTask_BlackboardBase
 public:
 	explicit UBTTask_LookatPlayer(FObjectInitializer const& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+	FRotator GetRotation(FRotator startRot, FRotator targetRot);
 };

@@ -59,6 +59,11 @@ void ABaseEliteMonster::AttachMoreWeapon(TSubclassOf<AMonster_Weapon> Weapon, FN
 	WeaponInstance2->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
 }
 
+void ABaseEliteMonster::PlayGimicMontage()
+{
+	PlayAnimMontage(GetGimicMontage());
+}
+
 void ABaseEliteMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
 	int const OtherBodyIndex, bool const FromSweep, 
