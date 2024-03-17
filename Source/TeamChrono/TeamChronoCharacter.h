@@ -45,6 +45,9 @@ class ATeamChronoCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AttackAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ESkillAction;
 
 	UPROPERTY(VisibleAnywhere)
 	class UWidgetComponent* StaminaBar;
@@ -108,6 +111,7 @@ private:
 
 	void SetStamina();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	bool Steminerdecreasing = false;
 
 	void MoveRotation(FVector2D MovementVector);
@@ -146,7 +150,7 @@ private:
 	float pcDodgeStamina = 20.0f;
 
 	// e 스킬 스테미너
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
 	float ESkillStamina = 25.0f;
 
 	// e 스킬 쿨타임
@@ -156,14 +160,24 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
 	int ESkillBackTime = 4;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	bool EskillCheck;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	bool IsESkillDoing;
+
+	// 회피 기능
+	void Dodge();
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Dodge, Meta = (AllowPrivateAccess = true))
+	bool m_bIsDodging = false;
+
+	bool m_bIsDodgingEnd = false;
 public:
 	ATeamChronoCharacter();
 
 
-	// 회피 기능
-	void Dodge();
-	bool m_bIsDodging = false;
-	bool m_bIsDodgingEnd = false;
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
 
