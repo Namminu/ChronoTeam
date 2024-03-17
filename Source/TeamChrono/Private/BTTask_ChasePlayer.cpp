@@ -20,7 +20,6 @@ EBTNodeResult::Type UBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent& Own
 
 		//move to player's location
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(cont, PlayerLocation);
-
 		//finish with success
 		return EBTNodeResult::Succeeded;
 	}

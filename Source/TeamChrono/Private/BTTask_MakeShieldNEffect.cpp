@@ -21,7 +21,7 @@ EBTNodeResult::Type UBTTask_MakeShieldNEffect::ExecuteTask(UBehaviorTreeComponen
 	{
 		//Make Shield & Effect
 		EliteMonster->beforeGimic();
-
+		EliteMonster->ReNewBarrierHp();
 		//Set bool property in BB : 'isShieldOn' true
 		UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("isShieldOn", true);
 	}

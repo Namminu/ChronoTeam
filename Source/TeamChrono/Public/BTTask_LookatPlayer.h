@@ -17,5 +17,8 @@ public:
 	explicit UBTTask_LookatPlayer(FObjectInitializer const& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-	FRotator GetRotation(FRotator startRot, FRotator targetRot);
+	FRotator GetRotation(FRotator startRot, FRotator targetRot, float deltaTime);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rotation", meta = (AllowPrivateAccess = "true"))
+	float RotationSpeed;
 };

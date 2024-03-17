@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "BTTask_MakeShieldNEffect.generated.h"
+#include "BTTask_GimicClear.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TEAMCHRONO_API UBTTask_MakeShieldNEffect : public UBTTask_BlackboardBase
+class TEAMCHRONO_API UBTTask_GimicClear : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 public:
-	explicit UBTTask_MakeShieldNEffect(FObjectInitializer const& ObjectInitializer);
+	explicit UBTTask_GimicClear(FObjectInitializer const& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-private:
 };

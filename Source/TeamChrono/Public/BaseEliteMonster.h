@@ -39,6 +39,14 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void beforeGimic();
 
+	//기믹 - 베리어 체력 갱신 용 타이머 함수
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void SetGimicTimer();
+
+	//기믹 - 베리어 타이머 해제 함수
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ReSetTimer();
+
 /// Overlap Event Function 
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
@@ -69,7 +77,8 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 /// 
-
+	UFUNCTION(BlueprintCallable)
+	void ReNewBarrierHp();
 
 private:
 /// 강한 공격 부분 변수
@@ -109,6 +118,10 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float BarrierHp;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	float Fst_BarrierHp;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	float Snd_BarrierHp;
 
 ///Setter
 public:
@@ -116,4 +129,7 @@ public:
 
 ///Getter
 	UAnimMontage* GetGimicMontage() { return Gimic_Montage; }
+	UNiagaraComponent* GetSpecificEffect() { return SpecificEffect; }
+	UFUNCTION(BlueprintCallable)
+	float GetBarrierHp() { return BarrierHp; }
 };

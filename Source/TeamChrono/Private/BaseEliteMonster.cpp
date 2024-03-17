@@ -64,6 +64,14 @@ void ABaseEliteMonster::PlayGimicMontage()
 	PlayAnimMontage(GetGimicMontage());
 }
 
+void ABaseEliteMonster::SetGimicTimer_Implementation()
+{
+}
+
+void ABaseEliteMonster::ReSetTimer_Implementation()
+{
+}
+
 void ABaseEliteMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
 	int const OtherBodyIndex, bool const FromSweep, 
@@ -126,6 +134,27 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 		return DamageAmount;
 	}
-	else return 0.f;
+	else if (isInvincible)	//무적 상태 = 기믹을 하는 상태 = 방어막의 체력이 이때 까일 수 있도록 함
+	{
+		BarrierHp -= DamageAmount;
+		if (BarrierHp <= 0)
+		{
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimicClear", true);
+		}
+	}
+		return 0.f;
+}
+
+void ABaseEliteMonster::ReNewBarrierHp()
+{
+	if (GetMonCurrentHp() == call_FstGimicHp)
+	{
+		BarrierHp = Fst_BarrierHp;
+	}
+	else if (GetMonCurrentHp() == call_SndGimicHp)
+	{
+		BarrierHp = Snd_BarrierHp;
+	}
+	SetGimicTimer();
 }
 
