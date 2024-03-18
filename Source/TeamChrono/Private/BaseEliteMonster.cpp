@@ -26,6 +26,9 @@ void ABaseEliteMonster::BeginPlay()
 	currentAtkCount = 0;
 	isInvincible = false;
 
+	isFstGimic = false;
+	isSndGimic = false;
+
 	SpecificEffect->Deactivate();
 }
 
@@ -125,15 +128,23 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	{
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-		//기믹 시작 Hp인지 확인
-		//근데 조건을 == 으로 하면 오버데미지의 경우 호출이 안되는데? 어떻게 고치지
-		if (GetMonCurrentHp() == call_FstGimicHp || GetMonCurrentHp() == call_SndGimicHp)
+		//Check Monster Hp for First Gimic Time
+		if (GetMonCurrentHp() <= GetMonMaxHp() * (call_FstGimicHp/100) && !isFstGimic) 
 		{
+			isFstGimic = true;
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
 			EliteGimic();
 		}
-
+		//Check Monster Hp for  Gimic Time
+		if (GetMonCurrentHp() <= GetMonMaxHp() * (call_SndGimicHp/100) && !isSndGimic)
+		{
+			isSndGimic = true;
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+			EliteGimic();
+		}
 		return DamageAmount;
 	}
+
 	else if (isInvincible)	//무적 상태 = 기믹을 하는 상태 = 방어막의 체력이 이때 까일 수 있도록 함
 	{
 		BarrierHp -= DamageAmount;
@@ -142,16 +153,18 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimicClear", true);
 		}
 	}
-		return 0.f;
+	return 0.f;
 }
 
 void ABaseEliteMonster::ReNewBarrierHp()
 {
-	if (GetMonCurrentHp() == call_FstGimicHp)
+	//첫번째 기믹 시작 + 두번째 기믹 시작x
+	if (isFstGimic&&!isSndGimic)
 	{
 		BarrierHp = Fst_BarrierHp;
 	}
-	else if (GetMonCurrentHp() == call_SndGimicHp)
+	//첫번째 기믹 확인 + 두번째 기믹 시작 O
+	else if (isFstGimic&&isSndGimic)
 	{
 		BarrierHp = Snd_BarrierHp;
 	}

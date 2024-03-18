@@ -17,6 +17,10 @@ EBTNodeResult::Type UBTTask_BacktoMainTree::ExecuteTask(UBehaviorTreeComponent& 
 	auto const* const cont = OwnerComp.GetAIOwner();
 	auto* const EliteMonster = Cast<ABaseEliteMonster>(cont->GetPawn());
 
+	//initialize bool key
+	UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("IsGimicClear", false);
+	UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("IsShieldOn", false);
+	//Back to Main tree to change bool key
 	UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	return EBTNodeResult::Succeeded;
 }

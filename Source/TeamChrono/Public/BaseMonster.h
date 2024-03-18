@@ -189,6 +189,7 @@ public:
 	int GetMonSpeed() const { return monSpeed; }	
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
+	int GetMonMaxHp() const { return monMaxHp; }
 	int GetMonAtk() const { return monAtk; }
 /// Component Getter
 	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }

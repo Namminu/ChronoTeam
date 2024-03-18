@@ -123,6 +123,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float Snd_BarrierHp;
 
+	bool isFstGimic;
+	bool isSndGimic;
+
 ///Setter
 public:
 	void SetInvincible(bool newBollSet) { isInvincible = newBollSet; }
