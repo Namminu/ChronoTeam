@@ -147,6 +147,7 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 	else if (isInvincible)	//무적 상태 = 기믹을 하는 상태 = 방어막의 체력이 이때 까일 수 있도록 함
 	{
+		DamageWeaponFlash();
 		BarrierHp -= DamageAmount;
 		if (BarrierHp <= 0)
 		{
