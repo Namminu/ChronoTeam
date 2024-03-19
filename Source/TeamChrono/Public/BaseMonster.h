@@ -30,6 +30,8 @@ public:
 
 	UAnimMontage* GetAtkMontage() const;
 
+	UAnimMontage* GetCreateMontage() const;
+
 	int MeleeAttack_Implementation() override;
 
 	//기본 공격 함수
@@ -59,7 +61,7 @@ public:
 
 	//나이아가라 이펙트 호출 함수
 	UFUNCTION(BlueprintCallable)
-	void CallNiagaraEffect();
+	void CallNiagaraEffect(UNiagaraComponent* NiaEffect);
 
 	//몬스터 사망 호출 함수
 	void mon_Death();
@@ -110,8 +112,8 @@ private:
 	class USphereComponent* AttackRangeBox;
 
 ///
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
-	class UNiagaraComponent* NiagaraEffect;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* NiagaraAttackEffect;
 
 ///
 	UFUNCTION()
@@ -183,11 +185,18 @@ private:
 	FName AttackRangeKey;
 
 public:
+/// Property Getter
 	int GetMonSpeed() const { return monSpeed; }	
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
+	int GetMonMaxHp() const { return monMaxHp; }
 	int GetMonAtk() const { return monAtk; }
-	// 
+/// Component Getter
+	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
+	UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
+	USphereComponent* GetAttackRangeColl() const { return AttackRangeBox; }
+///
+	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }
 	//float GetArrowDistance() const { return arrow_Distance; }
 	
 };
