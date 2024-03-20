@@ -132,7 +132,6 @@ void ATeamChronoCharacter::BeginPlay()
 	{
 		pAnimInst->OnPlayMontageNotifyBegin.AddDynamic(this, &ATeamChronoCharacter::HandleOnMontageNotifyBegin);
 	}
-
 	// 스테미나
 	pcMoveStamina = pcStamina;
 	GetWorldTimerManager().SetTimer(StaminaTimerHandle, this, &ATeamChronoCharacter::SetStamina, pcStaminaTimer, true);
