@@ -21,8 +21,8 @@ EBTNodeResult::Type UBTTask_GimicClear::ExecuteTask(UBehaviorTreeComponent& Owne
 	auto* const EliteMonster = Cast<ABaseEliteMonster>(cont->GetPawn());
 
 	//off Shield Effect
-	EliteMonster->GetSpecificEffect()->Deactivate();
 	EliteMonster->ReSetTimer();
+	EliteMonster->GetSpecificEffect()->Deactivate();
 	EliteMonster->SetInvincible(false);
 
 	//clear Gimic, so Monster Can Take Damage now
