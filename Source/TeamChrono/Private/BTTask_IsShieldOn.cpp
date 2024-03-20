@@ -25,11 +25,13 @@ EBTNodeResult::Type UBTTask_IsShieldOn::ExecuteTask(UBehaviorTreeComponent& Owne
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Set Shield On"));
 		EliteMonster->GetSpecificEffect()->Activate();
+		EliteMonster->GetWeaponInstance_Fst()->GetWeaponMesh()->SetRenderCustomDepth(true);
 	}
 	else if (isShieldOn)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Set Shield Off"));
 		EliteMonster->GetSpecificEffect()->Deactivate();
+		EliteMonster->GetWeaponInstance_Fst()->GetWeaponMesh()->SetRenderCustomDepth(false);
 	}
 	return EBTNodeResult::Succeeded;
 }

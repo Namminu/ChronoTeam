@@ -47,6 +47,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ReSetTimer();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ChangeMTI();
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void DamageWeaponFlash();
 
@@ -116,7 +119,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float call_SndGimicHp;
 
-	UPROPERTY(BlueprintReadOnly, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	bool isInvincible;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
@@ -128,6 +131,9 @@ private:
 
 	bool isFstGimic;
 	bool isSndGimic;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool isMTI;
 
 ///Setter
 public:

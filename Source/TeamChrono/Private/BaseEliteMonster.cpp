@@ -24,10 +24,12 @@ void ABaseEliteMonster::BeginPlay()
 
 	//변수 초기화
 	currentAtkCount = 0;
-	isInvincible = false;
+	isInvincible = true;
 
 	isFstGimic = false;
 	isSndGimic = false;
+
+	isMTI = false;
 
 	SpecificEffect->Deactivate();
 }
@@ -124,34 +126,37 @@ void ABaseEliteMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedC
 
 float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (!isInvincible)
+	if (GetIsBorn())
 	{
-		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+		if (!isInvincible)
+		{
+			Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-		//Check Monster Hp for First Gimic Time
-		if (GetMonCurrentHp() <= GetMonMaxHp() * (call_FstGimicHp/100) && !isFstGimic) 
-		{
-			isFstGimic = true;
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
-			EliteGimic();
+			//Check Monster Hp for First Gimic Time
+			if (GetMonCurrentHp() <= GetMonMaxHp() * (call_FstGimicHp / 100) && !isFstGimic)
+			{
+				isFstGimic = true;
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+				EliteGimic();
+			}
+			//Check Monster Hp for  Gimic Time
+			if (GetMonCurrentHp() <= GetMonMaxHp() * (call_SndGimicHp / 100) && !isSndGimic)
+			{
+				isSndGimic = true;
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+				EliteGimic();
+			}
+			return DamageAmount;
 		}
-		//Check Monster Hp for  Gimic Time
-		if (GetMonCurrentHp() <= GetMonMaxHp() * (call_SndGimicHp/100) && !isSndGimic)
-		{
-			isSndGimic = true;
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
-			EliteGimic();
-		}
-		return DamageAmount;
-	}
 
-	else if (isInvincible)	//무적 상태 = 기믹을 하는 상태 = 방어막의 체력이 이때 까일 수 있도록 함
-	{
-		DamageWeaponFlash();
-		BarrierHp -= DamageAmount;
-		if (BarrierHp <= 0)
+		else if (isInvincible)	//무적 상태 = 기믹을 하는 상태 = 방어막의 체력이 이때 까일 수 있도록 함
 		{
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimicClear", true);
+			DamageWeaponFlash();
+			BarrierHp -= DamageAmount;
+			if (BarrierHp <= 0)
+			{
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimicClear", true);
+			}
 		}
 	}
 	return 0.f;

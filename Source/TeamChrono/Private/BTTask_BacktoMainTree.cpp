@@ -20,6 +20,7 @@ EBTNodeResult::Type UBTTask_BacktoMainTree::ExecuteTask(UBehaviorTreeComponent& 
 	//initialize bool key
 	UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("IsGimicClear", false);
 	UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("IsShieldOn", false);
+	UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 	//Back to Main tree to change bool key
 	UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	return EBTNodeResult::Succeeded;

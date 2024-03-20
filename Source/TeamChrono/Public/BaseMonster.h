@@ -184,6 +184,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
 	FName AttackRangeKey;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER BORN", meta = (AllowPrivateAccess = "true"))
+	bool isMonsterBorn;
+
 public:
 /// Property Getter
 	int GetMonSpeed() const { return monSpeed; }	
@@ -191,12 +194,13 @@ public:
 	int GetMonCurrentHp() const { return monNowHp; } 
 	int GetMonMaxHp() const { return monMaxHp; }
 	int GetMonAtk() const { return monAtk; }
+	bool GetIsBorn() const { return isMonsterBorn; }
 /// Component Getter
 	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
 	UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
 	USphereComponent* GetAttackRangeColl() const { return AttackRangeBox; }
-///
+/// DamageType Getter
 	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }
-	//float GetArrowDistance() const { return arrow_Distance; }
-	
+/// Weapon Getter
+	AMonster_Weapon* GetWeaponInstance_Fst() const { return WeaponInstance; }
 };

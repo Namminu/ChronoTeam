@@ -60,6 +60,7 @@ void ABaseMonster::BeginPlay()
 	 
 	monNowHp = monMaxHp;
 	monAtk = 1;
+	isMonsterBorn = false; 
 
 	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
@@ -168,21 +169,17 @@ void ABaseMonster::AttackEnd() const
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	DamageFlash();
-
-	////변수만큼 반짝임 반복
-	//for (int i = 0; i < flashCount; i++)
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("Damage Flash Count : %d"), i+1);
-	//	DamageFlash();
-	//}
-
-	monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
-	if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
+	if (GetIsBorn())
 	{
-		mon_Death();
+		UE_LOG(LogTemp, Warning, TEXT("BaseMonster : is Born is true"));
+		monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
+		if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
+		{
+			mon_Death();
+			return DamageAmount;
+		}
+		DamageFlash();
 	}
-
 	return DamageAmount;
 }
 
