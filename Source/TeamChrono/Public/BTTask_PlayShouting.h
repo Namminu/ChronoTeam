@@ -16,6 +16,7 @@ class TEAMCHRONO_API UBTTask_PlayShouting : public UBTTask_BlackboardBase
 public:
 	explicit UBTTask_PlayShouting(FObjectInitializer const& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IMPULSE", meta = (AllowPrivateAccess = "true"))
 	float Radius;
