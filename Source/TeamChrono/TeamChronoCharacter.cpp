@@ -15,7 +15,8 @@
 #include <algorithm>
 #include "ABAnimInstance.h"
 #include "ASword.h"
-
+/// 
+#include "Components/BoxComponent.h"
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -88,6 +89,7 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 
 
 	MaxCombo = 3;
+	AttackEndComboState();
 	AttackEndComboState();
 }
 
