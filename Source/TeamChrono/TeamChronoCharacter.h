@@ -169,14 +169,17 @@ private:
 	// 회피 기능
 	void Dodge();
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Dodge, Meta = (AllowPrivateAccess = true))
-	bool m_bIsDodging = false;
 
 	bool m_bIsDodgingEnd = false;
 public:
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = Dodge)
+	bool m_bIsDodging = false;
+
 	ATeamChronoCharacter();
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "QSkill")
+	bool IsQSkillBuilding;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
@@ -210,7 +213,7 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-
-
+	UFUNCTION(BlueprintCallable)
+	void isNotDodging()  { m_bIsDodgingEnd = false;  m_bIsDodging = false;}
 
 };

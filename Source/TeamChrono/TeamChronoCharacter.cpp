@@ -181,7 +181,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATeamChronoCharacter::Attack()
 {
-	if (!m_bIsDodgingEnd)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding)
 	{
 		if (IsAttacking)
 		{
@@ -261,7 +261,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	MoveRotation(MovementVector);
-	if (Controller != nullptr && !m_bIsDodging && !IsAttacking)
+	if (Controller != nullptr && !m_bIsDodging && !IsAttacking && !IsQSkillBuilding)
 	{
 
 		// find out which way is forward
@@ -294,7 +294,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 void ATeamChronoCharacter::Dodge()
 {
 	//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
-	if (!m_bIsDodging)
+	if (!m_bIsDodging && !IsQSkillBuilding)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("123"));
 		// 현재 스테미너가 구르기 스테미너보다 있으면
