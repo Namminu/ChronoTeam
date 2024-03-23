@@ -98,6 +98,8 @@ void AMagician_MagicBall::ChasePlayer()
 
 void AMagician_MagicBall::Re_Elasticity()
 {
-
+	UE_LOG(LogTemp, Warning, TEXT("MagicBall : Hitted by Player so ReElasticity"));
 	FRotator newRotator = player->GetActorRotation();
+
+
 }
