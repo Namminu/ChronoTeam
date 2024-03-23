@@ -38,8 +38,11 @@ public:
 	/// <summary>
 	/// 반탄력 기능 정의
 	/// </summary>
-	UFUNCTION()
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Re_Elasticity();
+	
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetMagicSpeed(float newSpeed);
 
 protected:
 	// Called when the game starts or when spawned
@@ -56,10 +59,10 @@ private:
 	class UNiagaraComponent* NiagaraEffect;
 
 	//Projectile Component
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileComponent;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	ATeamChronoCharacter* player;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -70,6 +73,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BALL", meta = (AllowPrivateAccess = "true"))
 	bool bisPlayerhit;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BALL", meta = (AllowPrivateAccess = "true"))
+	float re_Speed;
 
 public:	
 	// Called every frame

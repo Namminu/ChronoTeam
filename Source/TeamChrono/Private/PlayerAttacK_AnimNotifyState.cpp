@@ -3,6 +3,7 @@
 
 #include "PlayerAttacK_AnimNotifyState.h"
 #include <TeamChrono/TeamChronoCharacter.h>
+#include "Components/BoxComponent.h"
 
 void UPlayerAttacK_AnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
@@ -11,9 +12,15 @@ void UPlayerAttacK_AnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp
 	{
 		if (ATeamChronoCharacter* const player = Cast<ATeamChronoCharacter>(MeshComp->GetOwner()))
 		{
+			//player->GetAttackSwordBox()->SetCollisionProfileName("Player Sword Box");
+			player->GetAttackSwordBox()->SetNotifyRigidBodyCollision(true);
+			player->GetAttackSwordBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
 			UE_LOG(LogTemp, Warning, TEXT("Playe hits Start"));
-			//player->GetAttackSwordBox()->SetNotifyRigidBodyCollision(true);
-			//player->GetAttackSwordBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("AttackAnim : player Cast Failed"));
 		}
 	}
 }
@@ -25,9 +32,15 @@ void UPlayerAttacK_AnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, 
 	{
 		if (ATeamChronoCharacter* const player = Cast<ATeamChronoCharacter>(MeshComp->GetOwner()))
 		{
+			//player->GetAttackSwordBox()->SetCollisionProfileName("Player Sword Box");
+			player->GetAttackSwordBox()->SetNotifyRigidBodyCollision(false);
+			player->GetAttackSwordBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 			UE_LOG(LogTemp, Warning, TEXT("Playe hits End"));
-			//player->GetAttackSwordBox()->SetNotifyRigidBodyCollision(false);
-			//player->GetAttackSwordBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("AttackAnim : player Cast Failed"));
 		}
 	}
 }

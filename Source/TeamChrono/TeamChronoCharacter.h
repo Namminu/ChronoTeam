@@ -148,6 +148,13 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Weapon;
 
+//
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UBoxComponent* test_SwordBox;
+
+	UFUNCTION()
+	UBoxComponent* GetAttackSwordBox() const { return test_SwordBox; }
+
 protected:
 
 	/** Called for movement input */

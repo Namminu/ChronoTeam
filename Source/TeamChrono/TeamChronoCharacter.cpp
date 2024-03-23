@@ -91,6 +91,11 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 	MaxCombo = 3;
 	AttackEndComboState();
 	AttackEndComboState();
+
+//
+	test_SwordBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TEST_SwordBox"));
+	test_SwordBox->SetupAttachment(GetMesh());
+
 }
 
 void ATeamChronoCharacter::PostInitializeComponents()

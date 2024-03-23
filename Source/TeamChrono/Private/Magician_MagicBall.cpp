@@ -6,6 +6,8 @@
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include <BaseMonster.h>
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AMagician_MagicBall::AMagician_MagicBall()
@@ -18,7 +20,7 @@ AMagician_MagicBall::AMagician_MagicBall()
 	RootComponent = Sphere;
 	//Set Niagara Effect Component
 	NiagaraEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara_Effect"));
-	NiagaraEffect->SetupAttachment(Sphere);
+	NiagaraEffect->SetupAttachment(Sphere); 
 	//Set Projectile
 	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Component"));
 
@@ -32,6 +34,8 @@ void AMagician_MagicBall::BeginPlay()
 	//Add Dynamic Function
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AMagician_MagicBall::OnProjectileOverlapBegin);
 	Sphere->OnComponentEndOverlap.AddDynamic(this, &AMagician_MagicBall::OnProjectileOverlapEnd);
+
+	bisPlayerhit = false;
 
 	//Cast to Player
 	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
@@ -57,22 +61,72 @@ void AMagician_MagicBall::OnProjectileOverlapBegin(UPrimitiveComponent* const Ov
 	int const OtherBodyIndex, bool const FromSweep,
 	FHitResult const& SweepResult)
 {
-	//플레이어의 검 - 공격 타이밍에 부딪힐 경우
-	if (otherActor->ActorHasTag("SWORD"))
+	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		Re_Elasticity();
-	}
-	else
-	{
-		//자기 자신일 경우 or 몬스터에 부딪힐 경우
-		if (otherActor == this || otherActor->ActorHasTag("MONSTER")) return;
-		//플레이어에 부딪힐 경우
-		if (otherActor->ActorHasTag("PLAYER"))
+		UE_LOG(LogTemp, Warning, TEXT("First, Overlap to Player"));
+
+		if (OtherComponent->ComponentHasTag("SWORD"))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Sword box overlap"));
+			Re_Elasticity();
+		}
+		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("MagicBall : hits Player"));
 			UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
+			Destroy();
 		}
-		//벽 등 다른 액터에 부딪힐 경우
+	}
+	else
+	{
+		if (otherActor == this) return;
+		if (otherActor->ActorHasTag("MONSTER"))
+		{
+			if (!bisPlayerhit) return;	//플레이어가 투사체 hit 전	
+			else if (bisPlayerhit)		//플레이어가 투사체 hit 후
+			{
+				ABaseMonster* monster = Cast<ABaseMonster>(otherActor);
+				if (UCapsuleComponent* CapsuleComponent = Cast<UCapsuleComponent>(OtherComponent))
+				{
+					if (CapsuleComponent == monster->GetCapsuleComponent())
+					{
+						UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
+						Destroy();
+					}
+				}
+				//if (OtherComponent == monster->GetCapsuleComponent())	//몬스터 Mesh 에 맞아야 Damage 적용되도록 함
+				//{
+				//	UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
+				//	Destroy();
+				//}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("Failed : ApplyDamage to Monster"));
+				}
+			}
+		}
+		else Destroy();
+	}
+
+//
+	if (otherActor->ActorHasTag("PLAYER"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("First, Overlap to Player"));
+		if (OtherComponent->ComponentHasTag("SWORD"))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Sword box overlap"));
+			Re_Elasticity();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("MagicBall : hits Player"));
+			UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
+			Destroy();
+		}
+	}
+	else
+	{
+		if (otherActor == this || otherActor->ActorHasTag("MONSTER")) return;
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Magician's MagicBall overlap to otherActor"));
@@ -96,10 +150,12 @@ void AMagician_MagicBall::ChasePlayer()
 	ProjectileComponent->Velocity = targetDirection * (ProjectileComponent->InitialSpeed);
 }
 
-void AMagician_MagicBall::Re_Elasticity()
+void AMagician_MagicBall::Re_Elasticity_Implementation()
 {
+	bisPlayerhit = true;
+	FVector playerForward = player->GetActorForwardVector();
+	//playerForward.Normalize();
+	ProjectileComponent->Velocity = playerForward * (ProjectileComponent->InitialSpeed);
+	SetMagicSpeed(ProjectileComponent->InitialSpeed * re_Speed);
 	UE_LOG(LogTemp, Warning, TEXT("MagicBall : Hitted by Player so ReElasticity"));
-	FRotator newRotator = player->GetActorRotation();
-
-
 }
