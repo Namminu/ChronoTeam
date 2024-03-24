@@ -176,4 +176,3 @@ void ABaseEliteMonster::ReNewBarrierHp()
 	}
 	SetGimicTimer();
 }
-
