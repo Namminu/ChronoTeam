@@ -117,7 +117,7 @@ private:
 
 ///
 	UFUNCTION()
-	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	virtual void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex,
@@ -125,13 +125,13 @@ private:
 		FHitResult const& SweepResult);
 
 	UFUNCTION()
-	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	virtual void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
 
 	UFUNCTION()
-	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	virtual void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex,
@@ -139,7 +139,7 @@ private:
 		FHitResult const& SweepResult);
 
 	UFUNCTION()
-	void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	virtual void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);

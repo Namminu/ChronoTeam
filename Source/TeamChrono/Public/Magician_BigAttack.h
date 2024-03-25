@@ -45,9 +45,6 @@ public:
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
 
-	UFUNCTION()
-	void SelfDestroy();
-
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	USceneComponent* Root;
@@ -92,8 +89,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	float delay;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	float destroyDelay;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
 	float swordDelay;

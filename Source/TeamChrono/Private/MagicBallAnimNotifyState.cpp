@@ -12,6 +12,10 @@ void UMagicBallAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UA
 		{
 			Magician->SpawnMagicBall();
 		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("AnimState : MagicBall Cast Failed"));
+		}
 	}
 }
 

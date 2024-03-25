@@ -30,6 +30,8 @@ void ABaseElite_MagicianMonster::BeginPlay()
 
 	BigAttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapBegin);
 	BigAttackRangeBox->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapEnd);
+	GetAttackRangeColl()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapBegin);
+	GetAttackRangeColl()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapEnd);
 }
 
 void ABaseElite_MagicianMonster::Tick(float DeltaTime)
@@ -63,6 +65,8 @@ void ABaseElite_MagicianMonster::OnRangeOverlapBegin(UPrimitiveComponent* const 
 	{
 		isBigAck = false;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", true);
+
+		UE_LOG(LogTemp, Warning, TEXT("NormalAttack : True, BigAttack : false"));
 	}
 
 }
@@ -76,6 +80,9 @@ void ABaseElite_MagicianMonster::OnRangeOverlapEnd(UPrimitiveComponent* const Ov
 	{
 		isBigAck = true;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", false);
+
+
+		UE_LOG(LogTemp, Warning, TEXT("NormalAttack : false, BigAttack : true"));
 	}
 
 }
@@ -92,7 +99,11 @@ void ABaseElite_MagicianMonster::OnBigRangeOverlapBegin(UPrimitiveComponent* con
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		isBigAck = true;
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", true);
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", false);
+
+
+		UE_LOG(LogTemp, Warning, TEXT("NormalAttack : false, BigAttack : true"));
 	}
 }
 
@@ -104,7 +115,10 @@ void ABaseElite_MagicianMonster::OnBigRangeOverlapEnd(UPrimitiveComponent* const
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		isBigAck = false;
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", false);
+
+
+		UE_LOG(LogTemp, Warning, TEXT("NormalAttack : false, BigAttack : false"));
 	}
 }
 
@@ -115,7 +129,7 @@ int ABaseElite_MagicianMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
-void ABaseElite_MagicianMonster::MakeBigAttack_Implementation(ATeamChronoCharacter* targetPlayer)
+void ABaseElite_MagicianMonster::MakeBigAttack_Implementation()
 {
 
 }

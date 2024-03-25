@@ -109,6 +109,8 @@ void ABaseEliteMonster::OnRangeOverlapBegin(UPrimitiveComponent* const Overlappe
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
+
+		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseEliteMonster"));
 	}
 }
 
@@ -121,6 +123,8 @@ void ABaseEliteMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedC
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
+
+		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseEliteMonster"));
 	}
 }
 

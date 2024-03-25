@@ -12,8 +12,7 @@ void UMagician_BigAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp,
 	{
 		if (ABaseElite_MagicianMonster* const Magician = Cast<ABaseElite_MagicianMonster>(MeshComp->GetOwner()))
 		{		
-			ATeamChronoCharacter* player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-			Magician->MakeBigAttack(player);
+			Magician->MakeBigAttack();
 		}
 	}
 }

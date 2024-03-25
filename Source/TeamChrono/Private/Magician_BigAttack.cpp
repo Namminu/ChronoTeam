@@ -107,18 +107,11 @@ void AMagician_BigAttack::OnAttackOverlapBegin(UPrimitiveComponent* const Overla
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
-
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMagician_BigAttack::SelfDestroy, delay, false);
+		UE_LOG(LogTemp, Warning, TEXT("Sword Hits Player"));
 	}
 }
 
 void AMagician_BigAttack::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
-}
-
-void AMagician_BigAttack::SelfDestroy()
-{
-	Destroy();
 }

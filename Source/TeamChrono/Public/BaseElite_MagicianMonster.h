@@ -30,24 +30,24 @@ public:
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex,
 		bool const FromSweep,
-		FHitResult const& SweepResult);
+		FHitResult const& SweepResult) override;
 
 	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex);
+		int const OtherBodyIndex) override;
 
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex,
 		bool const FromSweep,
-		FHitResult const& SweepResult);
+		FHitResult const& SweepResult) override;
 
 	void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex);
+		int const OtherBodyIndex) override;
 
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent,
@@ -76,7 +76,7 @@ public:
 
 	//Make Big Attack
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void MakeBigAttack(ATeamChronoCharacter* targetPlayer);
+	void MakeBigAttack();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))

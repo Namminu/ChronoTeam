@@ -110,6 +110,8 @@ void ABaseMonster::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComp
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
 		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
+
+		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseMonster"));
 	}
 }
 
@@ -122,6 +124,8 @@ void ABaseMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompon
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
 		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
+
+		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseMonster"));
 	}
 }
 
