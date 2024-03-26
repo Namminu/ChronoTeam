@@ -40,8 +40,8 @@ ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxCo
 	AttackRangeBox->SetupAttachment(GetCapsuleComponent());
 
 	//Niagara Effect Component
-	NiagaraEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Niagara Effect"));
-	NiagaraEffect->SetupAttachment(GetCapsuleComponent());
+	NiagaraAttackEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Attack Effect"));
+	NiagaraAttackEffect->SetupAttachment(GetCapsuleComponent());
 }
 
 // Called when the game starts or when spawned  
@@ -50,12 +50,17 @@ void ABaseMonster::BeginPlay()
 	Super::BeginPlay();
 
 	//Begin With Deactivate Niagara Effect
-	NiagaraEffect->Deactivate();
+	if (GetAttackEffect() != nullptr)
+	{
+		GetAttackEffect()->Deactivate();
+	}
+
 	//Create Dynamic Material Instance
 	CreateMTI();
-
+	 
 	monNowHp = monMaxHp;
 	monAtk = 1;
+	isMonsterBorn = false; 
 
 	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
@@ -104,7 +109,9 @@ void ABaseMonster::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComp
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
-		UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
+		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
+
+		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseMonster"));
 	}
 }
 
@@ -116,7 +123,9 @@ void ABaseMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompon
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
-		UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
+		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
+
+		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseMonster"));
 	}
 }
 
@@ -164,44 +173,47 @@ void ABaseMonster::AttackEnd() const
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	DamageFlash();
-
-	////변수만큼 반짝임 반복
-	//for (int i = 0; i < flashCount; i++)
-	//{
-	//	UE_LOG(LogTemp, Error, TEXT("Damage Flash Count : %d"), i+1);
-	//	DamageFlash();
-	//}
-
-	monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
-	if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
+	if (GetIsBorn())
 	{
-		mon_Death();
+		UE_LOG(LogTemp, Warning, TEXT("BaseMonster : is Born is true"));
+		monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
+		if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
+		{
+			mon_Death();
+			return DamageAmount;
+		}
+		DamageFlash();
 	}
-
 	return DamageAmount;
 }
 
 void ABaseMonster::AttachWeapon(TSubclassOf<AMonster_Weapon> Weapon, FName socketName)
 {
-	//AMonster_Weapon* monsterWP
+	//AMonster_Weapon* monsterWP	
 	WeaponInstance = GetWorld()->SpawnActor<AMonster_Weapon>(Weapon, GetMesh()->GetSocketTransform(socketName, ERelativeTransformSpace::RTS_World));
-
 	WeaponInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, socketName);
 }
 
-void ABaseMonster::CallNiagaraEffect()
+void ABaseMonster::CallNiagaraEffect(UNiagaraComponent* NiaEffect)
 {
-	NiagaraEffect->Activate();
+	if (NiaEffect != nullptr)
+	{
+		NiaEffect->Activate();
+	}
 }
 
 void ABaseMonster::mon_Death()
 {
+	//Stop Movement
+	GetCharacterMovement()->SetMovementMode(MOVE_None);	
+	//Stop Collision
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
+	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
-	GetCharacterMovement()->SetMovementMode(MOVE_None);	//Stop Movement
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	//Can't Collision
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 
 	PlayAnimMontage(DeathMontage);	//Death Animation	
 	Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
@@ -255,8 +267,12 @@ UAnimMontage* ABaseMonster::GetAtkMontage() const
 { 
 	return AtkMontage; 
 }
+UAnimMontage* ABaseMonster::GetCreateMontage() const
+{
+	return CreateMontage;
+}
 
 UBehaviorTree* ABaseMonster::GetBehaviorTree() const
-{ 
+{
 	return BTree;
 }

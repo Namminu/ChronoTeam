@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AI_Controller_.h"
 #include <Kismet/KismetMathLibrary.h>
+#include "BaseMonster.h"
 
 UBTTask_LookatPlayer::UBTTask_LookatPlayer(FObjectInitializer const& ObjectInitializer)
 {
@@ -28,10 +29,16 @@ EBTNodeResult::Type UBTTask_LookatPlayer::ExecuteTask(UBehaviorTreeComponent& Ow
 				//obtain npc location to use as on origin
 				auto const Origin = ai->GetActorLocation();
 
+				FRotator currentRotation = FRotator(0, ai->GetActorRotation().Yaw, 0);
+
 				FRotator changeRotation = UKismetMathLibrary::FindLookAtRotation(Origin, playerLocation);
+				FRotator newRotation = FRotator(0, changeRotation.Yaw, 0);
 
 				//Set Ai rotation to Look at Player
-				ai->SetActorRotation(changeRotation);
+				//ai->SetActorRotation(newRotation);
+
+				//ai->SetActorRotation(GetRotation(currentRotation, newRotation));
+				ai->SetActorRotation(GetRotation(currentRotation, newRotation, UGameplayStatics::GetWorldDeltaSeconds(GetWorld())));
 			}
 		}
 		else
@@ -44,4 +51,10 @@ EBTNodeResult::Type UBTTask_LookatPlayer::ExecuteTask(UBehaviorTreeComponent& Ow
 	}
 
 	return EBTNodeResult::Failed;
+}
+
+FRotator UBTTask_LookatPlayer::GetRotation(FRotator startRot, FRotator targetRot, float deltaTime)
+{
+	//return FMath::Lerp(startRot, targetRot, 0.5f);
+	return FMath::RInterpTo(startRot, targetRot, deltaTime, RotationSpeed);
 }

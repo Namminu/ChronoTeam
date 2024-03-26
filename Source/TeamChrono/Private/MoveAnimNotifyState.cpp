@@ -12,7 +12,6 @@ UMoveAnimNotifyState::UMoveAnimNotifyState()
 
 void UMoveAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
 
 	Owner = MeshComp->GetOwner();
 	StartLocation = Owner->GetActorLocation();
@@ -39,7 +38,6 @@ void UMoveAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSe
 }
 void UMoveAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
 {
-	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
 	if (Owner != nullptr)    
 	{
 		if (Owner->GetWorld()->GetTimerManager().IsTimerActive(MoveTimerHandle))
@@ -56,5 +54,4 @@ void UMoveAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSeq
 
 void UMoveAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	Super::NotifyEnd(MeshComp, Animation);
 }

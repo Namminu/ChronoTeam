@@ -49,6 +49,6 @@ void ASpawnerNotifier::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SpawnerNotifier has failed to Casting on Player"));
+		UE_LOG(LogTemp, Warning, TEXT("SpawnerNotifier has failed to Casting on Player || isGetWorked is true"));
 	}
 }
