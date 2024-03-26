@@ -45,6 +45,9 @@ class ATeamChronoCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AttackAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ESkillAction;
 
 	UPROPERTY(VisibleAnywhere)
 	class UWidgetComponent* StaminaBar;
@@ -108,6 +111,7 @@ private:
 
 	void SetStamina();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	bool Steminerdecreasing = false;
 
 	void MoveRotation(FVector2D MovementVector);
@@ -115,27 +119,28 @@ private:
 	//구르는 방향 저장
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = MoveRotation, Meta = (AllowPrivateAccess = true))
 	FRotator DodgeRotation;
-public:
-	ATeamChronoCharacter();
 
+	// 최대 체력의 최대
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = HP, Meta = (AllowPrivateAccess = true))
+	int p_FullMaxHp = 12;
 
-	// 회피 기능
-	void Dodge();
-	bool m_bIsDodging = false;
-	bool m_bIsDodgingEnd = false;
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void RollAnimation();
+	// 현재 최대 체력
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = HP, Meta = (AllowPrivateAccess = true))
+	int P_MaxHP = 4;
+
+	// 현재 체력
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = HP, Meta = (AllowPrivateAccess = true))
+	int P_CurrentHP;
 
 	//최대 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcMaxStamina = 100.0f;
 	// 현재 스테미너
-	UPROPERTY(EditAnywhere, Category = "Stamina")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	float pcStamina = 100.0f;
 	// 스테미너UI 부드럽게 변경 시간
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcStaminaTimer = 0.05f;
-
 
 	// 자동 회복
 	UPROPERTY(EditAnywhere, Category = "Stamina")
@@ -144,10 +149,43 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcDodgeStamina = 20.0f;
 
+	// e 스킬 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	float ESkillStamina = 25.0f;
+
+	// e 스킬 쿨타임
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	int ESkillCoolTime = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	int ESkillBackTime = 4;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	bool EskillCheck;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	bool IsESkillDoing;
+
+	// 회피 기능
+	void Dodge();
+
+
+	bool m_bIsDodgingEnd = false;
+public:
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = Dodge)
+	bool m_bIsDodging = false;
+
+	ATeamChronoCharacter();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "QSkill")
+	bool IsQSkillBuilding;
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void RollAnimation();
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Weapon;
-
 protected:
 
 	/** Called for movement input */
@@ -175,5 +213,7 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	UFUNCTION(BlueprintCallable)
+	void isNotDodging()  { m_bIsDodgingEnd = false;  m_bIsDodging = false;}
 
 };

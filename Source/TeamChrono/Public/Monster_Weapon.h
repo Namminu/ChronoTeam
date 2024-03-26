@@ -28,6 +28,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void DamageFlash();
 
+	//Flash MTI 세팅 함수
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetFlashMTI();
+
 	//생성 시 투명도 조절 함수
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Change_Opacity(float StartAlpha, float EndAlpha);
@@ -39,4 +43,8 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Weapon;
+
+public:
+	/// 
+	UStaticMeshComponent* GetWeaponMesh() { return Weapon; }
 };

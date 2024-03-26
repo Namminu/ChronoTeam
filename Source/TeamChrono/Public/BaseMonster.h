@@ -30,6 +30,8 @@ public:
 
 	UAnimMontage* GetAtkMontage() const;
 
+	UAnimMontage* GetCreateMontage() const;
+
 	int MeleeAttack_Implementation() override;
 
 	//기본 공격 함수
@@ -59,7 +61,7 @@ public:
 
 	//나이아가라 이펙트 호출 함수
 	UFUNCTION(BlueprintCallable)
-	void CallNiagaraEffect();
+	void CallNiagaraEffect(UNiagaraComponent* NiaEffect);
 
 	//몬스터 사망 호출 함수
 	void mon_Death();
@@ -110,12 +112,12 @@ private:
 	class USphereComponent* AttackRangeBox;
 
 ///
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
-	class UNiagaraComponent* NiagaraEffect;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* NiagaraAttackEffect;
 
 ///
 	UFUNCTION()
-	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	virtual void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex,
@@ -123,13 +125,13 @@ private:
 		FHitResult const& SweepResult);
 
 	UFUNCTION()
-	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	virtual void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
 
 	UFUNCTION()
-	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	virtual void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex,
@@ -137,7 +139,7 @@ private:
 		FHitResult const& SweepResult);
 
 	UFUNCTION()
-	void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	virtual void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
@@ -182,12 +184,23 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
 	FName AttackRangeKey;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER BORN", meta = (AllowPrivateAccess = "true"))
+	bool isMonsterBorn;
+
 public:
+/// Property Getter
 	int GetMonSpeed() const { return monSpeed; }	
 	int GetMonAtkRange() const { return monAtkRange; }	
 	int GetMonCurrentHp() const { return monNowHp; } 
+	int GetMonMaxHp() const { return monMaxHp; }
 	int GetMonAtk() const { return monAtk; }
-	// 
-	//float GetArrowDistance() const { return arrow_Distance; }
-	
+	bool GetIsBorn() const { return isMonsterBorn; }
+/// Component Getter
+	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
+	UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
+	USphereComponent* GetAttackRangeColl() const { return AttackRangeBox; }
+/// DamageType Getter
+	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }
+/// Weapon Getter
+	AMonster_Weapon* GetWeaponInstance_Fst() const { return WeaponInstance; }
 };

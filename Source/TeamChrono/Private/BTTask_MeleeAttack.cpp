@@ -49,5 +49,6 @@ EBTNodeResult::Type UBTTask_MeleeAttack::ExecuteTask(UBehaviorTreeComponent& Own
 
 bool UBTTask_MeleeAttack::MontageHasFinished(ABaseMonster* const Monster)
 {
-	return Monster->GetMesh()->GetAnimInstance()->Montage_GetIsStopped(Monster->GetAtkMontage());
+	return !(Monster->GetMesh()->GetAnimInstance()->IsAnyMontagePlaying());
+	//return Monster->GetMesh()->GetAnimInstance()->Montage_GetIsStopped(Monster->GetAtkMontage());
 }
