@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+//#include <TeamChrono/TeamChronoCharacter.h>
 #include "Magician_BigAttack.generated.h"
 
 UCLASS()
@@ -44,6 +45,9 @@ public:
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void DetachFromPlayer();
 
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -97,6 +101,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
 	TArray<UBoxComponent*> HitBoxes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
+	bool isSwordReady;
 
 public:
 	UCapsuleComponent* GetCapsule() const { return Capsule; }

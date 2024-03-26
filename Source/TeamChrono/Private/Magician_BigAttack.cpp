@@ -66,6 +66,7 @@ void AMagician_BigAttack::BeginPlay()
 {
 	Super::BeginPlay();
 
+	isSwordReady = false;
 	damageAmount = 2;
 
 	SwordEffect1->Deactivate();
@@ -114,4 +115,9 @@ void AMagician_BigAttack::OnAttackOverlapBegin(UPrimitiveComponent* const Overla
 void AMagician_BigAttack::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
+}
+
+void AMagician_BigAttack::DetachFromPlayer_Implementation()
+{
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 }
