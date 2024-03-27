@@ -8,6 +8,8 @@
 #include "AI_Controller_.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "MonsterSpawner.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include <Kismet/GameplayStatics.h>
 
 ABaseElite_MagicianMonster::ABaseElite_MagicianMonster()
@@ -28,6 +30,10 @@ void ABaseElite_MagicianMonster::BeginPlay()
 	if (player == nullptr) UE_LOG(LogTemp, Error, TEXT("Magicball has Cast failed to Player"));
 
 	isBigAck = false;
+	isMontage = false;
+
+	SetisFstGimic(false);
+	SetisSndGimic(false);
 
 	AssginToArray();
 	SetTimerFunc();
@@ -72,8 +78,6 @@ void ABaseElite_MagicianMonster::OnRangeOverlapBegin(UPrimitiveComponent* const 
 	{
 		isBigAck = false;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", true);
-
-		UE_LOG(LogTemp, Warning, TEXT("NormalAttack : True, BigAttack : false"));
 	}
 
 }
@@ -87,9 +91,6 @@ void ABaseElite_MagicianMonster::OnRangeOverlapEnd(UPrimitiveComponent* const Ov
 	{
 		isBigAck = true;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", false);
-
-
-		UE_LOG(LogTemp, Warning, TEXT("NormalAttack : false, BigAttack : true"));
 	}
 
 }
@@ -108,9 +109,6 @@ void ABaseElite_MagicianMonster::OnBigRangeOverlapBegin(UPrimitiveComponent* con
 		isBigAck = true;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", true);
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", false);
-
-
-		UE_LOG(LogTemp, Warning, TEXT("NormalAttack : false, BigAttack : true"));
 	}
 }
 
@@ -123,9 +121,6 @@ void ABaseElite_MagicianMonster::OnBigRangeOverlapEnd(UPrimitiveComponent* const
 	{
 		isBigAck = false;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", false);
-
-
-		UE_LOG(LogTemp, Warning, TEXT("NormalAttack : false, BigAttack : false"));
 	}
 }
 
@@ -168,12 +163,10 @@ void ABaseElite_MagicianMonster::SetTimerFunc()
 
 void ABaseElite_MagicianMonster::MakeBigAttack_Implementation()
 {
-
 }
 
 void ABaseElite_MagicianMonster::SpawnMonster()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Magician : Spawn Monster Called"));
 	for (AMonsterSpawner* Spawner : MonsterArray)
 	{
 		if (Spawner)
@@ -186,7 +179,61 @@ void ABaseElite_MagicianMonster::SpawnMonster()
 
 float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	//Check is Playing Make Barrier Animation
+	if (!isMontage)
+	{
+		//Not Invincible = Damage Apply to Monster directly
+		if (!GetInvincible())
+		{
+			//Check Monster Born for not Take Damage in Born_Animation
+			if (GetIsBorn())
+			{
+				SetMonCurrentHp(GetMonCurrentHp() - DamageAmount);
+				//if Monster Hp under Zero, Get Die
+				if (GetMonCurrentHp() <= 0)
+				{
+					mon_Death();
+					return 0.f;
+				}
+				DamageFlash();
+
+				//if Monster Hp under Gimic Hp, Start Gimic
+				//	if (GetMonCurrentHp() <= GetMonMaxHp() * (call_FstGimicHp / 100) && !isFstGimic)
+				if (GetMonCurrentHp() <= GetMonMaxHp() * (Get_FstGimicHp() / 100) && !GetisFstGimic())
+				{
+					UE_LOG(LogTemp, Error, TEXT("First Gimic Start"));
+					SetisFstGimic(true);
+					SetInvincible(true);
+					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+				}
+				if (GetMonCurrentHp() <= GetMonMaxHp() * (Get_SndGimicHp() / 100) && !GetisSndGimic())
+				{
+					UE_LOG(LogTemp, Error, TEXT("Second Gimic Start"));
+					SetisSndGimic(true);
+					SetInvincible(true);
+					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+				}
+			}
+		}
+		//Invincible = Damage Apply to Barrier
+		else
+		{
+			//Take Damage only by Magic_Ball
+			if (DamageCauser && DamageCauser->ActorHasTag("MAGICBALL"))
+			{
+				BarrierFlash();
+				SetBarrierHp(GetBarrierHp() - DamageAmount);
+
+				//if Barrier Hp under Zero, Set Invincible false for Take Damage for Monster
+				if (GetBarrierHp() <= 0)
+				{
+					SetInvincible(false);
+					GetSpecificEffect()->Deactivate();
+					UE_LOG(LogTemp, Error, TEXT("Gimic End"));
+				}
+			}
+		}
+	}
 
 	return 0.0f;
 }

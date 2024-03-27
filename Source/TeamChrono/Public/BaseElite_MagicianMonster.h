@@ -91,6 +91,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void AssginToArray();
 
+	//Barrier Func - Effect Change for Damage Flash
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BarrierFlash();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* BigAttackRangeBox;
@@ -107,7 +111,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	float SpawnDelay;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
+	bool isMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* InitBarrierEffect;
+
 public:
 /// Getter Func
 	USphereComponent* GetBigAttackRange() const { return BigAttackRangeBox; }
+	bool GetIsMontage() const { return isMontage; }
+
+/// Setter Func
+	void SetIsMontage(bool newBool) { isMontage = newBool; }
 };

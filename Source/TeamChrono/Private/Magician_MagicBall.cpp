@@ -94,11 +94,6 @@ void AMagician_MagicBall::OnProjectileOverlapBegin(UPrimitiveComponent* const Ov
 						Destroy();
 					}
 				}
-				//if (OtherComponent == monster->GetCapsuleComponent())	//몬스터 Mesh 에 맞아야 Damage 적용되도록 함
-				//{
-				//	UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
-				//	Destroy();
-				//}
 				else
 				{
 					UE_LOG(LogTemp, Error, TEXT("Failed : ApplyDamage to Monster"));
@@ -109,31 +104,30 @@ void AMagician_MagicBall::OnProjectileOverlapBegin(UPrimitiveComponent* const Ov
 	}
 
 //
-	if (otherActor->ActorHasTag("PLAYER"))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("First, Overlap to Player"));
-		if (OtherComponent->ComponentHasTag("SWORD"))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Sword box overlap"));
-			Re_Elasticity();
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("MagicBall : hits Player"));
-			UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
-			Destroy();
-		}
-	}
-	else
-	{
-		if (otherActor == this || otherActor->ActorHasTag("MONSTER")) return;
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Magician's MagicBall overlap to otherActor"));
-
-		}
-		Destroy();
-	}
+	//if (otherActor->ActorHasTag("PLAYER"))
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("First, Overlap to Player"));
+	//	if (OtherComponent->ComponentHasTag("SWORD"))
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("Sword box overlap"));
+	//		Re_Elasticity();
+	//	}
+	//	else
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("MagicBall : hits Player"));
+	//		UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
+	//		Destroy();
+	//	}
+	//}
+	//else
+	//{
+	//	if (otherActor == this || otherActor->ActorHasTag("MONSTER")) return;
+	//	else
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("Magician's MagicBall overlap to otherActor"));
+	//	}
+	//	Destroy();
+	//}
 }
 
 void AMagician_MagicBall::OnProjectileOverlapEnd(UPrimitiveComponent* const OverlappedComponent,

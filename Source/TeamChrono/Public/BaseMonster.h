@@ -212,4 +212,6 @@ public:
 	void SetFstMTI(UMaterialInstanceDynamic* newMTI) { Fst_MTI = newMTI; }
 	void SetSndMTI(UMaterialInstanceDynamic* newMTI) { Snd_MTI = newMTI; }
 	//TArray<UMaterialInstanceDynamic*> SetMTIArray() 
+/// Property Setter
+	void SetMonCurrentHp(const int newHp) { monNowHp = newHp; }
 };

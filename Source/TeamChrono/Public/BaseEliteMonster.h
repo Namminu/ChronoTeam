@@ -119,14 +119,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float call_SndGimicHp;
 
-	UPROPERTY(BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	bool isInvincible;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float BarrierHp;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float Fst_BarrierHp;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float Snd_BarrierHp;
 
 	bool isFstGimic;
@@ -138,10 +138,23 @@ private:
 ///Setter
 public:
 	void SetInvincible(bool newBollSet) { isInvincible = newBollSet; }
+	void SetBarrierHp(const float newHp) { BarrierHp = newHp; }
+
+	void SetisFstGimic(const bool newBool) { isFstGimic = newBool; }
+	void SetisSndGimic(const bool newBool) { isSndGimic = newBool; }
 
 ///Getter
 	UAnimMontage* GetGimicMontage() { return Gimic_Montage; }
 	UNiagaraComponent* GetSpecificEffect() { return SpecificEffect; }
+
 	UFUNCTION(BlueprintCallable)
 	float GetBarrierHp() { return BarrierHp; }
+
+	bool GetInvincible() const { return isInvincible; }
+
+	float Get_FstGimicHp() const { return call_FstGimicHp; }
+	float Get_SndGimicHp() const { return call_SndGimicHp; }
+
+	bool GetisFstGimic() const { return isFstGimic; }
+	bool GetisSndGimic() const { return isSndGimic; }
 };
