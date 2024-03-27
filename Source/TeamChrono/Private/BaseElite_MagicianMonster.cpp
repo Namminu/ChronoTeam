@@ -7,6 +7,7 @@
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 #include "AI_Controller_.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "MonsterSpawner.h"
 #include <Kismet/GameplayStatics.h>
 
 ABaseElite_MagicianMonster::ABaseElite_MagicianMonster()
@@ -27,6 +28,12 @@ void ABaseElite_MagicianMonster::BeginPlay()
 	if (player == nullptr) UE_LOG(LogTemp, Error, TEXT("Magicball has Cast failed to Player"));
 
 	isBigAck = false;
+
+	AssginToArray();
+	SetTimerFunc();
+
+	//Set BlackBoard Property to true So Can Take Damage Immediately
+	UAIBlueprintHelperLibrary::GetAIController(GetOwner())->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", true);
 
 	GetBigAttackRange()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapBegin);
 	GetBigAttackRange()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapEnd);
@@ -129,17 +136,6 @@ int ABaseElite_MagicianMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
-void ABaseElite_MagicianMonster::SpawnMonster()
-{
-	for (AMonsterSpawner* Spawner : MonsterArray)
-	{
-		if (Spawner)
-		{
-			// 특정 함수 호출
-			Spawner->SpawnMonster();
-		}
-	}
-}
 void ABaseElite_MagicianMonster::CreateMTI()
 {
 	GetMTIArray().Empty();	//Clear Array
@@ -157,14 +153,35 @@ void ABaseElite_MagicianMonster::CreateMTI()
 		GetMTIArray().Add(this->GetSndMTI());
 	}
 }
+
 void ABaseElite_MagicianMonster::mon_Death()
 {
 	GetBigAttackRange()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Super::mon_Death();
 }
+
+void ABaseElite_MagicianMonster::SetTimerFunc()
+{
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseElite_MagicianMonster::SpawnMonster, SpawnDelay, true);
+}
+
 void ABaseElite_MagicianMonster::MakeBigAttack_Implementation()
 {
 
+}
+
+void ABaseElite_MagicianMonster::SpawnMonster()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Magician : Spawn Monster Called"));
+	for (AMonsterSpawner* Spawner : MonsterArray)
+	{
+		if (Spawner)
+		{
+			// 특정 함수 호출
+			Spawner->SpawnMonster_Implementation();
+		}
+	}
 }
 
 float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

@@ -86,6 +86,11 @@ public:
 
 	void mon_Death() override;
 
+	void SetTimerFunc();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void AssginToArray();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* BigAttackRangeBox;
@@ -98,6 +103,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	TArray<AMonsterSpawner*> MonsterArray;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
+	float SpawnDelay;
 
 public:
 /// Getter Func
