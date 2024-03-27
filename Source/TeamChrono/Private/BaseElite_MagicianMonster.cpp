@@ -28,8 +28,8 @@ void ABaseElite_MagicianMonster::BeginPlay()
 
 	isBigAck = false;
 
-	BigAttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapBegin);
-	BigAttackRangeBox->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapEnd);
+	GetBigAttackRange()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapBegin);
+	GetBigAttackRange()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapEnd);
 	GetAttackRangeColl()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapBegin);
 	GetAttackRangeColl()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapEnd);
 }
@@ -129,6 +129,39 @@ int ABaseElite_MagicianMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
+void ABaseElite_MagicianMonster::SpawnMonster()
+{
+	for (AMonsterSpawner* Spawner : MonsterArray)
+	{
+		if (Spawner)
+		{
+			// 특정 함수 호출
+			Spawner->SpawnMonster();
+		}
+	}
+}
+void ABaseElite_MagicianMonster::CreateMTI()
+{
+	GetMTIArray().Empty();	//Clear Array
+	UE_LOG(LogTemp, Error, TEXT("Magician : Call CreateMTI Func"));
+
+	if (UMaterialInstanceDynamic* m_FstMTI = GetMesh()->CreateDynamicMaterialInstance(0))
+	{
+		SetFstMTI(m_FstMTI);
+		GetMTIArray().Add(this->GetFstMTI());
+	}
+	
+	if (UMaterialInstanceDynamic* m_SndMTI = GetMesh()->CreateDynamicMaterialInstance(1))
+	{
+		SetSndMTI(m_SndMTI);
+		GetMTIArray().Add(this->GetSndMTI());
+	}
+}
+void ABaseElite_MagicianMonster::mon_Death()
+{
+	GetBigAttackRange()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Super::mon_Death();
+}
 void ABaseElite_MagicianMonster::MakeBigAttack_Implementation()
 {
 

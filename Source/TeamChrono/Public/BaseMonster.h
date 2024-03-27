@@ -64,11 +64,12 @@ public:
 	void CallNiagaraEffect(UNiagaraComponent* NiaEffect);
 
 	//몬스터 사망 호출 함수
-	void mon_Death();
+	virtual void mon_Death();
 	void mon_Destroy();
 
 	//Create Dynamic Material Instance Function
-	void CreateMTI();
+	UFUNCTION(BlueprintCallable)
+	virtual void CreateMTI();
 
 protected:
 	// Called when the game starts or when spawned
@@ -203,4 +204,12 @@ public:
 	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }
 /// Weapon Getter
 	AMonster_Weapon* GetWeaponInstance_Fst() const { return WeaponInstance; }
+/// MTI Getter
+	UMaterialInstanceDynamic* GetFstMTI() const { return Fst_MTI; }
+	UMaterialInstanceDynamic* GetSndMTI() const { return Snd_MTI; }
+	TArray<UMaterialInstanceDynamic*> GetMTIArray() const { return MTIArray; }
+/// MTI Setter
+	void SetFstMTI(UMaterialInstanceDynamic* newMTI) { Fst_MTI = newMTI; }
+	void SetSndMTI(UMaterialInstanceDynamic* newMTI) { Snd_MTI = newMTI; }
+	//TArray<UMaterialInstanceDynamic*> SetMTIArray() 
 };

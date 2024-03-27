@@ -61,6 +61,7 @@ void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 void AAchor_Arrow::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
+
 }
 
 void AAchor_Arrow::CallNiagaraEffect()
@@ -68,9 +69,8 @@ void AAchor_Arrow::CallNiagaraEffect()
 	NiagaraEffect->Activate();
 }
 
-void AAchor_Arrow::arrowDestroy()
+void AAchor_Arrow::arrowDestroy_Implementation()
 {
-	Destroy();
 }
 
 //void AAchor_Arrow::DestoryByDistance_Implementation(float distance)

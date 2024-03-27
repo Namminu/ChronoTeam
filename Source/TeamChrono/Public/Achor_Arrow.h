@@ -36,6 +36,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CallNiagaraEffect();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void arrowDestroy();
 
 protected:

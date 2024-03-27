@@ -6,6 +6,7 @@
 #include "BaseEliteMonster.h"
 #include <TeamChrono/TeamChronoCharacter.h>
 #include "Magician_BigAttack.h"
+#include "MonsterSpawner.h"
 #include "BaseElite_MagicianMonster.generated.h"
 /**
  * 
@@ -78,6 +79,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void MakeBigAttack();
 
+	UFUNCTION(BlueprintCallable)
+	void SpawnMonster();
+
+	void CreateMTI() override;
+
+	void mon_Death() override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* BigAttackRangeBox;
@@ -88,5 +96,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BIGACK", meta = (AllowPrivateAccess = "true"))
 	bool isBigAck;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
+	TArray<AMonsterSpawner*> MonsterArray;
 
+public:
+/// Getter Func
+	USphereComponent* GetBigAttackRange() const { return BigAttackRangeBox; }
 };
