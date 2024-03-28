@@ -95,6 +95,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void BarrierFlash();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void WhyOnlyUGetDown();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetFlashMTI();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* BigAttackRangeBox;

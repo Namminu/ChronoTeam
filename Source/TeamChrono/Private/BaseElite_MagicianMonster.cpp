@@ -25,6 +25,11 @@ void ABaseElite_MagicianMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//CreateMTI();		//Add MTI to MTIArray
+	//SetFst_SndMTI();	//Save Init MT
+	ChangeMTI();		//Change MTI for Walking in Opaque
+	SetFlashMTI();		//Set Flash MTI after Change MTI <- Opaque
+
 	//Cast to Player
 	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	if (player == nullptr) UE_LOG(LogTemp, Error, TEXT("Magicball has Cast failed to Player"));
@@ -133,25 +138,14 @@ int ABaseElite_MagicianMonster::MeleeAttack_Implementation()
 
 void ABaseElite_MagicianMonster::CreateMTI()
 {
-	GetMTIArray().Empty();	//Clear Array
-	UE_LOG(LogTemp, Error, TEXT("Magician : Call CreateMTI Func"));
-
-	if (UMaterialInstanceDynamic* m_FstMTI = GetMesh()->CreateDynamicMaterialInstance(0))
-	{
-		SetFstMTI(m_FstMTI);
-		GetMTIArray().Add(this->GetFstMTI());
-	}
-	
-	if (UMaterialInstanceDynamic* m_SndMTI = GetMesh()->CreateDynamicMaterialInstance(1))
-	{
-		SetSndMTI(m_SndMTI);
-		GetMTIArray().Add(this->GetSndMTI());
-	}
+	Super::CreateMTI();
 }
 
 void ABaseElite_MagicianMonster::mon_Death()
 {
+	ChangeMTI();
 	GetBigAttackRange()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	WhyOnlyUGetDown();
 	Super::mon_Death();
 }
 
@@ -200,20 +194,24 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 				DamageFlash();
 
 				//if Monster Hp under Gimic Hp, Start Gimic
-				//	if (GetMonCurrentHp() <= GetMonMaxHp() * (call_FstGimicHp / 100) && !isFstGimic)
 				if (GetMonCurrentHp() <= GetMonMaxHp() * (Get_FstGimicHp() / 100) && !GetisFstGimic())
 				{
 					UE_LOG(LogTemp, Error, TEXT("First Gimic Start"));
-					SetisFstGimic(true);
-					SetInvincible(true);
+					SetisFstGimic(true);			//Change Property to Not Take FstGimic Again
+					SetInvincible(true);			//Not for Take Damage
+					//Set BlackBoard Properties to Make Barrier
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 				}
 				if (GetMonCurrentHp() <= GetMonMaxHp() * (Get_SndGimicHp() / 100) && !GetisSndGimic())
 				{
 					UE_LOG(LogTemp, Error, TEXT("Second Gimic Start"));
-					SetisSndGimic(true);
-					SetInvincible(true);
+					//
+					SetisSndGimic(true);			//Change Property to Not Take SndGimic Again
+					SetInvincible(true);			//Not for Take Damage
+					//Set BlackBoard Properties to Make Barrier
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);				
 				}
 			}
 		}
