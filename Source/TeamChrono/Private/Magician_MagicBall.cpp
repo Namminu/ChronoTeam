@@ -65,9 +65,12 @@ void AMagician_MagicBall::OnProjectileOverlapBegin(UPrimitiveComponent* const Ov
 	{
 		UE_LOG(LogTemp, Warning, TEXT("First, Overlap to Player"));
 
+		if (bisPlayerhit) return;
+
 		if (OtherComponent->ComponentHasTag("SWORD"))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Sword box overlap"));
+			Re_Elasticity();
 			Re_Elasticity();
 		}
 		else
@@ -144,9 +147,10 @@ void AMagician_MagicBall::ChasePlayer()
 	ProjectileComponent->Velocity = targetDirection * (ProjectileComponent->InitialSpeed);
 }
 
-void AMagician_MagicBall::Re_Elasticity_Implementation()
+void AMagician_MagicBall::Re_Elasticity()
 {
 	bisPlayerhit = true;
+	damageAmount = re_DamageAmount;
 	FVector playerForward = player->GetActorForwardVector();
 	//playerForward.Normalize();
 	ProjectileComponent->Velocity = playerForward * (ProjectileComponent->InitialSpeed);

@@ -263,6 +263,11 @@ void ABaseMonster::CreateMTI()
 	}
 }
 
+void ABaseMonster::PlayMontage(UAnimMontage* Montage)
+{
+	PlayAnimMontage(Montage);
+}
+
 UAnimMontage* ABaseMonster::GetAtkMontage() const
 { 
 	return AtkMontage; 

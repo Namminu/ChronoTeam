@@ -106,7 +106,7 @@ private:
 	bool isBigAck;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
-	TArray<AMonsterSpawner*> MonsterArray;
+	TArray<AMonsterSpawner*> SpawnerArray;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	float SpawnDelay;
@@ -116,6 +116,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	UNiagaraComponent* InitBarrierEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
+	TArray<ABaseMonster*> MonsterArray;
 
 public:
 /// Getter Func

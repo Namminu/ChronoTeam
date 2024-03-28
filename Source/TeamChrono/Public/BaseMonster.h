@@ -71,6 +71,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void CreateMTI();
 
+	void PlayMontage(UAnimMontage* Montage);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -167,7 +167,7 @@ void ABaseElite_MagicianMonster::MakeBigAttack_Implementation()
 
 void ABaseElite_MagicianMonster::SpawnMonster()
 {
-	for (AMonsterSpawner* Spawner : MonsterArray)
+	for (AMonsterSpawner* Spawner : SpawnerArray)
 	{
 		if (Spawner)
 		{
@@ -192,7 +192,9 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 				//if Monster Hp under Zero, Get Die
 				if (GetMonCurrentHp() <= 0)
 				{
+					//Magician Die
 					mon_Death();
+					//Magician - Spawned Monster Die too
 					return 0.f;
 				}
 				DamageFlash();
@@ -221,16 +223,16 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 			//Take Damage only by Magic_Ball
 			if (DamageCauser && DamageCauser->ActorHasTag("MAGICBALL"))
 			{
-				BarrierFlash();
 				SetBarrierHp(GetBarrierHp() - DamageAmount);
-
 				//if Barrier Hp under Zero, Set Invincible false for Take Damage for Monster
 				if (GetBarrierHp() <= 0)
 				{
 					SetInvincible(false);
 					GetSpecificEffect()->Deactivate();
 					UE_LOG(LogTemp, Error, TEXT("Gimic End"));
+					return 0.f;
 				}
+				BarrierFlash();
 			}
 		}
 	}
