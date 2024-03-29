@@ -157,4 +157,5 @@ public:
 
 	bool GetisFstGimic() const { return isFstGimic; }
 	bool GetisSndGimic() const { return isSndGimic; }
+
 };

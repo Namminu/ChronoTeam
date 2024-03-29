@@ -11,6 +11,7 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include <Kismet/GameplayStatics.h>
+#include "GameFramework/CharacterMovementComponent.h"
 
 ABaseElite_MagicianMonster::ABaseElite_MagicianMonster()
 {
@@ -18,6 +19,9 @@ ABaseElite_MagicianMonster::ABaseElite_MagicianMonster()
 
 	BigAttackRangeBox = CreateDefaultSubobject<USphereComponent>(TEXT("Big Attack Range"));
 	BigAttackRangeBox->SetupAttachment(GetCapsuleComponent());
+
+	DiePortalEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Die Portal"));
+	DiePortalEffect->SetupAttachment(GetCapsuleComponent());
 
 }
 
@@ -36,6 +40,8 @@ void ABaseElite_MagicianMonster::BeginPlay()
 
 	isBigAck = false;
 	isMontage = false;
+
+	DiePortalEffect->Deactivate();
 
 	SetisFstGimic(false);
 	SetisSndGimic(false);
@@ -141,12 +147,48 @@ void ABaseElite_MagicianMonster::CreateMTI()
 	Super::CreateMTI();
 }
 
-void ABaseElite_MagicianMonster::mon_Death()
+/// <summary>
+/// ReDefine mon_Death in Magician
+/// </summary>
+void ABaseElite_MagicianMonster::mon_Death_Implementation()
 {
-	ChangeMTI();
+	UE_LOG(LogTemp, Warning, TEXT("Magician Death Func Called"));
+
 	GetBigAttackRange()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	WhyOnlyUGetDown();
-	Super::mon_Death();
+
+	//Stop Movement
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	//Stop Collision
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
+	monsterAI->StopAI();	//Stop BT 
+	
+	//monsterAI->ClearFocus(EAIFocusPriority::Default);
+	//monsterAI->SetFocus(this);
+	
+	//Pause Death Montage On Layback
+	DeathFunc();
+}
+
+//void ABaseElite_MagicianMonster::mon_Destroy()
+//{
+//	Destroy();
+//	GetWeaponInstance_Fst()->Wp_Destroy();
+//
+//	UE_LOG(LogTemp, Warning, TEXT("Call Destroy Func by MagicianMonster"));
+//}
+
+void ABaseElite_MagicianMonster::RealDestroy()
+{
+	Destroy();
+	GetWeaponInstance_Fst()->Wp_Destroy();
+
+	UE_LOG(LogTemp, Warning, TEXT("Call Destroy Func by MagicianMonster"));
 }
 
 void ABaseElite_MagicianMonster::SetTimerFunc()
@@ -165,7 +207,6 @@ void ABaseElite_MagicianMonster::SpawnMonster()
 	{
 		if (Spawner)
 		{
-			// 특정 함수 호출
 			Spawner->SpawnMonster_Implementation();
 		}
 	}
@@ -186,9 +227,10 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 				//if Monster Hp under Zero, Get Die
 				if (GetMonCurrentHp() <= 0)
 				{
-					//Magician Die
-					mon_Death();
-					//Magician - Spawned Monster Die too
+					SetMonsterLive(false);
+					//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMonsterLive", false);
+					mon_Death();					//Magician Die
+					//Magician - Spawned Monster Die too?
 					return 0.f;
 				}
 				DamageFlash();
@@ -199,16 +241,19 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 					UE_LOG(LogTemp, Error, TEXT("First Gimic Start"));
 					SetisFstGimic(true);			//Change Property to Not Take FstGimic Again
 					SetInvincible(true);			//Not for Take Damage
+
 					//Set BlackBoard Properties to Make Barrier
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 				}
+
 				if (GetMonCurrentHp() <= GetMonMaxHp() * (Get_SndGimicHp() / 100) && !GetisSndGimic())
 				{
 					UE_LOG(LogTemp, Error, TEXT("Second Gimic Start"));
 					//
 					SetisSndGimic(true);			//Change Property to Not Take SndGimic Again
 					SetInvincible(true);			//Not for Take Damage
+
 					//Set BlackBoard Properties to Make Barrier
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);				

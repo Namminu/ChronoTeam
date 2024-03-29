@@ -61,6 +61,8 @@ void ABaseMonster::BeginPlay()
 	monNowHp = monMaxHp;
 	monAtk = 1;
 	isMonsterBorn = false; 
+	isMonsterLive = true;
+
 
 	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
@@ -110,8 +112,6 @@ void ABaseMonster::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComp
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
 		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
-
-		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseMonster"));
 	}
 }
 
@@ -179,6 +179,7 @@ float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
 		if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
 		{
+			isMonsterLive = false;
 			mon_Death();
 			return DamageAmount;
 		}
@@ -202,7 +203,7 @@ void ABaseMonster::CallNiagaraEffect(UNiagaraComponent* NiaEffect)
 	}
 }
 
-void ABaseMonster::mon_Death()
+void ABaseMonster::mon_Death_Implementation()
 {
 	//Stop Movement
 	GetCharacterMovement()->SetMovementMode(MOVE_None);	
@@ -214,9 +215,12 @@ void ABaseMonster::mon_Death()
 
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
+	//monsterAI->ClearFocus(EAIFocusPriority::Default);
 
 	PlayAnimMontage(DeathMontage);	//Death Animation	
 	Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
+
+
 
 	FTimerHandle TimerHandle;
 	float delay = 3.3f;
@@ -275,6 +279,11 @@ UAnimMontage* ABaseMonster::GetAtkMontage() const
 UAnimMontage* ABaseMonster::GetCreateMontage() const
 {
 	return CreateMontage;
+}
+
+UAnimMontage* ABaseMonster::GetDeathMontage() const
+{
+	return DeathMontage;
 }
 
 UBehaviorTree* ABaseMonster::GetBehaviorTree() const

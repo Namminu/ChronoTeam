@@ -32,6 +32,8 @@ public:
 
 	UAnimMontage* GetCreateMontage() const;
 
+	UAnimMontage* GetDeathMontage() const;
+
 	int MeleeAttack_Implementation() override;
 
 	//기본 공격 함수
@@ -64,8 +66,10 @@ public:
 	void CallNiagaraEffect(UNiagaraComponent* NiaEffect);
 
 	//몬스터 사망 호출 함수
-	virtual void mon_Death();
-	void mon_Destroy();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void mon_Death();
+	UFUNCTION(BlueprintCallable)
+	virtual void mon_Destroy();
 
 	//Create Dynamic Material Instance Function
 	UFUNCTION(BlueprintCallable)
@@ -190,6 +194,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER BORN", meta = (AllowPrivateAccess = "true"))
 	bool isMonsterBorn;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool isMonsterLive;
+
 public:
 /// Property Getter
 	int GetMonSpeed() const { return monSpeed; }	
@@ -198,6 +205,8 @@ public:
 	int GetMonMaxHp() const { return monMaxHp; }
 	int GetMonAtk() const { return monAtk; }
 	bool GetIsBorn() const { return isMonsterBorn; }
+	bool GetMonsterLive() const { return isMonsterLive; }
+
 /// Component Getter
 	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
 	UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
@@ -216,4 +225,5 @@ public:
 	//TArray<UMaterialInstanceDynamic*> SetMTIArray() 
 /// Property Setter
 	void SetMonCurrentHp(const int newHp) { monNowHp = newHp; }
+	void SetMonsterLive(const bool newBool) { isMonsterLive = newBool; }
 };

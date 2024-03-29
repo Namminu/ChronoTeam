@@ -79,12 +79,22 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void MakeBigAttack();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void DeathFunc();
+
 	UFUNCTION(BlueprintCallable)
 	void SpawnMonster();
 
 	void CreateMTI() override;
 
-	void mon_Death() override;
+	void mon_Death_Implementation();
+
+	//Override Mon_Destroy Func for ReDefine 
+	void mon_Destroy() override;
+
+	//Real Destroy Func - Monster & Weapon
+	UFUNCTION(BlueprintCallable)
+	void RealDestroy();
 
 	void SetTimerFunc();
 
@@ -122,6 +132,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	UNiagaraComponent* InitBarrierEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DIE", meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* DiePortalEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	TArray<ABaseMonster*> MonsterArray;
