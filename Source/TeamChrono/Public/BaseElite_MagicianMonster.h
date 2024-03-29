@@ -6,7 +6,7 @@
 #include "BaseEliteMonster.h"
 #include <TeamChrono/TeamChronoCharacter.h>
 #include "Magician_BigAttack.h"
-#include "MonsterSpawner.h"
+#include "Magician_MonsterSpawner.h"
 #include "BaseElite_MagicianMonster.generated.h"
 /**
  * 
@@ -85,12 +85,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnMonster();
 
-	void CreateMTI() override;
+	//void CreateMTI() override;
 
 	void mon_Death_Implementation();
-
-	//Override Mon_Destroy Func for ReDefine 
-	void mon_Destroy() override;
 
 	//Real Destroy Func - Monster & Weapon
 	UFUNCTION(BlueprintCallable)
@@ -105,11 +102,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void BarrierFlash();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void WhyOnlyUGetDown();
+	//UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	//void WhyOnlyUGetDown();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetFlashMTI();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void AddMonsterArray();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
@@ -122,7 +122,7 @@ private:
 	bool isBigAck;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
-	TArray<AMonsterSpawner*> SpawnerArray;
+	TArray<AMagician_MonsterSpawner*> SpawnerArray;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	float SpawnDelay;

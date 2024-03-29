@@ -135,6 +135,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool isMTI;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool isPowerUpPlaying;
+
 ///Setter
 public:
 	void SetInvincible(bool newBollSet) { isInvincible = newBollSet; }
@@ -142,6 +145,8 @@ public:
 
 	void SetisFstGimic(const bool newBool) { isFstGimic = newBool; }
 	void SetisSndGimic(const bool newBool) { isSndGimic = newBool; }
+
+	void SetPowerUpPlaying(const bool newBool) { isPowerUpPlaying = newBool; }
 
 ///Getter
 	UAnimMontage* GetGimicMontage() { return Gimic_Montage; }
@@ -158,4 +163,5 @@ public:
 	bool GetisFstGimic() const { return isFstGimic; }
 	bool GetisSndGimic() const { return isSndGimic; }
 
+	bool GetPowerUpPlaying() const { return isPowerUpPlaying; }
 };

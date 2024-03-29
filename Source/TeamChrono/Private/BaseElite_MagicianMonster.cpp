@@ -29,9 +29,6 @@ void ABaseElite_MagicianMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//CreateMTI();		//Add MTI to MTIArray
-	//SetFst_SndMTI();	//Save Init MT
-	ChangeMTI();		//Change MTI for Walking in Opaque
 	SetFlashMTI();		//Set Flash MTI after Change MTI <- Opaque
 
 	//Cast to Player
@@ -142,10 +139,10 @@ int ABaseElite_MagicianMonster::MeleeAttack_Implementation()
 	return 0;
 }
 
-void ABaseElite_MagicianMonster::CreateMTI()
-{
-	Super::CreateMTI();
-}
+//void ABaseElite_MagicianMonster::CreateMTI()
+//{
+//	Super::CreateMTI();
+//}
 
 /// <summary>
 /// ReDefine mon_Death in Magician
@@ -155,7 +152,7 @@ void ABaseElite_MagicianMonster::mon_Death_Implementation()
 	UE_LOG(LogTemp, Warning, TEXT("Magician Death Func Called"));
 
 	GetBigAttackRange()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	WhyOnlyUGetDown();
+	//WhyOnlyUGetDown();
 
 	//Stop Movement
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
@@ -203,11 +200,14 @@ void ABaseElite_MagicianMonster::MakeBigAttack_Implementation()
 
 void ABaseElite_MagicianMonster::SpawnMonster()
 {
-	for (AMonsterSpawner* Spawner : SpawnerArray)
+	for (AMagician_MonsterSpawner* Spawner : SpawnerArray)
 	{
 		if (Spawner)
 		{
-			Spawner->SpawnMonster_Implementation();
+			//Spawn Monster
+			Spawner->SpawnMonster();
+			//Add Spawned Monster to Array
+			AddMonsterArray();
 		}
 	}
 }
@@ -230,7 +230,11 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 					SetMonsterLive(false);
 					//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMonsterLive", false);
 					mon_Death();					//Magician Die
-					//Magician - Spawned Monster Die too?
+					//Magician - Spawned Monster Die too
+					for (ABaseMonster* monsters : MonsterArray)
+					{
+						monsters->mon_Death();
+					}
 					return 0.f;
 				}
 				DamageFlash();
