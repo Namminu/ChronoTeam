@@ -19,6 +19,7 @@ void AAI_Controller_::StopAI()
 	if (nullptr != BehaviorTreeComponent)
 	{
 		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+		//BehaviorTreeComponent->StopLogic("Dead");
 	}
 }
 

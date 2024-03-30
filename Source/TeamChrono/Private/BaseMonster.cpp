@@ -215,7 +215,7 @@ void ABaseMonster::mon_Death_Implementation()
 
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
-	//monsterAI->ClearFocus(EAIFocusPriority::Default);
+	DetachFromControllerPendingDestroy();
 
 	PlayAnimMontage(DeathMontage);	//Death Animation	
 	Change_Opacity(1, 0);	//Change Opacity to 1 -> 0

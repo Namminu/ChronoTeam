@@ -164,9 +164,7 @@ void ABaseElite_MagicianMonster::mon_Death_Implementation()
 
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
-	
-	//monsterAI->ClearFocus(EAIFocusPriority::Default);
-	//monsterAI->SetFocus(this);
+	DetachFromControllerPendingDestroy();
 	
 	//Pause Death Montage On Layback
 	DeathFunc();
