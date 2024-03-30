@@ -177,6 +177,7 @@ private:
 	class AASword* WeaponInstance;
 
 	bool m_bIsDodgingEnd = false;
+
 public:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = Dodge)
@@ -190,6 +191,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
 
+	// 마우스 방향 바라보는 코드
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void CharacterMouseDirection();
 
 protected:
 

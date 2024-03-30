@@ -94,7 +94,7 @@ void ATeamChronoCharacter::PostInitializeComponents()
 			CanNextCombo = false;
 			if (IsComboInputOn)
 			{
-
+				CharacterMouseDirection();
 				AttackStartComboState();
 				ABAnim->JumpToAttackMontageSection(CurrentCombo);
 
@@ -147,10 +147,12 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
 		//Acttak
-		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Attack);
-		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
-		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
+
+		// Acttak ±¤Å¬
+		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Attack);
 	}
 	else
 	{
@@ -176,7 +178,7 @@ void ATeamChronoCharacter::Attack()
 			ABAnim->PlayAttackMontage();
 			ABAnim->JumpToAttackMontageSection(CurrentCombo);
 			IsAttacking = true;
-
+			CharacterMouseDirection();
 
 			FName WeaponSocket(TEXT("Weapon_Sword_Hand"));
 			if (WeaponInstance)
