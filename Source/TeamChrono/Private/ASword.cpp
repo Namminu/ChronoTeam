@@ -10,7 +10,7 @@ AASword::AASword()
 	PrimaryActorTick.bCanEverTick = false;
 	Sword = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON"));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> SW(TEXT("/Game/PlayerCharacter/SM_PROP_weapon_sword_dungeon_1.SM_PROP_weapon_sword_dungeon_1"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SW(TEXT("/Script/Engine.StaticMesh'/Game/PlayerCharacter/PlayerSword.PlayerSword'"));
 	if (SW.Succeeded())
 	{
 		Sword->SetStaticMesh(SW.Object);

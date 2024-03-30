@@ -14,12 +14,13 @@ void UMoveAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSe
 {
 
 	Owner = MeshComp->GetOwner();
-	StartLocation = Owner->GetActorLocation();
-	TotalDistance = TotalDuration * MoveDistancePerSec; // 전체 이동 거리
-	// Begin 부터 End 까지 걸리는 시간이 TotalDuration 으로 넘어온다
-	TotalTime = TotalDuration;
 	if (Owner != nullptr)
 	{
+		StartLocation = Owner->GetActorLocation();
+		TotalDistance = TotalDuration * MoveDistancePerSec; // 전체 이동 거리
+		// Begin 부터 End 까지 걸리는 시간이 TotalDuration 으로 넘어온다
+		TotalTime = TotalDuration;
+
 		Owner->GetWorld()->GetTimerManager().ClearTimer(MoveTimerHandle);
 		Owner->GetWorld()->GetTimerManager().SetTimer(MoveTimerHandle,
 			FTimerDelegate::CreateLambda([this]()-> void
@@ -36,6 +37,7 @@ void UMoveAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSe
 					);
 	}
 }
+
 void UMoveAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
 {
 	if (Owner != nullptr)    

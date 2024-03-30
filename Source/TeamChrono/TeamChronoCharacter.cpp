@@ -74,17 +74,6 @@ ATeamChronoCharacter::ATeamChronoCharacter()
 		StaminaBar->SetDrawSize(FVector2D(-100.f, 200.f));
 	}
 
-	FName WeaponSocket(TEXT("Weapon_Sword"));
-	if (GetMesh()->DoesSocketExist(WeaponSocket))
-	{
-		Weapon = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WEAPON"));
-		static ConstructorHelpers::FObjectFinder<UStaticMesh> SW(TEXT("/Game/PlayerCharacter/SM_PROP_weapon_sword_dungeon_1.SM_PROP_weapon_sword_dungeon_1"));
-		if (SW.Succeeded())
-		{
-			Weapon->SetStaticMesh(SW.Object);
-		}
-		Weapon->SetupAttachment(GetMesh(), WeaponSocket);
-	}
 
 
 	MaxCombo = 3;
@@ -138,19 +127,7 @@ void ATeamChronoCharacter::BeginPlay()
 	GetWorldTimerManager().SetTimer(StaminaTimerHandle, this, &ATeamChronoCharacter::SetStamina, pcStaminaTimer, true);
 	pcStamina = FMath::Clamp(pcStamina, 0, pcMaxStamina);
 
-
-	FName WeaponSocket(TEXT("Weapon_Sword_Hand"));
-
-	auto CurrentWeapon = GetWorld()->SpawnActor<AASword>(FVector::ZeroVector, FRotator::ZeroRotator);
-
-
-
-	if (CurrentWeapon)
-	{
-		CurrentWeapon->AttachToComponent(GetMesh(),
-			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-			WeaponSocket);
-	}
+	
 }
 
 
@@ -170,9 +147,10 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
 		//Acttak
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
+		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Attack);
+		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
+		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
 	}
 	else
 	{
@@ -200,13 +178,13 @@ void ATeamChronoCharacter::Attack()
 			IsAttacking = true;
 
 
-			/*FName WeaponSocket(TEXT("Weapon_Sword_Hand"));
-			if (CurrentSword)
+			FName WeaponSocket(TEXT("Weapon_Sword_Hand"));
+			if (WeaponInstance)
 			{
-				CurrentSword->AttachToComponent(GetMesh(),
+				WeaponInstance->AttachToComponent(GetMesh(),
 					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 					WeaponSocket);
-			}*/
+			}
 		}
 	}
 	
@@ -253,6 +231,14 @@ void ATeamChronoCharacter::AttackEndComboState()
 
 	CanNextCombo = false;
 	CurrentCombo = 0;
+
+	FName WeaponSocket(TEXT("Weapon_Sword_Back"));
+	if (WeaponInstance)
+	{
+		WeaponInstance->AttachToComponent(GetMesh(),
+			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+			WeaponSocket);
+	}
 }
 
 
@@ -314,11 +300,25 @@ void ATeamChronoCharacter::Dodge()
 
 				pcStamina -= pcDodgeStamina;
 				Steminerdecreasing = true;
-				//pAnimInst->Montage_Play(m_pDodgeMontage);
-				//LaunchCharacter(GetActorForwardVector() * DodgeSpeed, true, true);
+
 			}
 		}
 
+	}
+}
+
+void ATeamChronoCharacter::AttachWeapon(TSubclassOf<AASword> Weapon)
+{
+	FName WeaponSocket(TEXT("Weapon_Sword_Back"));
+
+	WeaponInstance = GetWorld()->SpawnActor<AASword>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+
+	if (WeaponInstance)
+	{
+
+		WeaponInstance->AttachToComponent(GetMesh(),
+			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+			WeaponSocket);
 	}
 }
 

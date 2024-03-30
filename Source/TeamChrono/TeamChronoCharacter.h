@@ -169,6 +169,12 @@ private:
 	// 회피 기능
 	void Dodge();
 
+	//무기 장착 호출 함수
+	UFUNCTION(BlueprintCallable)
+	void AttachWeapon(TSubclassOf<AASword> Weapon);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
+	class AASword* WeaponInstance;
 
 	bool m_bIsDodgingEnd = false;
 public:
@@ -184,8 +190,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
 
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Weapon;
+
 protected:
 
 	/** Called for movement input */
