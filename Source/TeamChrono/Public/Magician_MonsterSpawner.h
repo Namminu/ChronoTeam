@@ -13,12 +13,4 @@ UCLASS()
 class TEAMCHRONO_API AMagician_MonsterSpawner : public AMonsterSpawner
 {
 	GENERATED_BODY()
-public:
-	void SpawnMonster_Implementation() override;
-private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MAGICIAN", meta = (AllowPrivateAccess = "true"))
-	FString MagicianTag;
-
-public:
-	FString GetMagicTag() const { return MagicianTag; }
 };

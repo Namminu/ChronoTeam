@@ -6,7 +6,7 @@
 #include "BaseEliteMonster.h"
 #include <TeamChrono/TeamChronoCharacter.h>
 #include "Magician_BigAttack.h"
-#include "Magician_MonsterSpawner.h"
+#include "MonsterSpawner.h"
 #include "BaseElite_MagicianMonster.generated.h"
 /**
  * 
@@ -108,9 +108,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetFlashMTI();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void AddMonsterArray();
-
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* BigAttackRangeBox;
@@ -122,7 +119,7 @@ private:
 	bool isBigAck;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
-	TArray<AMagician_MonsterSpawner*> SpawnerArray;
+	TArray<AMonsterSpawner*> SpawnerArray;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	float SpawnDelay;
@@ -135,9 +132,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DIE", meta = (AllowPrivateAccess = "true"))
 	UNiagaraComponent* DiePortalEffect;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
-	TArray<ABaseMonster*> MonsterArray;
 
 public:
 /// Getter Func

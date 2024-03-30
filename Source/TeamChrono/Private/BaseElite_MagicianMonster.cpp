@@ -200,14 +200,12 @@ void ABaseElite_MagicianMonster::MakeBigAttack_Implementation()
 
 void ABaseElite_MagicianMonster::SpawnMonster()
 {
-	for (AMagician_MonsterSpawner* Spawner : SpawnerArray)
+	for (AMonsterSpawner* Spawner : SpawnerArray)
 	{
 		if (Spawner)
 		{
 			//Spawn Monster
 			Spawner->SpawnMonster();
-			//Add Spawned Monster to Array
-			AddMonsterArray();
 		}
 	}
 }
@@ -230,11 +228,6 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 					SetMonsterLive(false);
 					//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMonsterLive", false);
 					mon_Death();					//Magician Die
-					//Magician - Spawned Monster Die too
-					for (ABaseMonster* monsters : MonsterArray)
-					{
-						monsters->mon_Death();
-					}
 					return 0.f;
 				}
 				DamageFlash();
