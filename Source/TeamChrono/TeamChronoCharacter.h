@@ -100,6 +100,10 @@ public:
 
 	// UPROPERTY(VisibleAnywhere, Category = Weapon)
 	// class AABWeapon* CurrentWeapon;
+	
+	//구르는 방향 저장
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = MoveRotation, Meta = (AllowPrivateAccess = true))
+	FRotator DodgeRotation;
 
 private:
 
@@ -116,9 +120,6 @@ private:
 
 	void MoveRotation(FVector2D MovementVector);
 
-	//구르는 방향 저장
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = MoveRotation, Meta = (AllowPrivateAccess = true))
-	FRotator DodgeRotation;
 
 	// 최대 체력의 최대
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = HP, Meta = (AllowPrivateAccess = true))
