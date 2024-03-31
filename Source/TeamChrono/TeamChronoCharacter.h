@@ -151,7 +151,7 @@ private:
 	float pcDodgeStamina = 20.0f;
 
 	// e 스킬 스테미너
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	float ESkillStamina = 25.0f;
 
 	// e 스킬 쿨타임
@@ -195,6 +195,9 @@ public:
 	// 마우스 방향 바라보는 코드
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void CharacterMouseDirection();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void HitDetect();
 
 protected:
 
