@@ -55,14 +55,19 @@ void ABaseMonster::BeginPlay()
 		GetAttackEffect()->Deactivate();
 	}
 
+	//Setup How Collision Enable
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
 	//Create Dynamic Material Instance
 	CreateMTI();
-	 
+	
 	monNowHp = monMaxHp;
 	monAtk = 1;
 	isMonsterBorn = false; 
 	isMonsterLive = true;
-
 
 	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
 	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
@@ -113,6 +118,7 @@ void ABaseMonster::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComp
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
 		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
 	}
+
 }
 
 void ABaseMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
