@@ -300,8 +300,7 @@ void ATeamChronoCharacter::Dodge()
 				m_bIsDodgingEnd = true;
 				RollAnimation();
 
-				pcStamina -= pcDodgeStamina;
-				Steminerdecreasing = true;
+				StaminaVariation(pcDodgeStamina);
 
 			}
 		}
@@ -323,6 +322,27 @@ void ATeamChronoCharacter::AttachWeapon(TSubclassOf<AASword> Weapon)
 			WeaponSocket);
 	}
 }
+
+
+
+void ATeamChronoCharacter::StaminaVariation(float VariationStemina)
+{
+	if(0 < VariationStemina)
+		Steminerdecreasing = true;
+
+	pcStamina = pcStamina - VariationStemina;
+	
+	if (0 >= pcStamina)
+	{
+		pcStamina = 0;
+	}
+	else if (pcStamina >= pcMaxStamina)
+	{
+		pcStamina = pcMaxStamina;
+	}
+}
+
+
 
 
 void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)

@@ -132,7 +132,7 @@ private:
 	// 현재 체력
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = HP, Meta = (AllowPrivateAccess = true))
 	int P_CurrentHP;
-
+	
 	//최대 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcMaxStamina = 100.0f;
@@ -149,6 +149,10 @@ private:
 	//구르기 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcDodgeStamina = 20.0f;
+
+	// 공격 회복 스테미나
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float AttackStaminaRecovery = 5.0f;
 
 	// e 스킬 스테미너
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
@@ -167,12 +171,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
 	bool IsESkillDoing;
 
+	
+
 	// 회피 기능
 	void Dodge();
 
-	//무기 장착 호출 함수
-	UFUNCTION(BlueprintCallable)
-	void AttachWeapon(TSubclassOf<AASword> Weapon);
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	class AASword* WeaponInstance;
@@ -180,6 +184,31 @@ private:
 	bool m_bIsDodgingEnd = false;
 
 public:
+
+	// Q 스킬 눌렀을때 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float QSkillStamina = 25.0f;
+
+	// Q 스킬 쓰는중 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float QSkillingStamina = 5.0f;
+
+	// Q 스킬 썼다 안쓰고 껐을때 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float QSkillEndStamina = 10.0f;
+
+	//무기 장착 호출 함수
+	UFUNCTION(BlueprintCallable)
+	void AttachWeapon(TSubclassOf<AASword> Weapon);
+
+	// 스테미나 변동(스킬 쓰거나 회복하거나)
+	UFUNCTION(BlueprintCallable)
+	void StaminaVariation(float VariationStemina);
+
+
+
+
+
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = Dodge)
 	bool m_bIsDodging = false;
