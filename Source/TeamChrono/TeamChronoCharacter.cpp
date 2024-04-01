@@ -181,9 +181,9 @@ void ATeamChronoCharacter::Attack()
 			CharacterMouseDirection();
 
 			FName WeaponSocket(TEXT("Weapon_Sword_Hand"));
-			if (WeaponInstance)
+			if (SwordInstance)
 			{
-				WeaponInstance->AttachToComponent(GetMesh(),
+				SwordInstance->AttachToComponent(GetMesh(),
 					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 					WeaponSocket);
 			}
@@ -235,9 +235,9 @@ void ATeamChronoCharacter::AttackEndComboState()
 	CurrentCombo = 0;
 
 	FName WeaponSocket(TEXT("Weapon_Sword_Back"));
-	if (WeaponInstance)
+	if (SwordInstance)
 	{
-		WeaponInstance->AttachToComponent(GetMesh(),
+		SwordInstance->AttachToComponent(GetMesh(),
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
 	}
@@ -312,12 +312,12 @@ void ATeamChronoCharacter::AttachWeapon(TSubclassOf<AASword> Weapon)
 {
 	FName WeaponSocket(TEXT("Weapon_Sword_Back"));
 
-	WeaponInstance = GetWorld()->SpawnActor<AASword>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+	SwordInstance = GetWorld()->SpawnActor<AASword>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
 
-	if (WeaponInstance)
+	if (SwordInstance)
 	{
 
-		WeaponInstance->AttachToComponent(GetMesh(),
+		SwordInstance->AttachToComponent(GetMesh(),
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
 	}

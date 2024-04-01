@@ -87,8 +87,7 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY()
 	class UABAnimInstance* ABAnim;
 
-	// ∞À ø¢≈Õ
-	// static AActor* CurrentSword;
+
 
 
 public:
@@ -179,7 +178,7 @@ private:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
-	class AASword* WeaponInstance;
+	class AASword* SwordInstance;
 
 	bool m_bIsDodgingEnd = false;
 
