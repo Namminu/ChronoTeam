@@ -57,9 +57,9 @@ void ABaseMonster::BeginPlay()
 
 	//Setup How Collision Enable
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	//Create Dynamic Material Instance
 	CreateMTI();
@@ -70,7 +70,7 @@ void ABaseMonster::BeginPlay()
 	isMonsterLive = true;
 
 	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
-	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
+	//WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
 	AttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
 	AttackRangeBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
 
@@ -163,7 +163,7 @@ void ABaseMonster::AttackStart() const
 {
 	WeaponCollisionBox->SetCollisionProfileName("Fist");
 	WeaponCollisionBox->SetNotifyRigidBodyCollision(true);
-	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	UE_LOG(LogTemp, Error, TEXT("Attack Start"));
 }
@@ -172,7 +172,7 @@ void ABaseMonster::AttackEnd() const
 {
 	WeaponCollisionBox->SetCollisionProfileName("Fist");
 	WeaponCollisionBox->SetNotifyRigidBodyCollision(false);
-	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	UE_LOG(LogTemp, Error, TEXT("Attack End"));
 }
@@ -225,8 +225,6 @@ void ABaseMonster::mon_Death_Implementation()
 
 	PlayAnimMontage(DeathMontage);	//Death Animation	
 	Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
-
-
 
 	FTimerHandle TimerHandle;
 	float delay = 3.3f;

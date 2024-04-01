@@ -29,6 +29,8 @@ void ABaseElite_MagicianMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
+
+
 	SetFlashMTI();		//Set Flash MTI after Change MTI <- Opaque
 
 	//Cast to Player
