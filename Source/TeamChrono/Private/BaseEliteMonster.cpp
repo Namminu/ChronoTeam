@@ -41,6 +41,8 @@ void ABaseEliteMonster::Tick(float DeltaTime)
 
 }
 
+
+
 int ABaseEliteMonster::MeleeAttack_Implementation()
 {
 	if (isBigAttack)	//강한 공격을 사용하는 경우 처리
@@ -185,4 +187,9 @@ void ABaseEliteMonster::ReNewBarrierHp()
 		BarrierHp = Snd_BarrierHp;
 	}
 	SetGimicTimer();
+}
+
+void ABaseEliteMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
 }

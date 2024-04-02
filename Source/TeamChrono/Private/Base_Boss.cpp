@@ -122,3 +122,8 @@ void ABase_Boss::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponen
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
 }
+
+void ABase_Boss::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+}

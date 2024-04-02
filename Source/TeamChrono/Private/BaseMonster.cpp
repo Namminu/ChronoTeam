@@ -271,6 +271,15 @@ void ABaseMonster::CreateMTI()
 	}
 }
 
+void ABaseMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	WeaponCollisionBox->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
+	AttackRangeBox->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
+	AttackRangeBox->OnComponentEndOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
+}
+
 void ABaseMonster::PlayMontage(UAnimMontage* Montage)
 {
 	PlayAnimMontage(Montage);

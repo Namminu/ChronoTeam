@@ -29,8 +29,6 @@ void ABaseElite_MagicianMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-
 	SetFlashMTI();		//Set Flash MTI after Change MTI <- Opaque
 
 	//Cast to Player
@@ -278,4 +276,9 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 	}
 
 	return 0.0f;
+}
+
+void ABaseElite_MagicianMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
 }

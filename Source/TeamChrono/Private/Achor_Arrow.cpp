@@ -98,7 +98,13 @@ void AAchor_Arrow::BeginPlay()
 	damageAmount = 1;
 
 	Arrow->OnComponentBeginOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapBegin);
-	//CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapEnd);
+}
+
+void AAchor_Arrow::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	Arrow->OnComponentBeginOverlap.RemoveDynamic(this, &AAchor_Arrow::OnAttackOverlapBegin);
 }
 
 // Called every frame

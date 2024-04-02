@@ -21,6 +21,9 @@ protected:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Called when Actor Destroy
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 public:
 // Override Functions
 	int MeleeAttack_Implementation() override;
