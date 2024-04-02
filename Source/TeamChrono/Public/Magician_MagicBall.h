@@ -38,7 +38,7 @@ public:
 	/// <summary>
 	/// 반탄력 기능 정의
 	/// </summary>
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void Re_Elasticity();
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
@@ -70,6 +70,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BALL", meta = (AllowPrivateAccess = "true"))
 	float damageAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BALL", meta = (AllowPrivateAccess = "true"))
+	float re_DamageAmount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BALL", meta = (AllowPrivateAccess = "true"))
 	bool bisPlayerhit;

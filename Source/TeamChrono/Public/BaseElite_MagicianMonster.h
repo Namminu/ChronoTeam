@@ -6,6 +6,7 @@
 #include "BaseEliteMonster.h"
 #include <TeamChrono/TeamChronoCharacter.h>
 #include "Magician_BigAttack.h"
+#include "MonsterSpawner.h"
 #include "BaseElite_MagicianMonster.generated.h"
 /**
  * 
@@ -23,6 +24,7 @@ public:
 	ABaseElite_MagicianMonster();
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 /// Overlap Event Function 
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
@@ -78,6 +80,35 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void MakeBigAttack();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void DeathFunc();
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnMonster();
+
+	//void CreateMTI() override;
+
+	void mon_Death_Implementation();
+
+	//Real Destroy Func - Monster & Weapon
+	UFUNCTION(BlueprintCallable)
+	void RealDestroy();
+
+	void SetTimerFunc();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void AssginToArray();
+
+	//Barrier Func - Effect Change for Damage Flash
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BarrierFlash();
+
+	//UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	//void WhyOnlyUGetDown();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetFlashMTI();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* BigAttackRangeBox;
@@ -88,5 +119,26 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BIGACK", meta = (AllowPrivateAccess = "true"))
 	bool isBigAck;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
+	TArray<AMonsterSpawner*> SpawnerArray;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
+	float SpawnDelay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
+	bool isMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* InitBarrierEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DIE", meta = (AllowPrivateAccess = "true"))
+	UNiagaraComponent* DiePortalEffect;
+
+public:
+/// Getter Func
+	USphereComponent* GetBigAttackRange() const { return BigAttackRangeBox; }
+	bool GetIsMontage() const { return isMontage; }
+
+/// Setter Func
+	void SetIsMontage(bool newBool) { isMontage = newBool; }
 };

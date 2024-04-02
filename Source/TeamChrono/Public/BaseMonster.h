@@ -32,6 +32,8 @@ public:
 
 	UAnimMontage* GetCreateMontage() const;
 
+	UAnimMontage* GetDeathMontage() const;
+
 	int MeleeAttack_Implementation() override;
 
 	//기본 공격 함수
@@ -64,16 +66,24 @@ public:
 	void CallNiagaraEffect(UNiagaraComponent* NiaEffect);
 
 	//몬스터 사망 호출 함수
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void mon_Death();
-	void mon_Destroy();
+	UFUNCTION(BlueprintCallable)
+	virtual void mon_Destroy();
 
 	//Create Dynamic Material Instance Function
-	void CreateMTI();
+	UFUNCTION(BlueprintCallable)
+	virtual void CreateMTI();
+
+	void PlayMontage(UAnimMontage* Montage);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
+	// Called when Actor Destroy
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 private: 
 ///
 	//비헤이비어 트리
@@ -187,6 +197,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER BORN", meta = (AllowPrivateAccess = "true"))
 	bool isMonsterBorn;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool isMonsterLive;
+
 public:
 /// Property Getter
 	int GetMonSpeed() const { return monSpeed; }	
@@ -195,6 +208,8 @@ public:
 	int GetMonMaxHp() const { return monMaxHp; }
 	int GetMonAtk() const { return monAtk; }
 	bool GetIsBorn() const { return isMonsterBorn; }
+	bool GetMonsterLive() const { return isMonsterLive; }
+
 /// Component Getter
 	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
 	UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
@@ -203,4 +218,15 @@ public:
 	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }
 /// Weapon Getter
 	AMonster_Weapon* GetWeaponInstance_Fst() const { return WeaponInstance; }
+/// MTI Getter
+	UMaterialInstanceDynamic* GetFstMTI() const { return Fst_MTI; }
+	UMaterialInstanceDynamic* GetSndMTI() const { return Snd_MTI; }
+	TArray<UMaterialInstanceDynamic*> GetMTIArray() const { return MTIArray; }
+/// MTI Setter
+	void SetFstMTI(UMaterialInstanceDynamic* newMTI) { Fst_MTI = newMTI; }
+	void SetSndMTI(UMaterialInstanceDynamic* newMTI) { Snd_MTI = newMTI; }
+	//TArray<UMaterialInstanceDynamic*> SetMTIArray() 
+/// Property Setter
+	void SetMonCurrentHp(const int newHp) { monNowHp = newHp; }
+	void SetMonsterLive(const bool newBool) { isMonsterLive = newBool; }
 };
