@@ -25,9 +25,9 @@ ABoss_Golem::ABoss_Golem()
 
 	//Setup Parts Break Effect
 	L_PartsBreakEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Left Break Effect"));
-	L_PartsBreakEffect->SetupAttachment(GetLeftHitBox());
+	L_PartsBreakEffect->SetupAttachment(GetMesh());
 	R_PartsBreakEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Right Break Effect"));
-	R_PartsBreakEffect->SetupAttachment(GetRightHitBox());
+	R_PartsBreakEffect->SetupAttachment(GetMesh());
 }
 
 void ABoss_Golem::BeginPlay()

@@ -154,8 +154,7 @@ private:
 public:
 ///Getter
 	//Collisions
-	UBoxComponent* GetLeftHitBox() const { return L_HitBox; }
-	UBoxComponent* GetRightHitBox() const { return R_HitBox; }
+	UBoxComponent* GetHitBox() const { return HitBox; }
 
 ///Setter
 
