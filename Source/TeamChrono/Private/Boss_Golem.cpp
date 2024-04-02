@@ -20,10 +20,8 @@ ABoss_Golem::ABoss_Golem()
 	Weapon2_Collision->SetupAttachment(GetMesh());
 
 	//Setup Left / Right Hitbox Collision
-	L_HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Left HitBox"));
-	L_HitBox->SetupAttachment(GetMesh());
-	R_HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Right Hitbox"));
-	R_HitBox->SetupAttachment(GetMesh());
+	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Body HitBox"));
+	HitBox->SetupAttachment(GetMesh());
 
 	//Setup Parts Break Effect
 	L_PartsBreakEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Left Break Effect"));

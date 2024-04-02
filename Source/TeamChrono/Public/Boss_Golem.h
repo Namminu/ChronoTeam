@@ -131,9 +131,7 @@ private:
 
 ///Pattern4 - HitBox
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
-	UBoxComponent* L_HitBox;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
-	UBoxComponent* R_HitBox;
+	UBoxComponent* HitBox;
 	
 ///AnimMontage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))

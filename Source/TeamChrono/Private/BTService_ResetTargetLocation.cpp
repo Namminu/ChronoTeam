@@ -6,6 +6,7 @@
 #include "AI_Controller_.h"
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 #include "BehaviorTree/BlackboardComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 UBTService_ResetTargetLocation::UBTService_ResetTargetLocation()
 {
@@ -21,13 +22,13 @@ void UBTService_ResetTargetLocation::OnBecomeRelevant(UBehaviorTreeComponent& Ow
 		if (auto* const Monster = Cast<ABaseMonster>(Cont->GetPawn()))
 		{
 			isAttack = UAIBlueprintHelperLibrary::GetAIController(Monster)->GetBlackboardComponent()->GetValueAsBool("PlayerIsInAttackRange");
-			isBarrier = UAIBlueprintHelperLibrary::GetAIController(Monster)->GetBlackboardComponent()->GetValueAsBool("CanTakeDamage");
+			//isBarrier = UAIBlueprintHelperLibrary::GetAIController(Monster)->GetBlackboardComponent()->GetValueAsBool("CanTakeDamage");
 
 			//While Monster Start Attack or Gimic Start
-			if (isAttack || !isBarrier)
+			if (isAttack)
 			{
 				//Set TargetLocation BB key to Actor(self) Location, So Don't Move when Finish Attack
-				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), Monster->GetActorLocation());
+				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation());
 
 				UE_LOG(LogTemp, Warning, TEXT("TargetLocation Reset"));
 			}
