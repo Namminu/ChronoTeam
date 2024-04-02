@@ -94,7 +94,7 @@ void ATeamChronoCharacter::PostInitializeComponents()
 			CanNextCombo = false;
 			if (IsComboInputOn)
 			{
-
+				CharacterMouseDirection();
 				AttackStartComboState();
 				ABAnim->JumpToAttackMontageSection(CurrentCombo);
 
@@ -147,10 +147,12 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
 		//Acttak
-		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		/*EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);*/
+
+		// Acttak ±¤Å¬
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Attack);
-		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
-		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
 	}
 	else
 	{
@@ -176,12 +178,12 @@ void ATeamChronoCharacter::Attack()
 			ABAnim->PlayAttackMontage();
 			ABAnim->JumpToAttackMontageSection(CurrentCombo);
 			IsAttacking = true;
-
+			CharacterMouseDirection();
 
 			FName WeaponSocket(TEXT("Weapon_Sword_Hand"));
-			if (WeaponInstance)
+			if (SwordInstance)
 			{
-				WeaponInstance->AttachToComponent(GetMesh(),
+				SwordInstance->AttachToComponent(GetMesh(),
 					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 					WeaponSocket);
 			}
@@ -233,9 +235,9 @@ void ATeamChronoCharacter::AttackEndComboState()
 	CurrentCombo = 0;
 
 	FName WeaponSocket(TEXT("Weapon_Sword_Back"));
-	if (WeaponInstance)
+	if (SwordInstance)
 	{
-		WeaponInstance->AttachToComponent(GetMesh(),
+		SwordInstance->AttachToComponent(GetMesh(),
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
 	}
@@ -298,8 +300,7 @@ void ATeamChronoCharacter::Dodge()
 				m_bIsDodgingEnd = true;
 				RollAnimation();
 
-				pcStamina -= pcDodgeStamina;
-				Steminerdecreasing = true;
+				StaminaVariation(pcDodgeStamina);
 
 			}
 		}
@@ -311,16 +312,37 @@ void ATeamChronoCharacter::AttachWeapon(TSubclassOf<AASword> Weapon)
 {
 	FName WeaponSocket(TEXT("Weapon_Sword_Back"));
 
-	WeaponInstance = GetWorld()->SpawnActor<AASword>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+	SwordInstance = GetWorld()->SpawnActor<AASword>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
 
-	if (WeaponInstance)
+	if (SwordInstance)
 	{
 
-		WeaponInstance->AttachToComponent(GetMesh(),
+		SwordInstance->AttachToComponent(GetMesh(),
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
 	}
 }
+
+
+
+void ATeamChronoCharacter::StaminaVariation(float VariationStemina)
+{
+	if(0 < VariationStemina)
+		Steminerdecreasing = true;
+
+	pcStamina = pcStamina - VariationStemina;
+	
+	if (0 >= pcStamina)
+	{
+		pcStamina = 0;
+	}
+	else if (pcStamina >= pcMaxStamina)
+	{
+		pcStamina = pcMaxStamina;
+	}
+}
+
+
 
 
 void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const FBranchingPointNotifyPayload& a_pBranchingPayload)

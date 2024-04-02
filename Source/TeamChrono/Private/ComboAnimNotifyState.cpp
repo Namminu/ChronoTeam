@@ -7,7 +7,7 @@
 
 void UComboAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
+
     if (MeshComp && MeshComp->GetOwner())
     {
         TeamChronoCharacter = Cast<ATeamChronoCharacter>(MeshComp->GetOwner());
@@ -21,7 +21,7 @@ void UComboAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimS
 }
 void UComboAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
 {
-	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
+
     if (TeamChronoCharacter)
     {
         if (TeamChronoCharacter->IsComboInputOn)
@@ -34,5 +34,5 @@ void UComboAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSe
 
 void UComboAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	Super::NotifyEnd(MeshComp, Animation);
+
 }
