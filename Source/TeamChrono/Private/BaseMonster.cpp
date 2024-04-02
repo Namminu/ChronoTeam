@@ -18,23 +18,27 @@
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 
 // Sets default values
-ABaseMonster::ABaseMonster() : WeaponCollisionBox{ CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollisionBox")) }
+ABaseMonster::ABaseMonster()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	if (WeaponCollisionBox)	//Weapon 히트박스 설정
-	{
-		WeaponCollisionBox->SetBoxExtent(FVector(5.f));
-		FAttachmentTransformRules const Rules{
-			EAttachmentRule::SnapToTarget,	//location
-			EAttachmentRule::SnapToTarget,	//rotation
-			EAttachmentRule::KeepWorld,		//World Scale
-			false	// Not default Attach to body
-		};
-		WeaponCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
-		WeaponCollisionBox->SetRelativeLocation(FVector(-7.f, 0.f, 0.f));
-	}
+	//if (WeaponCollisionBox)	//Weapon 히트박스 설정
+	//{
+	//	//WeaponCollisionBox->SetBoxExtent(FVector(5.f));
+	//	//FAttachmentTransformRules const Rules{
+	//	//	EAttachmentRule::SnapToTarget,	//location
+	//	//	EAttachmentRule::SnapToTarget,	//rotation
+	//	//	EAttachmentRule::KeepWorld,		//World Scale
+	//	//	false	// Not default Attach to body
+	//	//};
+	//	//WeaponCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
+
+	//}
+
+	WeaponCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Collision Box"));
+	WeaponCollisionBox->SetupAttachment(GetMesh());
+
 	//Attack Range - Capsule Component Setup
 	AttackRangeBox = CreateDefaultSubobject<USphereComponent>(TEXT("Attack Range Box"));
 	AttackRangeBox->SetupAttachment(GetCapsuleComponent());
