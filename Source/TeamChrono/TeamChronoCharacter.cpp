@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "ABAnimInstance.h"
 #include "ASword.h"
+#include "PlayerArrow.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -186,6 +187,8 @@ void ATeamChronoCharacter::Attack()
 					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 					WeaponSocket);
 			}
+			// ¿ø°Å¸® Äµ½½
+			IsNotLongAttacking();
 		}
 	}
 	
@@ -253,7 +256,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	MoveRotation(MovementVector);
-	if (Controller != nullptr && !m_bIsDodging && !IsAttacking && !IsQSkillBuilding)
+	if (Controller != nullptr && !m_bIsDodging && !IsAttacking && !IsQSkillBuilding && !LongAttacking)
 	{
 
 		// find out which way is forward
@@ -301,7 +304,12 @@ void ATeamChronoCharacter::Dodge()
 				SetActorRotation(DodgeRotation);
 				m_bIsDodging = true;
 				m_bIsDodgingEnd = true;
+
+				// ¿ø°Å¸® Äµ½½
+				IsNotLongAttacking();
+
 				RollAnimation();
+
 
 				StaminaVariation(pcDodgeStamina);
 
@@ -324,6 +332,22 @@ void ATeamChronoCharacter::AttachWeapon(TSubclassOf<AASword> Weapon)
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
 	}
+}
+
+void ATeamChronoCharacter::BowWeapon(TSubclassOf<APlayerArrow> Weapon)
+{
+	FName WeaponSocket(TEXT("Weapon_Arrow"));
+
+	BowInstance = GetWorld()->SpawnActor<APlayerArrow>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+
+	if (BowInstance)
+	{
+
+		BowInstance->AttachToComponent(GetMesh(),
+			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+			WeaponSocket);
+	}
+
 }
 
 
