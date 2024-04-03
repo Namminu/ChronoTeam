@@ -17,4 +17,8 @@ class TEAMCHRONO_API UArrowAnimNotifyState : public UAnimNotifyState
 public:
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
+	class ABaseMonster* monster;
 };

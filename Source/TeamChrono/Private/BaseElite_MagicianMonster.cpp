@@ -12,6 +12,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Monster_Weapon.h"
 
 ABaseElite_MagicianMonster::ABaseElite_MagicianMonster()
 {
@@ -160,7 +161,7 @@ void ABaseElite_MagicianMonster::mon_Death_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
@@ -276,9 +277,4 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 	}
 
 	return 0.0f;
-}
-
-void ABaseElite_MagicianMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	Super::EndPlay(EndPlayReason);
 }

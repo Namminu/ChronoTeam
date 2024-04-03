@@ -16,6 +16,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include <Blueprint/AIBlueprintHelperLibrary.h>
+#include "Monster_Weapon.h"
 
 // Sets default values
 ABaseMonster::ABaseMonster()
@@ -33,11 +34,10 @@ ABaseMonster::ABaseMonster()
 	//	//	false	// Not default Attach to body
 	//	//};
 	//	//WeaponCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
-
 	//}
 
-	WeaponCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Collision Box"));
-	WeaponCollisionBox->SetupAttachment(GetMesh());
+	//WeaponCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Collision Box"));
+	//WeaponCollisionBox->SetupAttachment(GetMesh());
 
 	//Attack Range - Capsule Component Setup
 	AttackRangeBox = CreateDefaultSubobject<USphereComponent>(TEXT("Attack Range Box"));
@@ -63,7 +63,7 @@ void ABaseMonster::BeginPlay()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	//GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	//Create Dynamic Material Instance
 	CreateMTI();
@@ -73,10 +73,19 @@ void ABaseMonster::BeginPlay()
 	isMonsterBorn = false; 
 	isMonsterLive = true;
 
-	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
-	//WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
-	AttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
-	AttackRangeBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
+	//if (WeaponCollisionBox != nullptr)
+	//{
+	//	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
+	//	//WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
+	//}
+	//else UE_LOG(LogTemp, Error, TEXT("Weapon Collision Box is NULL"));
+
+	if (AttackRangeBox != nullptr)
+	{
+		AttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
+		AttackRangeBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
+	}
+	else UE_LOG(LogTemp, Error, TEXT("Attack Range Box is NULL"));
 
 	//시작 시 무기 소지한 채로 시작
 	//AttachWeapon(monsterWeapon, "Weapon_R");
@@ -134,8 +143,6 @@ void ABaseMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompon
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
 		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
-
-		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseMonster"));
 	}
 }
 
@@ -165,27 +172,26 @@ int ABaseMonster::MeleeAttack_Implementation()
 
 void ABaseMonster::AttackStart() const
 {
-	WeaponCollisionBox->SetCollisionProfileName("Fist");
-	WeaponCollisionBox->SetNotifyRigidBodyCollision(true);
-	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	//WeaponCollisionBox->SetCollisionProfileName("Fist");
+	//WeaponCollisionBox->SetNotifyRigidBodyCollision(true);
+	//WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	UE_LOG(LogTemp, Error, TEXT("Attack Start"));
 }
 
-void ABaseMonster::AttackEnd() const
-{
-	WeaponCollisionBox->SetCollisionProfileName("Fist");
-	WeaponCollisionBox->SetNotifyRigidBodyCollision(false);
-	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	UE_LOG(LogTemp, Error, TEXT("Attack End"));
-}
+//void ABaseMonster::AttackEnd() const
+//{
+//	WeaponCollisionBox->SetCollisionProfileName("Fist");
+//	WeaponCollisionBox->SetNotifyRigidBodyCollision(false);
+//	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+//
+//	UE_LOG(LogTemp, Error, TEXT("Attack End"));
+//}
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	if (GetIsBorn())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BaseMonster : is Born is true"));
 		monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
 		if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
 		{
@@ -193,6 +199,7 @@ float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 			mon_Death();
 			return DamageAmount;
 		}
+		UE_LOG(LogTemp, Warning, TEXT("BaseMonster Take Damage"));
 		DamageFlash();
 	}
 	return DamageAmount;
@@ -215,13 +222,16 @@ void ABaseMonster::CallNiagaraEffect(UNiagaraComponent* NiaEffect)
 
 void ABaseMonster::mon_Death_Implementation()
 {
+	//Stop all Montages Before Death
+	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
+
 	//Stop Movement
 	GetCharacterMovement()->SetMovementMode(MOVE_None);	
 	//Stop Collision
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
@@ -273,15 +283,6 @@ void ABaseMonster::CreateMTI()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Second Material is null"));
 	}
-}
-
-void ABaseMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	Super::EndPlay(EndPlayReason);
-
-	WeaponCollisionBox->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
-	AttackRangeBox->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
-	AttackRangeBox->OnComponentEndOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
 }
 
 void ABaseMonster::PlayMontage(UAnimMontage* Montage)

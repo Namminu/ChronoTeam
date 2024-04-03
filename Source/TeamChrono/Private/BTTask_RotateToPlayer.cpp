@@ -14,25 +14,25 @@ EBTNodeResult::Type UBTTask_RotateToPlayer::ExecuteTask(UBehaviorTreeComponent& 
 	UBlackboardComponent* BBc = OwnerComp.GetBlackboardComponent();
 	if (BBc)
 	{
-		////Get BlackBoard Key : TargetLocation
-		//FVector playerLocation = BBc->GetValueAsVector(GetSelectedBlackboardKey());
-		//FVector currentLocation = OwnerComp.GetOwner()->GetActorLocation();
+		//Get BlackBoard Key : TargetLocation
+		FVector playerLocation = BBc->GetValueAsVector(GetSelectedBlackboardKey());
+		FVector currentLocation = OwnerComp.GetOwner()->GetActorLocation();
 
-		////Get Vector to Target
-		//FVector targetDirection = playerLocation - currentLocation;
-		//targetDirection.Z = 0.f;
+		//Get Vector to Target
+		FVector targetDirection = playerLocation - currentLocation;
+		targetDirection.Z = 0.f;
 
-		////Calculate Rotation
-		//FRotator targetRotation = FRotationMatrix::MakeFromX(targetDirection).Rotator();
+		//Calculate Rotation
+		FRotator targetRotation = FRotationMatrix::MakeFromX(targetDirection).Rotator();
 
-		//FRotator currentRotation = OwnerComp.GetOwner()->GetActorRotation();
+		FRotator currentRotation = OwnerComp.GetOwner()->GetActorRotation();
 
-		////Lerp in to TargetRotation
-		//FRotator newRotation = FMath::RInterpTo(currentRotation, targetRotation, GetWorld()->GetDeltaSeconds(), RotationDelay);
+		//Lerp in to TargetRotation
+		FRotator newRotation = FMath::RInterpTo(currentRotation, targetRotation, GetWorld()->GetDeltaSeconds(), RotationDelay);
 
-		////Set AI Rotation
-		////OwnerComp.GetOwner()->SetActorRotation(newRotation);
-		//OwnerComp.GetOwner()->SetActorRotation(targetRotation);
+		//Set AI Rotation
+		//OwnerComp.GetOwner()->SetActorRotation(newRotation);
+		OwnerComp.GetOwner()->SetActorRotation(targetRotation);
 
 		return EBTNodeResult::Succeeded;
 	}
