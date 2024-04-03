@@ -68,6 +68,7 @@ public:
 	//몬스터 사망 호출 함수
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void mon_Death();
+
 	UFUNCTION(BlueprintCallable)
 	virtual void mon_Destroy();
 
@@ -110,9 +111,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	TArray<UMaterialInstanceDynamic*> MTIArray;
+
 ///
 	//공격 히트박스
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* WeaponCollisionBox;
 	//무기
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
@@ -186,13 +188,13 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
 
-	//공격 범위 float
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
-	float AttakRange;
+	////공격 범위 float
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
+	//float AttakRange;
 
-	//BlackBoard Key Name
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
-	FName AttackRangeKey;
+	////BlackBoard Key Name
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK RANGE", meta = (AllowPrivateAccess = "true"))
+	//FName AttackRangeKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER BORN", meta = (AllowPrivateAccess = "true"))
 	bool isMonsterBorn;
