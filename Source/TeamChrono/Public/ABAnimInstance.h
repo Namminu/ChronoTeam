@@ -30,7 +30,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void NextAttackCheck();
 
-	bool NextAttacking = false;
+
 private:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))

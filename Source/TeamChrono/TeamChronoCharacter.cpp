@@ -90,9 +90,8 @@ void ATeamChronoCharacter::PostInitializeComponents()
 
 	ABAnim->OnNextAttackCheck.AddLambda([this]() -> void
 		{
-
 			CanNextCombo = false;
-			if (IsComboInputOn)
+			if (IsComboInputOn || IsComboPushOn)
 			{
 				CharacterMouseDirection();
 				AttackStartComboState();
@@ -147,9 +146,9 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
 		//Acttak
-		/*EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);*/
+		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
 
 		// Acttak 광클
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Attack);
@@ -195,21 +194,19 @@ void ATeamChronoCharacter::Attack()
 
 void ATeamChronoCharacter::AttackClickStart()
 {
-	if (!m_bIsDodgingEnd && IsAttacking)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding)
 	{
-		IsComboInputOn = true;
-		ABAnim->NextAttacking = true;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
+		IsComboPushOn = true;
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
 	}
 	
 }
 void ATeamChronoCharacter::AttackClickEnd()
 {
-	if (!m_bIsDodgingEnd && IsAttacking)
+	//if (!m_bIsDodgingEnd && !IsQSkillBuilding)
 	{
-		IsComboInputOn = false;
-		ABAnim->NextAttacking = false;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickEnd")));
+		IsComboPushOn = false;
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickEnd")));
 	}
 	
 }
@@ -240,6 +237,12 @@ void ATeamChronoCharacter::AttackEndComboState()
 		SwordInstance->AttachToComponent(GetMesh(),
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
+	}
+
+	// 만약 끝났을때 마우스가 눌려있으면 다시 공격 시작
+	if (IsComboPushOn)
+	{
+		Attack();
 	}
 }
 

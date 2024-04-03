@@ -94,6 +94,9 @@ public:
 	// 콤보 입력이 켜져 있는지 여부
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsComboInputOn;
+	// 콤보 입력이 켜져 있는지 여부
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsComboPushOn = false;
 
 
 
