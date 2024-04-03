@@ -33,10 +33,11 @@ ABaseMonster::ABaseMonster()
 	//	//	false	// Not default Attach to body
 	//	//};
 	//	//WeaponCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
+
 	//}
 
 	WeaponCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Collision Box"));
-	WeaponCollisionBox->SetupAttachment(GetCapsuleComponent());
+	WeaponCollisionBox->SetupAttachment(GetMesh());
 
 	//Attack Range - Capsule Component Setup
 	AttackRangeBox = CreateDefaultSubobject<USphereComponent>(TEXT("Attack Range Box"));
@@ -62,7 +63,7 @@ void ABaseMonster::BeginPlay()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	//GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	//Create Dynamic Material Instance
 	CreateMTI();
