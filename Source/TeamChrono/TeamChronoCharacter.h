@@ -274,6 +274,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void IsNotDodging()  { m_bIsDodgingEnd = false;  m_bIsDodging = false;}
 
-	UFUNCTION(BlueprintCallable)
-	void IsNotLongAttacking() { LongAttacking = false; }
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void IsNotLongAttacking();
 };

@@ -386,6 +386,11 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 	}
 }
 
+void ATeamChronoCharacter::IsNotLongAttacking_Implementation()
+{
+	 LongAttacking = false;
+}
+
 
 //스테미나 UI
 void ATeamChronoCharacter::SetStamina()
