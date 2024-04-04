@@ -20,7 +20,8 @@ public:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 
 private:
-	//class ATeamChronoChacter* player;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
+	ATeamChronoCharacter* player;
 
 	FVector playerLocation;
 	FVector selfLocation;

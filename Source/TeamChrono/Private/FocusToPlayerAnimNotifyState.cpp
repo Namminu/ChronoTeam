@@ -9,30 +9,36 @@
 void UFocusToPlayerAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
 	//Get Player Location
-	//player = Cast<ATeamChronoChacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	//playerLocation = player->GetActorLocation();
 
-	if (MeshComp && MeshComp->GetOwner())
-	{
-		if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
-		{
-			monster->GetActorLocation();
-		}
-	}
+	//if (MeshComp && MeshComp->GetOwner())
+	//{
+	//	if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
+	//	{
+	//		monster->GetActorLocation();
+	//	}
+	//}
 }
 
 void UFocusToPlayerAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
 {
-
-}
-
-void UFocusToPlayerAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
-{
 	if (MeshComp && MeshComp->GetOwner())
 	{
 		if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
 		{
-			monster->FocusToPlayer(false);
+			monster->FocusToPlayer(player);
 		}
 	}
+}
+
+void UFocusToPlayerAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
+{
+	//if (MeshComp && MeshComp->GetOwner())
+	//{
+	//	if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
+	//	{
+	//		monster->FocusToPlayer(false);
+	//	}
+	//}
 }

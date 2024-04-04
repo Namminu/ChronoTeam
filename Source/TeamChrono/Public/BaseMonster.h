@@ -82,7 +82,7 @@ public:
 	void TempAttack();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void FocusToPlayer(bool isFocus);
+	void FocusToPlayer(class ATeamChronoCharacter* player);
 
 protected:
 	// Called when the game starts or when spawned
