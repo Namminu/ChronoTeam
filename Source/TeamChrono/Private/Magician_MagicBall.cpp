@@ -67,12 +67,12 @@ void AMagician_MagicBall::OnProjectileOverlapBegin(UPrimitiveComponent* const Ov
 
 		if (bisPlayerhit) return;
 
-		if (OtherComponent->ComponentHasTag("SWORD"))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Sword box overlap"));
-			Re_Elasticity();
-			Re_Elasticity();
-		}
+		//if (OtherComponent->ComponentHasTag("SWORD"))
+		//{
+		//	UE_LOG(LogTemp, Warning, TEXT("Sword box overlap"));
+		//	Re_Elasticity();
+		//	Re_Elasticity();
+		//}
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("MagicBall : hits Player"));
@@ -136,6 +136,14 @@ void AMagician_MagicBall::OnProjectileOverlapBegin(UPrimitiveComponent* const Ov
 void AMagician_MagicBall::OnProjectileOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
+}
+
+float AMagician_MagicBall::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+	Re_Elasticity();
+	Re_Elasticity();
+	return 0.0f;
 }
 
 void AMagician_MagicBall::ChasePlayer()

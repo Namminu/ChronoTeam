@@ -55,19 +55,19 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 
-	UFUNCTION()
-	void OnBigRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
-		AActor* const otherActor,
-		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex,
-		bool const FromSweep,
-		FHitResult const& SweepResult);
+	//UFUNCTION()
+	//void OnBigRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	//	AActor* const otherActor,
+	//	UPrimitiveComponent* const OtherComponent,
+	//	int const OtherBodyIndex,
+	//	bool const FromSweep,
+	//	FHitResult const& SweepResult);
 
-	UFUNCTION()
-	void OnBigRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
-		AActor* const otherActor,
-		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex);
+	//UFUNCTION()
+	//void OnBigRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	//	AActor* const otherActor,
+	//	UPrimitiveComponent* const OtherComponent,
+	//	int const OtherBodyIndex);
 
 	int MeleeAttack_Implementation() override;
 
@@ -108,14 +108,17 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetFlashMTI();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void CheckDistancePlayer();
+
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
-	USphereComponent* BigAttackRangeBox;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
+	//USphereComponent* BigAttackRangeBox;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC ANIMATION", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* Gimic_Montage2;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BIGACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BIGACK", meta = (AllowPrivateAccess = "true"))
 	bool isBigAck;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
@@ -133,9 +136,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DIE", meta = (AllowPrivateAccess = "true"))
 	UNiagaraComponent* DiePortalEffect;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BIGACK", meta = (AllowPrivateAccess = "true"))
+	float AttackDistance;
+	
+	bool isCanAttack;
+
 public:
 /// Getter Func
-	USphereComponent* GetBigAttackRange() const { return BigAttackRangeBox; }
+	//USphereComponent* GetBigAttackRange() const { return BigAttackRangeBox; }
 	bool GetIsMontage() const { return isMontage; }
 
 /// Setter Func
