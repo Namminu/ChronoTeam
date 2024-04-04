@@ -26,17 +26,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 /// Overlap Event Function 
-	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
-		AActor* const otherActor,
-		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex,
-		bool const FromSweep,
-		FHitResult const& SweepResult) override;
+	//void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	//	AActor* const otherActor,
+	//	UPrimitiveComponent* const OtherComponent,
+	//	int const OtherBodyIndex,
+	//	bool const FromSweep,
+	//	FHitResult const& SweepResult) override;
 
-	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
-		AActor* const otherActor,
-		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex) override;
+	//void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	//	AActor* const otherActor,
+	//	UPrimitiveComponent* const OtherComponent,
+	//	int const OtherBodyIndex) override;
 
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,

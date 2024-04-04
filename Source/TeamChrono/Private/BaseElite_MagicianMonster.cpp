@@ -53,8 +53,8 @@ void ABaseElite_MagicianMonster::BeginPlay()
 
 	//GetBigAttackRange()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapBegin);
 	//GetBigAttackRange()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapEnd);
-	GetAttackRangeColl()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapBegin);
-	GetAttackRangeColl()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapEnd);
+	//GetAttackRangeColl()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapBegin);
+	//GetAttackRangeColl()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapEnd);
 }
 
 void ABaseElite_MagicianMonster::Tick(float DeltaTime)
@@ -67,17 +67,17 @@ void ABaseElite_MagicianMonster::Tick(float DeltaTime)
 	}
 }
 
-void ABaseElite_MagicianMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
-	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
-	int const OtherBodyIndex, bool const FromSweep, FHitResult const& SweepResult)
-{
-
-}
-
-void ABaseElite_MagicianMonster::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent, 
-	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
-{
-}
+//void ABaseElite_MagicianMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+//	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
+//	int const OtherBodyIndex, bool const FromSweep, FHitResult const& SweepResult)
+//{
+//
+//}
+//
+//void ABaseElite_MagicianMonster::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent, 
+//	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
+//{
+//}
 
 /// <summary>
 /// 일반 공격 범위 Overlap
@@ -162,6 +162,9 @@ int ABaseElite_MagicianMonster::MeleeAttack_Implementation()
 void ABaseElite_MagicianMonster::mon_Death_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Magician Death Func Called"));
+
+	//Stop all Montages Before Death
+	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
 
 	//GetBigAttackRange()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//WhyOnlyUGetDown();

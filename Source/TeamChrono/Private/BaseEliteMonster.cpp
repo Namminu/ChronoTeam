@@ -33,7 +33,10 @@ void ABaseEliteMonster::BeginPlay()
 
 	isMTI = false;
 
-	SpecificEffect->Deactivate();
+	if(SpecificEffect!=nullptr)
+	{
+		SpecificEffect->Deactivate();
+	}
 }
 
 void ABaseEliteMonster::Tick(float DeltaTime)
