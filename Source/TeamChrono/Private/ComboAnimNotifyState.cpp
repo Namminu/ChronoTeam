@@ -24,7 +24,7 @@ void UComboAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSe
 
     if (TeamChronoCharacter)
     {
-        if (TeamChronoCharacter->IsComboInputOn || TeamChronoCharacter->IsComboPushOn)
+        if (TeamChronoCharacter->IsComboInputOn)
         {
             ABAnimInstance->NextAttackCheck();
         }

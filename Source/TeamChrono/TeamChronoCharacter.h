@@ -56,7 +56,6 @@ class ATeamChronoCharacter : public ACharacter
 	void Attack();
 	void AttackClickStart();
 	void AttackClickEnd();
-
 	// 공격 몽타주 종료 시
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
@@ -95,10 +94,6 @@ public:
 	// 콤보 입력이 켜져 있는지 여부
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsComboInputOn;
-
-	// 콤보 입력이 켜져 있는지 여부
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-	bool IsComboPushOn = false;
 
 
 
@@ -175,13 +170,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
 	bool IsESkillDoing;
 
-	// 우클릭 원거리 공격중 확인
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LongAttack", Meta = (AllowPrivateAccess = true))
-	bool LongAttacking = false;
+	
 
-	// 원거리 스테미너
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
-	float LongAttackStamina = 10.0f;
 	// 회피 기능
 	void Dodge();
 
@@ -189,9 +179,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	class AASword* SwordInstance;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
-	class APlayerArrow* BowInstance;
 
 	bool m_bIsDodgingEnd = false;
 
@@ -212,10 +199,6 @@ public:
 	//무기 장착 호출 함수
 	UFUNCTION(BlueprintCallable)
 	void AttachWeapon(TSubclassOf<AASword> Weapon);
-
-	//활 장착 호출 함수
-	UFUNCTION(BlueprintCallable)
-	void BowWeapon(TSubclassOf<APlayerArrow> Weapon);
 
 	// 스테미나 변동(스킬 쓰거나 회복하거나)
 	UFUNCTION(BlueprintCallable)
@@ -272,8 +255,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	UFUNCTION(BlueprintCallable)
-	void IsNotDodging()  { m_bIsDodgingEnd = false;  m_bIsDodging = false;}
+	void isNotDodging()  { m_bIsDodgingEnd = false;  m_bIsDodging = false;}
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void IsNotLongAttacking();
 };
