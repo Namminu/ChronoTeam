@@ -27,7 +27,7 @@ void UFocusToPlayerAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp,
 	{
 		if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
 		{
-			monster->FocusToPlayer(player);
+			monster->FocusToPlayer();
 		}
 	}
 }
