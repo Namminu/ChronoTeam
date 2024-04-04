@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "ABAnimInstance.h"
 #include "ASword.h"
+#include "PlayerArrow.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -90,9 +91,8 @@ void ATeamChronoCharacter::PostInitializeComponents()
 
 	ABAnim->OnNextAttackCheck.AddLambda([this]() -> void
 		{
-
 			CanNextCombo = false;
-			if (IsComboInputOn)
+			if (IsComboInputOn || IsComboPushOn)
 			{
 				CharacterMouseDirection();
 				AttackStartComboState();
@@ -147,9 +147,9 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Move);
 
 		//Acttak
-		/*EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATeamChronoCharacter::Attack);
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);*/
+		//EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::AttackClickStart);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATeamChronoCharacter::AttackClickEnd);
 
 		// Acttak 광클
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ATeamChronoCharacter::Attack);
@@ -187,6 +187,8 @@ void ATeamChronoCharacter::Attack()
 					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 					WeaponSocket);
 			}
+			// 원거리 캔슬
+			IsNotLongAttacking();
 		}
 	}
 	
@@ -195,21 +197,19 @@ void ATeamChronoCharacter::Attack()
 
 void ATeamChronoCharacter::AttackClickStart()
 {
-	if (!m_bIsDodgingEnd && IsAttacking)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding)
 	{
-		IsComboInputOn = true;
-		ABAnim->NextAttacking = true;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
+		IsComboPushOn = true;
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
 	}
 	
 }
 void ATeamChronoCharacter::AttackClickEnd()
 {
-	if (!m_bIsDodgingEnd && IsAttacking)
+	//if (!m_bIsDodgingEnd && !IsQSkillBuilding)
 	{
-		IsComboInputOn = false;
-		ABAnim->NextAttacking = false;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickEnd")));
+		IsComboPushOn = false;
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickEnd")));
 	}
 	
 }
@@ -241,6 +241,12 @@ void ATeamChronoCharacter::AttackEndComboState()
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
 	}
+
+	// 만약 끝났을때 마우스가 눌려있으면 다시 공격 시작
+	if (IsComboPushOn)
+	{
+		Attack();
+	}
 }
 
 
@@ -250,7 +256,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	MoveRotation(MovementVector);
-	if (Controller != nullptr && !m_bIsDodging && !IsAttacking && !IsQSkillBuilding)
+	if (Controller != nullptr && !m_bIsDodging && !IsAttacking && !IsQSkillBuilding && !LongAttacking)
 	{
 
 		// find out which way is forward
@@ -298,7 +304,12 @@ void ATeamChronoCharacter::Dodge()
 				SetActorRotation(DodgeRotation);
 				m_bIsDodging = true;
 				m_bIsDodgingEnd = true;
+
+				// 원거리 캔슬
+				IsNotLongAttacking();
+
 				RollAnimation();
+
 
 				StaminaVariation(pcDodgeStamina);
 
@@ -321,6 +332,22 @@ void ATeamChronoCharacter::AttachWeapon(TSubclassOf<AASword> Weapon)
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
 	}
+}
+
+void ATeamChronoCharacter::BowWeapon(TSubclassOf<APlayerArrow> Weapon)
+{
+	FName WeaponSocket(TEXT("Weapon_Arrow"));
+
+	BowInstance = GetWorld()->SpawnActor<APlayerArrow>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+
+	if (BowInstance)
+	{
+
+		BowInstance->AttachToComponent(GetMesh(),
+			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+			WeaponSocket);
+	}
+
 }
 
 
@@ -357,6 +384,11 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 		m_bIsDodgingEnd = false;
 
 	}
+}
+
+void ATeamChronoCharacter::IsNotLongAttacking_Implementation()
+{
+	 LongAttacking = false;
 }
 
 
@@ -399,34 +431,34 @@ void ATeamChronoCharacter::MoveRotation(FVector2D MovementVector)
 {
 	if (MovementVector.X == 1 && MovementVector.Y == 1)
 	{
-		DodgeRotation.Yaw = 90;
+		DodgeRotation.Yaw = 45;
 	}
 	else if (MovementVector.X == 1 && MovementVector.Y == -1)
 	{
-		DodgeRotation.Yaw = 180;
+		DodgeRotation.Yaw = 135;
 	}
 	else if (MovementVector.X == -1 && MovementVector.Y == -1)
 	{
-		DodgeRotation.Yaw = -90;
+		DodgeRotation.Yaw = -135;
 	}
 	else if (MovementVector.X == -1 && MovementVector.Y == 1)
 	{
-		DodgeRotation.Yaw = 0;
+		DodgeRotation.Yaw = -45;
 	}
 	else if (MovementVector.X == 1 && MovementVector.Y == 0)
 	{
-		DodgeRotation.Yaw = 135;
+		DodgeRotation.Yaw = 90;
 	}
 	else if (MovementVector.X == -1 && MovementVector.Y == 0)
 	{
-		DodgeRotation.Yaw = -45;
+		DodgeRotation.Yaw = -90;
 	}
 	else if (MovementVector.X == 0 && MovementVector.Y == 1)
 	{
-		DodgeRotation.Yaw = 45;
+		DodgeRotation.Yaw = 0;
 	}
 	else if (MovementVector.X == 0 && MovementVector.Y == -1)
 	{
-		DodgeRotation.Yaw = -135;
+		DodgeRotation.Yaw = 180;
 	}
 }
