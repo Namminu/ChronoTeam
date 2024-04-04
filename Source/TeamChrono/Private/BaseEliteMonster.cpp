@@ -9,6 +9,7 @@
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 #include "AI_Controller_.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Monster_Weapon.h"
 
 ABaseEliteMonster::ABaseEliteMonster()
 {
@@ -32,7 +33,10 @@ void ABaseEliteMonster::BeginPlay()
 
 	isMTI = false;
 
-	SpecificEffect->Deactivate();
+	if(SpecificEffect!=nullptr)
+	{
+		SpecificEffect->Deactivate();
+	}
 }
 
 void ABaseEliteMonster::Tick(float DeltaTime)
@@ -40,8 +44,6 @@ void ABaseEliteMonster::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
-
 
 int ABaseEliteMonster::MeleeAttack_Implementation()
 {
@@ -89,8 +91,6 @@ void ABaseEliteMonster::OnAttackOverlapBegin(UPrimitiveComponent* const Overlapp
 
 	if (otherActor->ActorHasTag("PLAYER"))	//히트박스가 플레이어에게 닿았을 경우 = 플레이어 공격 시
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Monster hit Player"));
-
 		UGameplayStatics::ApplyDamage(otherActor, GetMonAtk(), nullptr, this, GetDamageType());
 	}
 }
@@ -112,8 +112,6 @@ void ABaseEliteMonster::OnRangeOverlapBegin(UPrimitiveComponent* const Overlappe
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
-
-		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseEliteMonster"));
 	}
 }
 
@@ -126,8 +124,6 @@ void ABaseEliteMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedC
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
-
-		UE_LOG(LogTemp, Error, TEXT("This Log Written by BaseEliteMonster"));
 	}
 }
 
@@ -187,9 +183,4 @@ void ABaseEliteMonster::ReNewBarrierHp()
 		BarrierHp = Snd_BarrierHp;
 	}
 	SetGimicTimer();
-}
-
-void ABaseEliteMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	Super::EndPlay(EndPlayReason);
 }

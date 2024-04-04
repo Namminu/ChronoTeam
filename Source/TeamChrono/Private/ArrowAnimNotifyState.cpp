@@ -3,12 +3,17 @@
 
 #include "ArrowAnimNotifyState.h"
 #include "BaseMonster.h"
+#include <Kismet/GameplayStatics.h>
+#include "AI_Controller_.h"
+#include <ComboAnimNotifyState.h>
+#include <TeamChrono/TeamChronoCharacter.h>
 
 void UArrowAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
 	if (MeshComp && MeshComp->GetOwner() && MeshComp->GetOwner()->ActorHasTag("ACHOR"))
 	{
-		if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
+		monster = Cast<ABaseMonster>(MeshComp->GetOwner());
+		if (monster)
 		{
 			monster->FireArrow();
 		}

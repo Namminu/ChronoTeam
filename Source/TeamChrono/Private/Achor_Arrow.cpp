@@ -40,14 +40,14 @@ void AAchor_Arrow::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 	int const OtherBodyIndex, bool const FromSweep, 
 	FHitResult const& SweepResult)
 {
-	if (otherActor == this||otherActor->ActorHasTag("MONSTER")) return;
+	/*if (otherActor == this|| OtherComponent->ComponentHasTag("MONSTER")) return;*/	
 
-	CallNiagaraEffect();	//Niaraga Effect when Arrow hit Something / Without this
+	if (otherActor == this || otherActor->ActorHasTag("MONSTER")) return;
 
-	if (otherActor->ActorHasTag("PLAYER"))
+	if (OtherComponent->ComponentHasTag("PLAYER"))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Arrow : hits Player"));
-
+		CallNiagaraEffect();	//Niaraga Effect when Arrow hit Something / Without this
 		UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
 	}
 	
@@ -97,14 +97,7 @@ void AAchor_Arrow::BeginPlay()
 
 	damageAmount = 1;
 
-	Arrow->OnComponentBeginOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapBegin);
-}
-
-void AAchor_Arrow::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	Super::EndPlay(EndPlayReason);
-
-	Arrow->OnComponentBeginOverlap.RemoveDynamic(this, &AAchor_Arrow::OnAttackOverlapBegin);
+	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AAchor_Arrow::OnAttackOverlapBegin);
 }
 
 // Called every frame

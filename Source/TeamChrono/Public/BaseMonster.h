@@ -7,7 +7,7 @@
 #include "GameFramework/Character.h"
 #include "CombatInterface.h"
 #include "Animation/AnimMontage.h"
-#include "Monster_Weapon.h"
+//#include "Monster_Weapon.h"
 #include "BaseMonster.generated.h"
 
 
@@ -68,6 +68,7 @@ public:
 	//몬스터 사망 호출 함수
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void mon_Death();
+
 	UFUNCTION(BlueprintCallable)
 	virtual void mon_Destroy();
 
@@ -77,12 +78,15 @@ public:
 
 	void PlayMontage(UAnimMontage* Montage);
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void TempAttack();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FocusToPlayer(class ATeamChronoCharacter* player);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	// Called when Actor Destroy
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private: 
 ///
@@ -111,12 +115,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	TArray<UMaterialInstanceDynamic*> MTIArray;
 ///
-	//공격 히트박스
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* WeaponCollisionBox;
+	////공격 히트박스
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
+	//class UBoxComponent* WeaponCollisionBox;
 	//무기
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
-	AMonster_Weapon* WeaponInstance;
+	class AMonster_Weapon* WeaponInstance;
 	//공격범위 히트박스
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class USphereComponent* AttackRangeBox;
@@ -212,7 +216,7 @@ public:
 
 /// Component Getter
 	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
-	UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
+	//UBoxComponent* GetWeaponColl() const { return WeaponCollisionBox; }
 	USphereComponent* GetAttackRangeColl() const { return AttackRangeBox; }
 /// DamageType Getter
 	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }

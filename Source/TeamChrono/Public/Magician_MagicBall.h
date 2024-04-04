@@ -31,6 +31,11 @@ public:
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
 
+	float TakeDamage(float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser) override;
+
 	//플레이어 유도 기능 정의
 	UFUNCTION()
 	void ChasePlayer();

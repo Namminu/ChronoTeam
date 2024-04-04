@@ -18,7 +18,6 @@ public:
 	ABaseEliteMonster();
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	int MeleeAttack_Implementation() override;
 
@@ -86,6 +85,9 @@ public:
 /// 
 	UFUNCTION(BlueprintCallable)
 	void ReNewBarrierHp();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void TempBigAttack();
 
 private:
 /// 강한 공격 부분 변수
