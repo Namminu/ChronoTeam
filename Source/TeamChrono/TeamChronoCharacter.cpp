@@ -354,19 +354,23 @@ void ATeamChronoCharacter::BowWeapon(TSubclassOf<APlayerArrow> Weapon)
 
 void ATeamChronoCharacter::StaminaVariation(float VariationStemina)
 {
-	if(0 < VariationStemina)
-		Steminerdecreasing = true;
+	if (!StaminaOnOff)
+	{
+		if (0 < VariationStemina)
+			Steminerdecreasing = true;
 
-	pcStamina = pcStamina - VariationStemina;
+		pcStamina = pcStamina - VariationStemina;
+
+		if (0 >= pcStamina)
+		{
+			pcStamina = 0;
+		}
+		else if (pcStamina >= pcMaxStamina)
+		{
+			pcStamina = pcMaxStamina;
+		}
+	}
 	
-	if (0 >= pcStamina)
-	{
-		pcStamina = 0;
-	}
-	else if (pcStamina >= pcMaxStamina)
-	{
-		pcStamina = pcMaxStamina;
-	}
 }
 
 
