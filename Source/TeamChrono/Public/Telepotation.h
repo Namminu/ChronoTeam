@@ -24,6 +24,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void FadeIn(AActor* player);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChangeOrb();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

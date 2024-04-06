@@ -24,6 +24,7 @@ void ATelepotation::Teleport(AActor* actor)
 {
 	//Set collision actor location to arrow(target) location
 	actor->SetActorRelativeLocation(arrowTarget->GetComponentLocation());
+	ChangeOrb();
 }
 
 void ATelepotation::NotifyActorBeginOverlap(AActor* OtherActor)
