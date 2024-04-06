@@ -4,6 +4,8 @@
 #include "Telepotation.h"
 #include "Components/BoxComponent.h"
 #include "Components/ArrowComponent.h"
+#include <TeamChrono/TeamChronoCharacter.h>
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 ATelepotation::ATelepotation()
@@ -28,7 +30,7 @@ void ATelepotation::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	if (OtherActor->ActorHasTag("PLAYER"))
 	{
-		FadeIn();
+		FadeIn(OtherActor);
 		Teleport(OtherActor);
 	}
 }

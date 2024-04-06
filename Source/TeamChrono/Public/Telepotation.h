@@ -22,7 +22,7 @@ public:
 	void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void FadeIn();
+	void FadeIn(AActor* player);
 
 protected:
 	// Called when the game starts or when spawned
