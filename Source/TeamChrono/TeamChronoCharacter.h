@@ -121,6 +121,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	bool Steminerdecreasing = false;
+	
+	// 스테미나 끄고 키기
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	bool StaminaOnOff = false;
 
 	void MoveRotation(FVector2D MovementVector);
 
