@@ -21,9 +21,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//// Called when Actor Destroy
-	//virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -40,19 +37,13 @@ public:
 	/// Setup Flash Material Instance for Damage Flash
 	/// </summary>
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void SetFlashMTI(UMaterialInstanceDynamic* MT);
+	void SetFlashMTIArray(UMaterialInstanceDynamic* MT);
 
 	/// <summary>
 	/// Func When BossMonster Died Call
 	/// </summary>
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Boss_Death();
-
-	///// <summary>
-	///// Set Focus to Player When Function Called
-	///// </summary>
-	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	//void FocusOnPlayer(ATeamChronoCharacter* mainPlayer);
 
 	/// <summary>
 	/// Take Damage Func
@@ -62,27 +53,11 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 
-	///// <summary>
-	///// Weapon Range Overlap Begin Event
-	///// / Bind in Base Boss
-	///// </summary>
-	//UFUNCTION()
-	//virtual void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
-	//	AActor* const otherActor,
-	//	UPrimitiveComponent* const OtherComponent,
-	//	int const OtherBodyIndex,
-	//	bool const FromSweep,
-	//	FHitResult const& SweepResult);
-
-	///// <summary>
-	///// Weapon Range Overlap End Event
-	///// / Bind in Base Boss
-	///// </summary>
-	//UFUNCTION()
-	//virtual void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
-	//	AActor* const otherActor,
-	//	UPrimitiveComponent* const OtherComponent,
-	//	int const OtherBodyIndex);
+	/// <summary>
+	/// Damage Flash When Monster Hitted
+	/// </summary>
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void DamageFlash();
 
 	/// <summary>
 	/// Attack Range Collision OverlapBegin Event
@@ -115,10 +90,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
 	class USphereComponent* AttackRange;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
-	//class UBoxComponent* WeaponCollision;
-
-
 ///Montage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* DeathMontage;
@@ -144,7 +115,7 @@ private:
 	TSubclassOf<UDamageType> DamageType;
 
 /// Materials
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	UMaterialInstanceDynamic* Fst_FlashMT;
 
 ///Arraies
@@ -159,6 +130,8 @@ public:
 	float GetBossInitSpeed() const { return f_bossInitSpeed; }
 
 	TArray<UMaterialInstanceDynamic*> GetMTIArray() const { return MTIArray; }
+	UMaterialInstanceDynamic* GetFstMTI() const { return Fst_FlashMT; }
+
 
 	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }
 
@@ -167,4 +140,6 @@ public:
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
+
+	void SetFstMTI(UMaterialInstanceDynamic* MTI) { Fst_FlashMT = MTI; }
 };

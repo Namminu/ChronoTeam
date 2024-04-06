@@ -30,8 +30,6 @@ public:
 
 	void Boss_Death_Implementation() override;
 
-	//void DamageFlash();
-
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent,
 		AController* EventInstigator,
@@ -44,20 +42,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void AttackFunc();
 
-
 // Overlap Events
-	//void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
-	//	AActor* const otherActor,
-	//	UPrimitiveComponent* const OtherComponent,
-	//	int const OtherBodyIndex,
-	//	bool const FromSweep,
-	//	FHitResult const& SweepResult) override;
-
-	//void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
-	//	AActor* const otherActor,
-	//	UPrimitiveComponent* const OtherComponent,
-	//	int const OtherBodyIndex) override;
-
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
@@ -127,14 +112,6 @@ private:
 	bool isFoth01_GimicStart;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
 	bool isFoth02_GimicStart;
-
-///More Weapon Collision
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
-	//UBoxComponent* Weapon2_Collision;
-
-///Pattern4 - HitBox
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
-	//class UBoxComponent* HitBox;
 	
 ///AnimMontage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
@@ -156,8 +133,6 @@ private:
 
 public:
 ///Getter
-	////Collisions
-	//class UBoxComponent* GetHitBox() const { return HitBox; }
 
 ///Setter
 
