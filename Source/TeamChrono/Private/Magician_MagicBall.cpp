@@ -77,7 +77,7 @@ void AMagician_MagicBall::OnProjectileOverlapBegin(UPrimitiveComponent* const Ov
 		{
 			UE_LOG(LogTemp, Warning, TEXT("MagicBall : hits Player"));
 			UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
-			Destroy();
+			HitNBurn();
 		}
 	}
 	else
@@ -94,7 +94,7 @@ void AMagician_MagicBall::OnProjectileOverlapBegin(UPrimitiveComponent* const Ov
 					if (CapsuleComponent == monster->GetCapsuleComponent())
 					{
 						UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
-						Destroy();
+						HitNBurn();
 					}
 				}
 				else

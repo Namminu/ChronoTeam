@@ -49,6 +49,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetMagicSpeed(float newSpeed);
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void HitNBurn();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
