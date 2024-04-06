@@ -21,8 +21,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Called when Actor Destroy
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	//// Called when Actor Destroy
+	//virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:	
 	// Called every frame
@@ -48,11 +48,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Boss_Death();
 
-	/// <summary>
-	/// Set Focus to Player When Function Called
-	/// </summary>
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void FocusOnPlayer(ATeamChronoCharacter* mainPlayer);
+	///// <summary>
+	///// Set Focus to Player When Function Called
+	///// </summary>
+	//UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	//void FocusOnPlayer(ATeamChronoCharacter* mainPlayer);
 
 	/// <summary>
 	/// Take Damage Func
@@ -62,27 +62,27 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 
-	/// <summary>
-	/// Weapon Range Overlap Begin Event
-	/// / Bind in Base Boss
-	/// </summary>
-	UFUNCTION()
-	virtual void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
-		AActor* const otherActor,
-		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex,
-		bool const FromSweep,
-		FHitResult const& SweepResult);
+	///// <summary>
+	///// Weapon Range Overlap Begin Event
+	///// / Bind in Base Boss
+	///// </summary>
+	//UFUNCTION()
+	//virtual void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	//	AActor* const otherActor,
+	//	UPrimitiveComponent* const OtherComponent,
+	//	int const OtherBodyIndex,
+	//	bool const FromSweep,
+	//	FHitResult const& SweepResult);
 
-	/// <summary>
-	/// Weapon Range Overlap End Event
-	/// / Bind in Base Boss
-	/// </summary>
-	UFUNCTION()
-	virtual void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
-		AActor* const otherActor,
-		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex);
+	///// <summary>
+	///// Weapon Range Overlap End Event
+	///// / Bind in Base Boss
+	///// </summary>
+	//UFUNCTION()
+	//virtual void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	//	AActor* const otherActor,
+	//	UPrimitiveComponent* const OtherComponent,
+	//	int const OtherBodyIndex);
 
 	/// <summary>
 	/// Attack Range Collision OverlapBegin Event
@@ -115,8 +115,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
 	class USphereComponent* AttackRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* WeaponCollision;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
+	//class UBoxComponent* WeaponCollision;
 
 
 ///Montage

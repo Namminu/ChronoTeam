@@ -46,17 +46,17 @@ public:
 
 
 // Overlap Events
-	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
-		AActor* const otherActor,
-		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex,
-		bool const FromSweep,
-		FHitResult const& SweepResult) override;
+	//void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+	//	AActor* const otherActor,
+	//	UPrimitiveComponent* const OtherComponent,
+	//	int const OtherBodyIndex,
+	//	bool const FromSweep,
+	//	FHitResult const& SweepResult) override;
 
-	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
-		AActor* const otherActor,
-		UPrimitiveComponent* const OtherComponent,
-		int const OtherBodyIndex) override;
+	//void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+	//	AActor* const otherActor,
+	//	UPrimitiveComponent* const OtherComponent,
+	//	int const OtherBodyIndex) override;
 
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
@@ -129,12 +129,12 @@ private:
 	bool isFoth02_GimicStart;
 
 ///More Weapon Collision
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
-	UBoxComponent* Weapon2_Collision;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
+	//UBoxComponent* Weapon2_Collision;
 
 ///Pattern4 - HitBox
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
-	UBoxComponent* HitBox;
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
+	//class UBoxComponent* HitBox;
 	
 ///AnimMontage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
@@ -156,8 +156,8 @@ private:
 
 public:
 ///Getter
-	//Collisions
-	UBoxComponent* GetHitBox() const { return HitBox; }
+	////Collisions
+	//class UBoxComponent* GetHitBox() const { return HitBox; }
 
 ///Setter
 
