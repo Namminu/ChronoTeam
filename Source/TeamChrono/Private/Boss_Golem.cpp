@@ -8,7 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include <Kismet/GameplayStatics.h>
 #include <Blueprint/AIBlueprintHelperLibrary.h>
-#include "AI_Controller_.h"
+#include "BossAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 ABoss_Golem::ABoss_Golem()
@@ -28,7 +28,7 @@ void ABoss_Golem::BeginPlay()
 	Super::BeginPlay();
 
 	//Set Gimic Bool Properties
-	CurrentAtkCount = 0;
+	CurrentAtkCount = 1;
 	isTrdGimicCanAttack = false;
 
 	isFst_GimicStart = false;
@@ -55,6 +55,8 @@ void ABoss_Golem::Tick(float DeltaTime)
 
 int ABoss_Golem::MeleeAttack_Implementation()
 {
+	UE_LOG(LogTemp, Error, TEXT("Boss_Golem Attack Func Called"));
+
 	//Call Normal Attack Func
 	if (CurrentAtkCount <= MaxAtkCount)
 	{
@@ -66,7 +68,7 @@ int ABoss_Golem::MeleeAttack_Implementation()
 	{
 		TrdGimic();
 		//Reset Current Atk Count for Loop
-		CurrentAtkCount = 0;
+		CurrentAtkCount = 1;
 	}
 
 	return 0;

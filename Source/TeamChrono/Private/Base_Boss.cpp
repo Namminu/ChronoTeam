@@ -6,7 +6,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include <Kismet/GameplayStatics.h>
-#include "AI_Controller_.h"
+#include "BossAIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 #include "BehaviorTree/BlackboardComponent.h"
@@ -34,6 +34,9 @@ void ABase_Boss::BeginPlay()
 	//Cast to Player
 	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!player) UE_LOG(LogTemp, Error, TEXT("Cast Failed to Player in Base_Boss"));
+
+	ABossAIController* BossAI = Cast<ABossAIController>(GetController());
+	BossAI->SetFocus(player);
 
 	//Initialize Currnet Boss Hp to Max Hp
 	f_bossCurrentHp = f_bossMaxHp;
@@ -75,8 +78,8 @@ void ABase_Boss::Boss_Death_Implementation()
 	//Stop Movement
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	//Stop BT 
-	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
-	monsterAI->StopAI();
+	ABossAIController* BossAI = Cast<ABossAIController>(GetController());
+	BossAI->StopAI();
 }
 
 float ABase_Boss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
