@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "CombatInterface.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include <TeamChrono/TeamChronoCharacter.h>
 #include "Base_Boss.generated.h"
 
@@ -82,6 +83,10 @@ public:
 		int const OtherBodyIndex);
 
 private:
+///Behavior Tree
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	UBehaviorTree* BTree;
+
 ///Cast to Player
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
 	ATeamChronoCharacter* player;
