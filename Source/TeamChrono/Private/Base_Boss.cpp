@@ -35,8 +35,10 @@ void ABase_Boss::BeginPlay()
 	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!player) UE_LOG(LogTemp, Error, TEXT("Cast Failed to Player in Base_Boss"));
 
-	ABossAIController* BossAI = Cast<ABossAIController>(GetController());
-	BossAI->SetFocus(player);
+	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
+	{
+		BossAI->SetFocus(player);
+	}
 
 	//Initialize Currnet Boss Hp to Max Hp
 	f_bossCurrentHp = f_bossMaxHp;

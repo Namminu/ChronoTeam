@@ -35,6 +35,12 @@ public:
 	int MeleeAttack_Implementation() override;
 
 	/// <summary>
+	/// Check Boss to Can do Combo Attack
+	/// </summary>
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void CheckComboAttackCando();
+
+	/// <summary>
 	/// Setup Flash Material Instance for Damage Flash
 	/// </summary>
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
@@ -142,6 +148,8 @@ public:
 	ATeamChronoCharacter* GetPlayerProperty() const { return player; }
 
 	UBehaviorTree* GetBehaviorTree() const { return BTree; }
+
+	ATeamChronoCharacter* GetPlayer() const { return player; }
 
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }

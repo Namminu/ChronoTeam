@@ -41,9 +41,16 @@ public:
 	/// 0 : First Normal Attack
 	/// 1 : Second Normal Combo Attack
 	/// 2 : Second Big Combo Attack
+	/// 3 : Third Gimic Attack
 	/// </summary>
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void AttackFunc(int caseNum);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetJumpAttackLocation();
+
+	UFUNCTION(BlueprintCallable)
+	float CalculateForwardVector(float forwardVector);
 
 // Overlap Events
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
@@ -57,6 +64,19 @@ public:
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex) override;
+
+// Calculate Attack Range Func
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_FstAttackRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_SndAttackRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_SndBigAttackRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_TrdGimicAttackRange();
 
 // Gimic Functions	
 	/// <summary>
@@ -96,7 +116,7 @@ private:
 	float FothGimic_01_StartHp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_Foth", meta = (AllowPrivateAccess = "true"))
 	float FothGimic_02_StartHp;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_Snd", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
 	float SndGimicDelay;
 
 ///Properties to Gimic Start
@@ -104,6 +124,8 @@ private:
 	float MaxAtkCount;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ATTACK COUNT", meta = (AllowPrivateAccess = "true"))
 	float CurrentAtkCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK BIG", meta = (AllowPrivateAccess = "true"))
+	float distanceToPlayer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_TRD", meta = (AllowPrivateAccess = "true"))
 	bool isTrdGimicCanAttack;

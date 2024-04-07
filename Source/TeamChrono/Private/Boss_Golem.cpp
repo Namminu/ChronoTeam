@@ -61,7 +61,7 @@ int ABoss_Golem::MeleeAttack_Implementation()
 	if (CurrentAtkCount <= MaxAtkCount)
 	{
 		AttackFunc(0);
-		CurrentAtkCount += 1;
+		CurrentAtkCount++;
 	}
 	//Call Big Attack - Third Gimic Func
 	else
@@ -112,6 +112,15 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	}
 
 	return 0.0f;
+}
+
+float ABoss_Golem::CalculateForwardVector(float forwardVector)
+{
+	if (forwardVector >= 0)
+	{
+		return 1.f;
+	}
+	else return -1.f;
 }
 
 void ABoss_Golem::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
