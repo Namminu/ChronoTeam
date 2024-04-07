@@ -131,7 +131,7 @@ private:
 
 	// 최대 체력의 최대
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = HP, Meta = (AllowPrivateAccess = true))
-	int p_FullMaxHp = 12;
+	int p_FullMaxHp = 10;
 
 	// 현재 최대 체력
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = HP, Meta = (AllowPrivateAccess = true))
