@@ -38,9 +38,12 @@ public:
 // Golem Functions
 	/// <summary>
 	/// Golem Normal Attack Func
+	/// 0 : First Normal Attack
+	/// 1 : Second Normal Combo Attack
+	/// 2 : Second Big Combo Attack
 	/// </summary>
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void AttackFunc();
+	void AttackFunc(int caseNum);
 
 // Overlap Events
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,

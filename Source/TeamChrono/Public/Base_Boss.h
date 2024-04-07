@@ -137,10 +137,11 @@ public:
 	TArray<UMaterialInstanceDynamic*> GetMTIArray() const { return MTIArray; }
 	UMaterialInstanceDynamic* GetFstMTI() const { return Fst_FlashMT; }
 
-
 	TSubclassOf<UDamageType> GetDamageType() const { return DamageType; }
 
 	ATeamChronoCharacter* GetPlayerProperty() const { return player; }
+
+	UBehaviorTree* GetBehaviorTree() const { return BTree; }
 
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
