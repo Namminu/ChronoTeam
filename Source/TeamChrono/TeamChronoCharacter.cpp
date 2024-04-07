@@ -304,7 +304,7 @@ void ATeamChronoCharacter::Dodge()
 				SetActorRotation(DodgeRotation);
 				m_bIsDodging = true;
 				m_bIsDodgingEnd = true;
-
+				Nodamage = true;
 				// ¿ø°Å¸® Äµ½½
 				IsNotLongAttacking();
 
@@ -382,6 +382,7 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 	if (a_nNotifyName.ToString() == "Dodge")
 	{
 		m_bIsDodging = false;
+		Nodamage = false;
 	}
 	if (a_nNotifyName.ToString() == "DodgeEnd")
 	{

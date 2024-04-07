@@ -199,6 +199,10 @@ private:
 
 	bool m_bIsDodgingEnd = false;
 
+	// 무적
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "무적", Meta = (AllowPrivateAccess = true))
+	bool Nodamage = false;
+
 public:
 
 	// Q 스킬 눌렀을때 스테미너
