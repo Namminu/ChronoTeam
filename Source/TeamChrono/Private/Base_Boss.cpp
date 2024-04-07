@@ -8,8 +8,6 @@
 #include <Kismet/GameplayStatics.h>
 #include "AI_Controller_.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include <Blueprint/AIBlueprintHelperLibrary.h>
-#include "BehaviorTree/BlackboardComponent.h"
 
 // Sets default values
 ABase_Boss::ABase_Boss()
