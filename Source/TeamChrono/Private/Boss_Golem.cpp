@@ -58,7 +58,7 @@ int ABoss_Golem::MeleeAttack_Implementation()
 	//Call Normal Attack Func
 	if (CurrentAtkCount <= MaxAtkCount)
 	{
-		AttackFunc();
+		AttackFunc(0);
 		CurrentAtkCount += 1;
 	}
 	//Call Big Attack - Third Gimic Func
@@ -120,6 +120,7 @@ void ABoss_Golem::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedCompo
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Player is in Melee Range"));
 		isTrdGimicCanAttack = true;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
 	}
@@ -132,6 +133,7 @@ void ABoss_Golem::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompone
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Player is Not in Melee Range"));
 		isTrdGimicCanAttack = false;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
 	}
