@@ -158,7 +158,9 @@ private:
 
 public:
 ///Getter
-
+	float GetGolemCurrentAttackCount() const { return CurrentAtkCount; }
+	float GetGolemMaxAttackCount() const { return MaxAtkCount; }
 ///Setter
-
+	UFUNCTION(BlueprintCallable)
+	void SetGolemCurrentAttackCount(const float newCount) { CurrentAtkCount = newCount; }
 };

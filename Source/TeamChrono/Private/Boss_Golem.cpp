@@ -63,13 +63,6 @@ int ABoss_Golem::MeleeAttack_Implementation()
 		AttackFunc(0);
 		CurrentAtkCount++;
 	}
-	//Call Big Attack - Third Gimic Func
-	else
-	{
-		TrdGimic();
-		//Reset Current Atk Count for Loop
-		CurrentAtkCount = 1;
-	}
 
 	return 0;
 }
