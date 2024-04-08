@@ -30,8 +30,6 @@ public:
 
 	void Boss_Death_Implementation() override;
 
-	//void DamageFlash();
-
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent,
 		AController* EventInstigator,
@@ -40,24 +38,21 @@ public:
 // Golem Functions
 	/// <summary>
 	/// Golem Normal Attack Func
+	/// 0 : First Normal Attack
+	/// 1 : Second Normal Combo Attack
+	/// 2 : Second Big Combo Attack
+	/// 3 : Third Gimic Attack
 	/// </summary>
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void AttackFunc();
+	void AttackFunc(int caseNum);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetJumpAttackLocation();
+
+	UFUNCTION(BlueprintCallable)
+	float CalculateForwardVector(float forwardVector);
 
 // Overlap Events
-	//void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
-	//	AActor* const otherActor,
-	//	UPrimitiveComponent* const OtherComponent,
-	//	int const OtherBodyIndex,
-	//	bool const FromSweep,
-	//	FHitResult const& SweepResult) override;
-
-	//void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
-	//	AActor* const otherActor,
-	//	UPrimitiveComponent* const OtherComponent,
-	//	int const OtherBodyIndex) override;
-
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
@@ -69,6 +64,19 @@ public:
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex) override;
+
+// Calculate Attack Range Func
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_FstAttackRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_SndAttackRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_SndBigAttackRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_TrdGimicAttackRange();
 
 // Gimic Functions	
 	/// <summary>
@@ -108,7 +116,7 @@ private:
 	float FothGimic_01_StartHp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_Foth", meta = (AllowPrivateAccess = "true"))
 	float FothGimic_02_StartHp;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_Snd", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
 	float SndGimicDelay;
 
 ///Properties to Gimic Start
@@ -116,6 +124,8 @@ private:
 	float MaxAtkCount;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ATTACK COUNT", meta = (AllowPrivateAccess = "true"))
 	float CurrentAtkCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK BIG", meta = (AllowPrivateAccess = "true"))
+	float distanceToPlayer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_TRD", meta = (AllowPrivateAccess = "true"))
 	bool isTrdGimicCanAttack;
@@ -127,14 +137,6 @@ private:
 	bool isFoth01_GimicStart;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
 	bool isFoth02_GimicStart;
-
-///More Weapon Collision
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COMPO", meta = (AllowPrivateAccess = "true"))
-	//UBoxComponent* Weapon2_Collision;
-
-///Pattern4 - HitBox
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
-	//class UBoxComponent* HitBox;
 	
 ///AnimMontage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
@@ -156,9 +158,9 @@ private:
 
 public:
 ///Getter
-	////Collisions
-	//class UBoxComponent* GetHitBox() const { return HitBox; }
-
+	float GetGolemCurrentAttackCount() const { return CurrentAtkCount; }
+	float GetGolemMaxAttackCount() const { return MaxAtkCount; }
 ///Setter
-
+	UFUNCTION(BlueprintCallable)
+	void SetGolemCurrentAttackCount(const float newCount) { CurrentAtkCount = newCount; }
 };
