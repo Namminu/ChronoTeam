@@ -79,6 +79,11 @@ void ABase_Boss::Boss_Death_Implementation()
 {
 	//Stop Movement
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	//Set Collision to NoCollision
+	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	//Stop BT 
 	ABossAIController* BossAI = Cast<ABossAIController>(GetController());
 	BossAI->StopAI();

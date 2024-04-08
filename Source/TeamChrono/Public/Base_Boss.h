@@ -149,7 +149,7 @@ public:
 
 	UBehaviorTree* GetBehaviorTree() const { return BTree; }
 
-	ATeamChronoCharacter* GetPlayer() const { return player; }
+	class USphereComponent* GetAttackRangeColl() const { return AttackRange; }
 
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
