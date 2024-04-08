@@ -28,7 +28,7 @@ void ABoss_Golem::BeginPlay()
 	Super::BeginPlay();
 
 	//Set Gimic Bool Properties
-	CurrentAtkCount = 1;
+	CurrentAtkCount = 0;
 	isTrdGimicCanAttack = false;
 
 	isFst_GimicStart = false;
@@ -58,11 +58,12 @@ int ABoss_Golem::MeleeAttack_Implementation()
 	UE_LOG(LogTemp, Error, TEXT("Boss_Golem Attack Func Called"));
 
 	//Call Normal Attack Func
-	if (CurrentAtkCount <= MaxAtkCount)
+	if (CurrentAtkCount < MaxAtkCount)
 	{
 		AttackFunc(0);
 		CurrentAtkCount++;
 	}
+	else TrdGimic();
 
 	return 0;
 }

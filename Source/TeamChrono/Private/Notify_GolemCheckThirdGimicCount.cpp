@@ -10,7 +10,7 @@ void UNotify_GolemCheckThirdGimicCount::Notify(USkeletalMeshComponent* MeshComp,
 	{
 		if (ABoss_Golem* const Boss = Cast<ABoss_Golem>(MeshComp->GetOwner()))
 		{
-			if (Boss->GetGolemCurrentAttackCount() > Boss->GetGolemMaxAttackCount())
+			if (Boss->GetGolemCurrentAttackCount() >= Boss->GetGolemMaxAttackCount())
 			{			
 				Boss->TrdGimic();
 				UE_LOG(LogTemp, Error, TEXT("Golem Third Gimic Called by Notify"));
