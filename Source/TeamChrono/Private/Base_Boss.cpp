@@ -37,7 +37,7 @@ void ABase_Boss::BeginPlay()
 
 	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
 	{
-		BossAI->SetFocus(player);
+		//BossAI->SetFocus(player);
 	}
 
 	//Initialize Currnet Boss Hp to Max Hp

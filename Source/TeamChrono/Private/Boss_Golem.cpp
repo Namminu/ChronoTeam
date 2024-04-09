@@ -55,8 +55,6 @@ void ABoss_Golem::Tick(float DeltaTime)
 
 int ABoss_Golem::MeleeAttack_Implementation()
 {
-	UE_LOG(LogTemp, Error, TEXT("Boss_Golem Attack Func Called"));
-
 	//Call Normal Attack Func
 	if (CurrentAtkCount < MaxAtkCount)
 	{
@@ -78,8 +76,6 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	UE_LOG(LogTemp, Error, TEXT("Golem Take Damage Called"));
 
 	DamageFlash();
 
@@ -125,7 +121,6 @@ void ABoss_Golem::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedCompo
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player is in Melee Range"));
 		isTrdGimicCanAttack = true;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
 	}
@@ -138,7 +133,6 @@ void ABoss_Golem::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompone
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player is Not in Melee Range"));
 		isTrdGimicCanAttack = false;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
 	}
