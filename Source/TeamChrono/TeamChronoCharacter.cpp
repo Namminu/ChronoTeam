@@ -436,34 +436,34 @@ void ATeamChronoCharacter::MoveRotation(FVector2D MovementVector)
 {
 	if (MovementVector.X == 1 && MovementVector.Y == 1)
 	{
-		DodgeRotation.Yaw = 45;
+		DodgeRotation.Yaw = 90;
 	}
 	else if (MovementVector.X == 1 && MovementVector.Y == -1)
 	{
-		DodgeRotation.Yaw = 135;
+		DodgeRotation.Yaw = 180;
 	}
 	else if (MovementVector.X == -1 && MovementVector.Y == -1)
 	{
-		DodgeRotation.Yaw = -135;
+		DodgeRotation.Yaw = -90;
 	}
 	else if (MovementVector.X == -1 && MovementVector.Y == 1)
 	{
-		DodgeRotation.Yaw = -45;
+		DodgeRotation.Yaw = -0;
 	}
 	else if (MovementVector.X == 1 && MovementVector.Y == 0)
 	{
-		DodgeRotation.Yaw = 90;
+		DodgeRotation.Yaw = 135;
 	}
 	else if (MovementVector.X == -1 && MovementVector.Y == 0)
 	{
-		DodgeRotation.Yaw = -90;
+		DodgeRotation.Yaw = -45;
 	}
 	else if (MovementVector.X == 0 && MovementVector.Y == 1)
 	{
-		DodgeRotation.Yaw = 0;
+		DodgeRotation.Yaw = 45;
 	}
 	else if (MovementVector.X == 0 && MovementVector.Y == -1)
 	{
-		DodgeRotation.Yaw = 180;
+		DodgeRotation.Yaw = -135;
 	}
 }
