@@ -35,10 +35,8 @@ void ABase_Boss::BeginPlay()
 	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!player) UE_LOG(LogTemp, Error, TEXT("Cast Failed to Player in Base_Boss"));
 
-	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
-	{
-		BossAI->SetFocus(player);
-	}
+	//Focus to Player Func
+	//SetFocusToPlayer();
 
 	//Initialize Currnet Boss Hp to Max Hp
 	f_bossCurrentHp = f_bossMaxHp;
@@ -64,7 +62,29 @@ void ABase_Boss::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 int ABase_Boss::MeleeAttack_Implementation()
 {
+	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
+	{
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(BossAI, this->GetActorLocation());
+	}
+	else UE_LOG(LogTemp, Warning, TEXT("Cast Failed to Boss Controller"));
+
 	return 0;
+}
+
+void ABase_Boss::SetFocusToPlayer()
+{
+	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
+	{
+		BossAI->SetFocus(player);
+	}
+}
+
+void ABase_Boss::ClearFocusToPlayer()
+{
+	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
+	{
+		BossAI->ClearFocus(EAIFocusPriority::Default);
+	}
 }
 
 void ABase_Boss::SetFlashMTIArray_Implementation(UMaterialInstanceDynamic* MT)

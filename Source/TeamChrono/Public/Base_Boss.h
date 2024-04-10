@@ -34,6 +34,9 @@ public:
 	/// </summary>
 	int MeleeAttack_Implementation() override;
 
+	void SetFocusToPlayer();
+	void ClearFocusToPlayer();
+
 	/// <summary>
 	/// Rotate to Player Func When Befor Combo Attack
 	/// </summary>
@@ -127,6 +130,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	float f_bossInitSpeed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
+	FVector playerLocation;
+
 ///DamageTypes
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
@@ -146,6 +152,9 @@ public:
 	float GetBossAtkMount() const { return f_bossAtk; }
 	float GetBossInitSpeed() const { return f_bossInitSpeed; }
 
+	UFUNCTION(BlueprintCallable)
+	FVector GetPlayerTargetLocation() const { return playerLocation; }
+
 	TArray<UMaterialInstanceDynamic*> GetMTIArray() const { return MTIArray; }
 	UMaterialInstanceDynamic* GetFstMTI() const { return Fst_FlashMT; }
 
@@ -162,4 +171,7 @@ public:
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
 
 	void SetFstMTI(UMaterialInstanceDynamic* MTI) { Fst_FlashMT = MTI; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerTargetLocation(const FVector newLocation) { playerLocation = newLocation; }
 };
