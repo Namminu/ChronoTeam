@@ -10,7 +10,7 @@ void UBossAttackCheckAnimNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimS
 	{
 		if (ABase_Boss* const Boss = Cast<ABase_Boss>(MeshComp->GetOwner()))
 		{
-			Boss->RotateToPlayer();
+			//Boss->RotateToPlayer();
 			Boss->CheckComboAttackCando();
 			UE_LOG(LogTemp, Warning, TEXT("Check Combo State"));
 		}
