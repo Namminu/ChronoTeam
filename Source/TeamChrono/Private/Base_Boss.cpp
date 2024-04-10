@@ -66,7 +66,6 @@ int ABase_Boss::MeleeAttack_Implementation()
 	{
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(BossAI, this->GetActorLocation());
 	}
-	else UE_LOG(LogTemp, Warning, TEXT("Cast Failed to Boss Controller"));
 
 	return 0;
 }

@@ -126,6 +126,8 @@ private:
 	float CurrentAtkCount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK BIG", meta = (AllowPrivateAccess = "true"))
 	float distanceToPlayer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK BIG", meta = (AllowPrivateAccess = "true"))
+	bool isJump;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_TRD", meta = (AllowPrivateAccess = "true"))
 	bool isTrdGimicCanAttack;
