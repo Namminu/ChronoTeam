@@ -37,7 +37,7 @@ void ABase_Boss::BeginPlay()
 
 	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
 	{
-		//BossAI->SetFocus(player);
+		BossAI->SetFocus(player);
 	}
 
 	//Initialize Currnet Boss Hp to Max Hp
@@ -87,6 +87,9 @@ void ABase_Boss::Boss_Death_Implementation()
 	//Stop BT 
 	ABossAIController* BossAI = Cast<ABossAIController>(GetController());
 	BossAI->StopAI();
+
+	//Play Death Montage
+	PlayAnimMontage(DeathMontage);
 }
 
 float ABase_Boss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,

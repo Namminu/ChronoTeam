@@ -35,6 +35,12 @@ public:
 	int MeleeAttack_Implementation() override;
 
 	/// <summary>
+	/// Rotate to Player Func When Befor Combo Attack
+	/// </summary>
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void RotateToPlayer();
+
+	/// <summary>
 	/// Check Boss to Can do Combo Attack
 	/// </summary>
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

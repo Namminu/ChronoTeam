@@ -2,7 +2,7 @@
 
 
 #include "BTService_ResetTargetLocation.h"
-#include "BaseMonster.h"
+#include "Base_Boss.h"
 #include "AI_Controller_.h"
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 #include "BehaviorTree/BlackboardComponent.h"
@@ -19,7 +19,7 @@ void UBTService_ResetTargetLocation::OnBecomeRelevant(UBehaviorTreeComponent& Ow
 	Super::OnBecomeRelevant(OwnerComp, NodeMemory);
 	if (auto const Cont = OwnerComp.GetAIOwner())
 	{
-		if (auto* const Monster = Cast<ABaseMonster>(Cont->GetPawn()))
+		if (auto* const Monster = Cast<ABase_Boss>(Cont->GetPawn()))
 		{
 			isAttack = UAIBlueprintHelperLibrary::GetAIController(Monster)->GetBlackboardComponent()->GetValueAsBool("PlayerIsInAttackRange");
 			//isBarrier = UAIBlueprintHelperLibrary::GetAIController(Monster)->GetBlackboardComponent()->GetValueAsBool("CanTakeDamage");
