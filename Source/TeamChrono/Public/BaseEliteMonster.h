@@ -86,6 +86,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ReNewBarrierHp();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void TempBigAttack();
+
 private:
 /// 강한 공격 부분 변수
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
@@ -119,14 +122,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float call_SndGimicHp;
 
-	UPROPERTY(BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	bool isInvincible;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float BarrierHp;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float Fst_BarrierHp;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ELITE ATTACK", meta = (AllowPrivateAccess = "true"))
 	float Snd_BarrierHp;
 
 	bool isFstGimic;
@@ -135,13 +138,33 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool isMTI;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool isPowerUpPlaying;
+
 ///Setter
 public:
 	void SetInvincible(bool newBollSet) { isInvincible = newBollSet; }
+	void SetBarrierHp(const float newHp) { BarrierHp = newHp; }
+
+	void SetisFstGimic(const bool newBool) { isFstGimic = newBool; }
+	void SetisSndGimic(const bool newBool) { isSndGimic = newBool; }
+
+	void SetPowerUpPlaying(const bool newBool) { isPowerUpPlaying = newBool; }
 
 ///Getter
 	UAnimMontage* GetGimicMontage() { return Gimic_Montage; }
 	UNiagaraComponent* GetSpecificEffect() { return SpecificEffect; }
+
 	UFUNCTION(BlueprintCallable)
 	float GetBarrierHp() { return BarrierHp; }
+
+	bool GetInvincible() const { return isInvincible; }
+
+	float Get_FstGimicHp() const { return call_FstGimicHp; }
+	float Get_SndGimicHp() const { return call_SndGimicHp; }
+
+	bool GetisFstGimic() const { return isFstGimic; }
+	bool GetisSndGimic() const { return isSndGimic; }
+
+	bool GetPowerUpPlaying() const { return isPowerUpPlaying; }
 };

@@ -10,7 +10,9 @@ void UAttackAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnim
 	{
 		if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
 		{
-			monster->AttackStart();
+			monster->TempAttack();
+			//monster->AttackStart();
+			//UE_LOG(LogTemp, Warning, TEXT("Attack Start"));
 		}
 	}
 }
@@ -21,7 +23,8 @@ void UAttackAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSe
 	{
 		if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
 		{
-			monster->AttackEnd();
+			//monster->AttackEnd();
+			UE_LOG(LogTemp, Warning, TEXT("Attack End"));
 		}
 	}
 }

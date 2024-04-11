@@ -12,7 +12,8 @@ public class TeamChrono : ModuleRules
 		{
 			"Core", 
 			"CoreUObject", 
-			"Engine", "InputCore", 
+			"Engine",
+			"InputCore", 
 			"EnhancedInput", 
 			"AIModule",
 			"GameplayTasks",

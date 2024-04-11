@@ -25,8 +25,5 @@ EBTNodeResult::Type UBTTask_GimicClear::ExecuteTask(UBehaviorTreeComponent& Owne
 	EliteMonster->GetSpecificEffect()->Deactivate();
 	EliteMonster->SetInvincible(false);
 
-	//clear Gimic, so Monster Can Take Damage now
-	UAIBlueprintHelperLibrary::GetAIController(EliteMonster)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", true);
-
 	return EBTNodeResult::Succeeded;
 }

@@ -56,6 +56,7 @@ class ATeamChronoCharacter : public ACharacter
 	void Attack();
 	void AttackClickStart();
 	void AttackClickEnd();
+
 	// 공격 몽타주 종료 시
 	UFUNCTION()
 	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
@@ -87,8 +88,7 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY()
 	class UABAnimInstance* ABAnim;
 
-	// 검 엑터
-	// static AActor* CurrentSword;
+
 
 
 public:
@@ -96,10 +96,18 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool IsComboInputOn;
 
+	// 콤보 입력이 켜져 있는지 여부
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+	bool IsComboPushOn = false;
+
 
 
 	// UPROPERTY(VisibleAnywhere, Category = Weapon)
 	// class AABWeapon* CurrentWeapon;
+	
+	//구르는 방향 저장
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = MoveRotation, Meta = (AllowPrivateAccess = true))
+	FRotator DodgeRotation;
 
 private:
 
@@ -113,16 +121,17 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	bool Steminerdecreasing = false;
+	
+	// 스테미나 끄고 키기
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	bool StaminaOnOff = false;
 
 	void MoveRotation(FVector2D MovementVector);
 
-	//구르는 방향 저장
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = MoveRotation, Meta = (AllowPrivateAccess = true))
-	FRotator DodgeRotation;
 
 	// 최대 체력의 최대
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = HP, Meta = (AllowPrivateAccess = true))
-	int p_FullMaxHp = 12;
+	int p_FullMaxHp = 10;
 
 	// 현재 최대 체력
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = HP, Meta = (AllowPrivateAccess = true))
@@ -131,7 +140,7 @@ private:
 	// 현재 체력
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = HP, Meta = (AllowPrivateAccess = true))
 	int P_CurrentHP;
-
+	
 	//최대 스테미너
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcMaxStamina = 100.0f;
@@ -149,8 +158,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Stamina")
 	float pcDodgeStamina = 20.0f;
 
+	// 공격 회복 스테미나
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float AttackStaminaRecovery = 5.0f;
+
 	// e 스킬 스테미너
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESkill", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	float ESkillStamina = 25.0f;
 
 	// e 스킬 쿨타임
@@ -166,12 +179,60 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
 	bool IsESkillDoing;
 
+	// 우클릭 원거리 공격중 확인
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LongAttack", Meta = (AllowPrivateAccess = true))
+	bool LongAttacking = false;
+
+	// 원거리 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float LongAttackStamina = 10.0f;
 	// 회피 기능
 	void Dodge();
 
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
+	class AASword* SwordInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
+	class APlayerArrow* BowInstance;
+
 	bool m_bIsDodgingEnd = false;
+
+	// 무적
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "무적", Meta = (AllowPrivateAccess = true))
+	bool Nodamage = false;
+
 public:
+
+	// Q 스킬 눌렀을때 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float QSkillStamina = 25.0f;
+
+	// Q 스킬 쓰는중 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float QSkillingStamina = 5.0f;
+
+	// Q 스킬 썼다 안쓰고 껐을때 스테미너
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float QSkillEndStamina = 10.0f;
+
+	//무기 장착 호출 함수
+	UFUNCTION(BlueprintCallable)
+	void AttachWeapon(TSubclassOf<AASword> Weapon);
+
+	//활 장착 호출 함수
+	UFUNCTION(BlueprintCallable)
+	void BowWeapon(TSubclassOf<APlayerArrow> Weapon);
+
+	// 스테미나 변동(스킬 쓰거나 회복하거나)
+	UFUNCTION(BlueprintCallable)
+	void StaminaVariation(float VariationStemina);
+
+
+
+
+
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = Dodge)
 	bool m_bIsDodging = false;
@@ -184,8 +245,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RollAnimation();
 
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Weapon;
+	// 마우스 방향 바라보는 코드
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void CharacterMouseDirection();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void HitDetect();
+
 protected:
 
 	/** Called for movement input */
@@ -214,6 +280,8 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	UFUNCTION(BlueprintCallable)
-	void isNotDodging()  { m_bIsDodgingEnd = false;  m_bIsDodging = false;}
+	void IsNotDodging()  { m_bIsDodgingEnd = false;  m_bIsDodging = false;}
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void IsNotLongAttacking();
 };

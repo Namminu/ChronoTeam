@@ -108,7 +108,6 @@ void AMagician_BigAttack::OnAttackOverlapBegin(UPrimitiveComponent* const Overla
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UGameplayStatics::ApplyDamage(otherActor, damageAmount, nullptr, this, DamageType);
-		UE_LOG(LogTemp, Warning, TEXT("Sword Hits Player"));
 	}
 }
 

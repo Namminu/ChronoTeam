@@ -19,6 +19,7 @@ void AAI_Controller_::StopAI()
 	if (nullptr != BehaviorTreeComponent)
 	{
 		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+		//BehaviorTreeComponent->StopLogic("Dead");
 	}
 }
 
@@ -45,7 +46,7 @@ void AAI_Controller_::SetupPerceptionSystem()
 	if (SightConfig)
 	{
 		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
-		SightConfig->SightRadius = 500.f;
+		SightConfig->SightRadius = 700.f;
 		SightConfig->LoseSightRadius = SightConfig->SightRadius + 25.f;
 		SightConfig->PeripheralVisionAngleDegrees = 90.f;
 		SightConfig->SetMaxAge(5.f);

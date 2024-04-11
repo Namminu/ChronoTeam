@@ -20,7 +20,7 @@ void UABAnimInstance::PlayAttackMontage()
 void UABAnimInstance::JumpToAttackMontageSection(int32 NewSection)
 {
 	Montage_JumpToSection(GetAttackMontageSectionName(NewSection), AttackMontage);
-	NextAttacking = false;
+
 }
 
 void UABAnimInstance::AnimNotify_AttackHitCheck()
@@ -44,7 +44,6 @@ void UABAnimInstance::NextAttackCheck()
 
 FName UABAnimInstance::GetAttackMontageSectionName(int32 Section)
 {
-
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Attack%d"), Section));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Attack%d"), Section));
 	return FName(*FString::Printf(TEXT("Attack%d"), Section));
 }

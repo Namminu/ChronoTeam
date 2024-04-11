@@ -34,6 +34,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void AttackFinally();
 
+	UFUNCTION()
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
@@ -41,6 +42,7 @@ public:
 		bool const FromSweep,
 		FHitResult const& SweepResult);
 
+	UFUNCTION()
 	void OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,

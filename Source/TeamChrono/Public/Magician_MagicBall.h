@@ -31,6 +31,11 @@ public:
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
 
+	float TakeDamage(float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser) override;
+
 	//플레이어 유도 기능 정의
 	UFUNCTION()
 	void ChasePlayer();
@@ -38,11 +43,14 @@ public:
 	/// <summary>
 	/// 반탄력 기능 정의
 	/// </summary>
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void Re_Elasticity();
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetMagicSpeed(float newSpeed);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void HitNBurn();
 
 protected:
 	// Called when the game starts or when spawned
@@ -70,6 +78,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BALL", meta = (AllowPrivateAccess = "true"))
 	float damageAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BALL", meta = (AllowPrivateAccess = "true"))
+	float re_DamageAmount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BALL", meta = (AllowPrivateAccess = "true"))
 	bool bisPlayerhit;

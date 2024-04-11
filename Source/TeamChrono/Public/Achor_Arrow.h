@@ -36,10 +36,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CallNiagaraEffect();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void arrowDestroy();
 
 protected:
-	// Called when the game starts or when spawned
+	// Called when the game starts or when spawned	
 	virtual void BeginPlay() override;
 
 public:
@@ -64,13 +65,6 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* NiagaraEffect;
-
-	////Arrow Target Distance
-	//float arrowDistance;
-	////Arrow Start Location
-	//FVector StartPosition;
-	////Arrow Current Location
-	//FVector CurrentPosition;
 
 	float damageAmount;
 

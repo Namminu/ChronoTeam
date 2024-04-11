@@ -33,4 +33,7 @@ public:
 	//몬스터 생성 함수
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MonsterSpawn")
 	void SpawnMonster();
+
+	TSubclassOf<ABaseMonster> GetMyMonster() const { return myMonster; }
+
 };
