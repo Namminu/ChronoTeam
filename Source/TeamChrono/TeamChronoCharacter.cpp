@@ -162,7 +162,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATeamChronoCharacter::Attack()
 {
-	if (!m_bIsDodgingEnd && !IsQSkillBuilding)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving)
 	{
 		if (IsAttacking)
 		{
@@ -197,7 +197,7 @@ void ATeamChronoCharacter::Attack()
 
 void ATeamChronoCharacter::AttackClickStart()
 {
-	if (!m_bIsDodgingEnd && !IsQSkillBuilding)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving)
 	{
 		IsComboPushOn = true;
 		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
@@ -256,7 +256,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	MoveRotation(MovementVector);
-	if (Controller != nullptr && !m_bIsDodging && !IsAttacking && !IsQSkillBuilding && !LongAttacking)
+	if (Controller != nullptr && !m_bIsDodging && !IsAttacking && !IsQSkillBuilding && !LongAttacking && !IsTabSkillMoving)
 	{
 
 		// find out which way is forward
