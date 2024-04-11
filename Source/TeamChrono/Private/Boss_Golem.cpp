@@ -30,6 +30,7 @@ void ABoss_Golem::BeginPlay()
 	//Set Gimic Bool Properties
 	CurrentAtkCount = 0;
 	isTrdGimicCanAttack = false;
+	isTrdGimicNow = false;
 
 	isFst_GimicStart = false;
 	isFoth01_GimicStart = false;
@@ -52,18 +53,16 @@ void ABoss_Golem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//Check When Not Jumping
-	if (!isJump)
+	if (!isJump&&!isTrdGimicNow)
 	{
 		//Player is So Far From Golem So Jump Attack To player
 		if (GetDistanceTo(GetPlayerProperty()) >= distanceToPlayer)
 		{
 			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
-			UE_LOG(LogTemp, Warning, TEXT("Player is So Far : Second Big Attack"));
 		}
 		else
 		{
 			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
-			UE_LOG(LogTemp, Warning, TEXT("Player is Not So Far"));
 		}
 	}
 
@@ -82,7 +81,11 @@ int ABoss_Golem::MeleeAttack_Implementation()
 		AttackFunc(0);
 		CurrentAtkCount++;
 	}
-	else TrdGimic();
+	else
+	{
+		isTrdGimicNow = true;
+		TrdGimic();
+	}
 
 	return 0;
 }
@@ -91,6 +94,9 @@ void ABoss_Golem::Boss_Death_Implementation()
 {
 	Super::Boss_Death();
 
+	FTimerHandle TimerHandle;
+	float delay = 4.3f;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Golem::Golem_Destroy, delay, false);
 }
 
 float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
@@ -104,8 +110,12 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFst_GimicStart)
 	{
 		isFst_GimicStart = true;
+		isFst_GimicIng = true;
+
 		UE_LOG(LogTemp, Warning, TEXT("Golem First Gimic Start"));
 		FstGimic();
+		//Pause Snd Gimic Timer
+		GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
 	}
 	//Fouth_Gimic_01 Start
 	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFoth01_GimicStart)
@@ -113,6 +123,8 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		isFoth01_GimicStart = true;
 		UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_fisrt Gimic Start"));
 		FothGimic();
+		//Pause Snd Gimic Timer
+		GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
 	}
 	//Fouth_Gimic_02 Start
 	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFoth02_GimicStart)
@@ -120,18 +132,25 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		isFoth02_GimicStart = true;
 		UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_Second Gimic Start"));
 		FothGimic();
+		//Pause Snd Gimic Timer
+		GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
 	}
 
 	return 0.0f;
 }
 
-float ABoss_Golem::CalculateForwardVector(float forwardVector)
+//float ABoss_Golem::CalculateForwardVector(float forwardVector)
+//{
+//	if (forwardVector >= 0)
+//	{
+//		return 1.f;
+//	}
+//	else return -1.f;
+//}
+
+void ABoss_Golem::Golem_Destroy()
 {
-	if (forwardVector >= 0)
-	{
-		return 1.f;
-	}
-	else return -1.f;
+	Destroy();
 }
 
 void ABoss_Golem::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
@@ -159,10 +178,24 @@ void ABoss_Golem::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompone
 	}
 }
 
+void ABoss_Golem::FstGimic_Implementation()
+{
+	//Start Gimic Sub Tree
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", false);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("FirstGimic", true);
+
+}
+
+void ABoss_Golem::SndGimic_Implementation()
+{
+	//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
+	//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", true);
+}
+
 void ABoss_Golem::SetSndGimicTimer()
 {
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Golem::SndGimic, SndGimicDelay, true);
+	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Golem::SndGimic, SndGimicDelay, true);
 }
 
 void ABoss_Golem::EndPlay(const EEndPlayReason::Type EndPlayReason)

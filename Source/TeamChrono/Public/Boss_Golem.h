@@ -49,8 +49,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetJumpAttackLocation();
 
-	UFUNCTION(BlueprintCallable)
-	float CalculateForwardVector(float forwardVector);
+	//UFUNCTION(BlueprintCallable)
+	//float CalculateForwardVector(float forwardVector);
+
+	UFUNCTION()
+	void Golem_Destroy();
 
 // Overlap Events
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
@@ -82,13 +85,16 @@ public:
 	/// <summary>
 	/// 패턴 1 : 제자리 함성 후 낙석주의 / 체력기반
 	/// </summary>
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void FstGimic();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StartFstGimicTimer();
 
 	/// <summary>
 	/// 패턴 2 : 중앙 점프 후 끌당 / 시간기반
 	/// </summary>
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void SndGimic();
 
 	/// <summary>
@@ -124,6 +130,8 @@ private:
 	float MaxAtkCount;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ATTACK COUNT", meta = (AllowPrivateAccess = "true"))
 	float CurrentAtkCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK COUNT", meta = (AllowPrivateAccess = "true"))
+	bool isTrdGimicNow;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK BIG", meta = (AllowPrivateAccess = "true"))
 	float distanceToPlayer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ATTACK BIG", meta = (AllowPrivateAccess = "true"))
@@ -133,8 +141,17 @@ private:
 	bool isTrdGimicCanAttack;
 
 	//Check Gimic is Started
+	FTimerHandle SndGimicTimerHandle;
+
+	//Fst Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FST", meta = (AllowPrivateAccess = "true"))
 	bool isFst_GimicStart;
+	UPROPERTY()
+	bool isFst_GimicIng;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_FST", meta = (AllowPrivateAccess = "true"))
+	float FstGimicTime;
+
+	//Fouth Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
 	bool isFoth01_GimicStart;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
@@ -162,7 +179,11 @@ public:
 ///Getter
 	float GetGolemCurrentAttackCount() const { return CurrentAtkCount; }
 	float GetGolemMaxAttackCount() const { return MaxAtkCount; }
+
+	bool GetFstGimicIng() const { return isFst_GimicIng; }
 ///Setter
 	UFUNCTION(BlueprintCallable)
 	void SetGolemCurrentAttackCount(const float newCount) { CurrentAtkCount = newCount; }
+
+	void SetFstGimicing(const bool newBool) { isFst_GimicIng = newBool; }
 };
