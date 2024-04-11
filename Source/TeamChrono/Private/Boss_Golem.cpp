@@ -51,6 +51,22 @@ void ABoss_Golem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//Check When Not Jumping
+	if (!isJump)
+	{
+		//Player is So Far From Golem So Jump Attack To player
+		if (GetDistanceTo(GetPlayerProperty()) >= distanceToPlayer)
+		{
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
+			UE_LOG(LogTemp, Warning, TEXT("Player is So Far : Second Big Attack"));
+		}
+		else
+		{
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
+			UE_LOG(LogTemp, Warning, TEXT("Player is Not So Far"));
+		}
+	}
+
 }
 
 int ABoss_Golem::MeleeAttack_Implementation()
