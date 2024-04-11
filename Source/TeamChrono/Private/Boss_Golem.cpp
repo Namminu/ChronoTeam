@@ -55,10 +55,10 @@ void ABoss_Golem::Tick(float DeltaTime)
 
 int ABoss_Golem::MeleeAttack_Implementation()
 {
-	//if (!isJump)
-	//{
-	//	Super::MeleeAttack_Implementation();
-	//}
+	if (!isJump)
+	{
+		Super::MeleeAttack_Implementation();
+	}
 
 	//Call Normal Attack Func
 	if (CurrentAtkCount < MaxAtkCount)
