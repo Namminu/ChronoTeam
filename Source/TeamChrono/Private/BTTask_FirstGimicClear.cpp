@@ -16,9 +16,6 @@ EBTNodeResult::Type UBTTask_FirstGimicClear::ExecuteTask(UBehaviorTreeComponent&
 {
 	auto const* const cont = OwnerComp.GetAIOwner();
 	auto* const Golem = Cast<ABoss_Golem>(cont->GetPawn());
-	
-	//Clear Focus
-	Golem->ClearFocusToPlayer();
 
 	//Clear Properties
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("FirstGimic", false);

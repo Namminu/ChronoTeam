@@ -19,8 +19,6 @@ EBTNodeResult::Type UBTTask_GolemFstGimicSetFuncTime::ExecuteTask(UBehaviorTreeC
 		{
 			if (!bFunctionsCalled)
 			{
-				//Set Focus To Player When Gimic Ing
-				Golem->SetFocusToPlayer();
 				//Call Fst Gimic Func
 				Golem->StartFstGimicTimer();
 

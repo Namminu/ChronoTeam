@@ -36,6 +36,7 @@ public:
 		AActor* DamageCauser) override;
 
 // Golem Functions
+
 	/// <summary>
 	/// Golem Normal Attack Func
 	/// 0 : First Normal Attack
@@ -49,8 +50,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetJumpAttackLocation();
 
-	//UFUNCTION(BlueprintCallable)
-	//float CalculateForwardVector(float forwardVector);
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetFstGimicTimer(float SpawnDelay);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ClearFstGimicTimer();
 
 	UFUNCTION()
 	void Golem_Destroy();
@@ -150,6 +154,10 @@ private:
 	bool isFst_GimicIng;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_FST", meta = (AllowPrivateAccess = "true"))
 	float FstGimicTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_FST", meta = (AllowPrivateAccess = "true"))
+	FVector RockSpawnLocation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_FST", meta = (AllowPrivateAccess = "true"))
+	float RockSpawnDelay;
 
 	//Fouth Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))

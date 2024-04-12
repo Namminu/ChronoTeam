@@ -150,15 +150,6 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	return 0.0f;
 }
 
-//float ABoss_Golem::CalculateForwardVector(float forwardVector)
-//{
-//	if (forwardVector >= 0)
-//	{
-//		return 1.f;
-//	}
-//	else return -1.f;
-//}
-
 void ABoss_Golem::Golem_Destroy()
 {
 	Destroy();
