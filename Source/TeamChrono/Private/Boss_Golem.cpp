@@ -33,6 +33,7 @@ void ABoss_Golem::BeginPlay()
 	isTrdGimicNow = false;
 
 	isFst_GimicStart = false;
+
 	isFoth01_GimicStart = false;
 	isFoth02_GimicStart = false;
 
@@ -92,50 +93,60 @@ int ABoss_Golem::MeleeAttack_Implementation()
 
 void ABoss_Golem::Boss_Death_Implementation()
 {
-	Super::Boss_Death();
+	Super::Boss_Death_Implementation();
 
-	FTimerHandle TimerHandle;
+	/*FTimerHandle TimerHandle;
 	float delay = 4.3f;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Golem::Golem_Destroy, delay, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Golem::Golem_Destroy, delay, false);*/
 }
 
 float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	DamageFlash();
-
-	//Fst_Gimic Start
-	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFst_GimicStart)
+	//Can Take Damage When Boss Not Invincible
+	if (!GetInvincible())
 	{
-		isFst_GimicStart = true;
-		isFst_GimicIng = true;
+		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-		UE_LOG(LogTemp, Warning, TEXT("Golem First Gimic Start"));
-		FstGimic();
-		//Pause Snd Gimic Timer
-		GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
-	}
-	//Fouth_Gimic_01 Start
-	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFoth01_GimicStart)
-	{
-		isFoth01_GimicStart = true;
-		UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_fisrt Gimic Start"));
-		FothGimic();
-		//Pause Snd Gimic Timer
-		GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
-	}
-	//Fouth_Gimic_02 Start
-	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFoth02_GimicStart)
-	{
-		isFoth02_GimicStart = true;
-		UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_Second Gimic Start"));
-		FothGimic();
-		//Pause Snd Gimic Timer
-		GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
-	}
+		DamageFlash();
 
+		//Fst_Gimic Start
+		if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFst_GimicStart)
+		{
+			isFst_GimicStart = true;
+			isFst_GimicIng = true;
+			//
+			SetInvincible(true);
+
+			UE_LOG(LogTemp, Warning, TEXT("Golem First Gimic Start"));
+			FstGimic();
+
+			//Pause Snd Gimic Timer
+			GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+		}
+		//Fouth_Gimic_01 Start
+		if (GetBossCurrentHp() <= GetBossMaxHp() * (FothGimic_01_StartHp / 100) && !isFoth01_GimicStart)
+		{
+			isFoth01_GimicStart = true;
+
+			UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_fisrt Gimic Start"));
+			FothGimic();
+
+			//Pause Snd Gimic Timer
+			GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+		}
+		//Fouth_Gimic_02 Start
+		if (GetBossCurrentHp() <= GetBossMaxHp() * (FothGimic_02_StartHp / 100) && !isFoth02_GimicStart)
+		{
+			isFoth02_GimicStart = true;
+
+			UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_Second Gimic Start"));
+			FothGimic();
+
+			//Pause Snd Gimic Timer
+			GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+		}
+	}
 	return 0.0f;
 }
 
@@ -183,12 +194,13 @@ void ABoss_Golem::FstGimic_Implementation()
 	//Start Gimic Sub Tree
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", false);
-	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("FirstGimic", true);
-
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("FirstGimic", true); 
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsFstGimicING", true);
 }
 
 void ABoss_Golem::SndGimic_Implementation()
 {
+	//SetInvincible(true);
 	//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
 	//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", true);
 }

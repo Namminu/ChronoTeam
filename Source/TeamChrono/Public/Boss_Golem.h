@@ -184,6 +184,6 @@ public:
 ///Setter
 	UFUNCTION(BlueprintCallable)
 	void SetGolemCurrentAttackCount(const float newCount) { CurrentAtkCount = newCount; }
-
+	UFUNCTION(BlueprintCallable)
 	void SetFstGimicing(const bool newBool) { isFst_GimicIng = newBool; }
 };

@@ -119,6 +119,9 @@ private:
 
 ///Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	bool bisInvincible;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	float f_bossMaxHp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
@@ -151,6 +154,7 @@ public:
 	float GetBossCurrentHp() const { return f_bossCurrentHp; }
 	float GetBossAtkMount() const { return f_bossAtk; }
 	float GetBossInitSpeed() const { return f_bossInitSpeed; }
+	bool GetInvincible() const { return bisInvincible; }
 
 	UFUNCTION(BlueprintCallable)
 	FVector GetPlayerTargetLocation() const { return playerLocation; }
@@ -169,6 +173,7 @@ public:
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
+	void SetInvincible(const bool newBool) { bisInvincible = newBool; }
 
 	void SetFstMTI(UMaterialInstanceDynamic* MTI) { Fst_FlashMT = MTI; }
 

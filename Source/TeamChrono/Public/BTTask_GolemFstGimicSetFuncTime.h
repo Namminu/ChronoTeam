@@ -16,4 +16,6 @@ class TEAMCHRONO_API UBTTask_GolemFstGimicSetFuncTime : public UBTTask_Blackboar
 public:
 	UBTTask_GolemFstGimicSetFuncTime();
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+private:
+	bool bFunctionsCalled = false;
 };

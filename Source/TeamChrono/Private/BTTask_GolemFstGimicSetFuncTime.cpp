@@ -17,14 +17,20 @@ EBTNodeResult::Type UBTTask_GolemFstGimicSetFuncTime::ExecuteTask(UBehaviorTreeC
 	{
 		if (ABoss_Golem* const Golem = Cast<ABoss_Golem>(cont->GetPawn()))
 		{
-			//Set Focus To Player When Gimic Ing
-			Golem->SetFocusToPlayer();
-			//Call Fst Gimic Func
-			Golem->StartFstGimicTimer();
+			if (!bFunctionsCalled)
+			{
+				//Set Focus To Player When Gimic Ing
+				Golem->SetFocusToPlayer();
+				//Call Fst Gimic Func
+				Golem->StartFstGimicTimer();
+
+				// Mark that functions have been called
+				bFunctionsCalled = true;
+			}
 
 			//Check Fst Gimic is Playing
 			if (Golem->GetFstGimicIng())
-			{		
+			{					
 				//Still Fst Gimic Playing
 				return EBTNodeResult::Failed;
 			}

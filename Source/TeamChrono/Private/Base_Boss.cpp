@@ -96,6 +96,9 @@ void ABase_Boss::SetFlashMTIArray_Implementation(UMaterialInstanceDynamic* MT)
 
 void ABase_Boss::Boss_Death_Implementation()
 {
+	//Stop all Montages Before Death
+	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
+
 	//Stop Movement
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	//Set Collision to NoCollision
@@ -114,7 +117,7 @@ void ABase_Boss::Boss_Death_Implementation()
 float ABase_Boss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
-	SetBossCurrentHp(GetBossCurrentHp()-DamageAmount);
+	SetBossCurrentHp(GetBossCurrentHp() - DamageAmount);
 	if (GetBossCurrentHp() <= 0) Boss_Death_Implementation();
 	return 0.0f;
 }
