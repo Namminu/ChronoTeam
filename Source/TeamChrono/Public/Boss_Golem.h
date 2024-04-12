@@ -112,6 +112,9 @@ public:
 	/// </summary>
 	void SetSndGimicTimer();
 
+	void SetPauseSndTimer();
+	void SetResumeSndTimer();
+
 	/// <summary>
 	/// 패턴 3 : 추격 후 바닥찍기 / 기본공격 4회마다
 	/// </summary>
@@ -166,7 +169,7 @@ private:
 	float RockSpawnDelay;
 
 	//Snd Gimic Properties
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
 	class AActor* TargetArrowDirection;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
 	bool isSnd_JumpCenterIng;

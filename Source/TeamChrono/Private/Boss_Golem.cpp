@@ -124,7 +124,7 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 			FstGimic();
 
 			//Pause Snd Gimic Timer
-			GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+			SetPauseSndTimer();
 		}
 		//Fouth_Gimic_01 Start
 		if (GetBossCurrentHp() <= GetBossMaxHp() * (FothGimic_01_StartHp / 100) && !isFoth01_GimicStart)
@@ -135,7 +135,7 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 			FothGimic();
 
 			//Pause Snd Gimic Timer
-			GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+			SetPauseSndTimer();
 		}
 		//Fouth_Gimic_02 Start
 		if (GetBossCurrentHp() <= GetBossMaxHp() * (FothGimic_02_StartHp / 100) && !isFoth02_GimicStart)
@@ -146,7 +146,7 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 			FothGimic();
 
 			//Pause Snd Gimic Timer
-			GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+			SetPauseSndTimer();
 		}
 	}
 	return 0.0f;
@@ -210,6 +210,16 @@ void ABoss_Golem::SndGimic_Implementation()
 void ABoss_Golem::SetSndGimicTimer()
 {
 	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Golem::SndGimic, SndGimicDelay, true);
+}
+
+void ABoss_Golem::SetPauseSndTimer()
+{
+	GetWorld()->GetTimerManager().PauseTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Golem::SetResumeSndTimer()
+{
+	GetWorld()->GetTimerManager().UnPauseTimer(SndGimicTimerHandle);
 }
 
 void ABoss_Golem::EndPlay(const EEndPlayReason::Type EndPlayReason)
