@@ -162,7 +162,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATeamChronoCharacter::Attack()
 {
-	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving && P_CurrentHP > 0)
 	{
 		if (IsAttacking)
 		{
@@ -197,7 +197,7 @@ void ATeamChronoCharacter::Attack()
 
 void ATeamChronoCharacter::AttackClickStart()
 {
-	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving && P_CurrentHP > 0)
 	{
 		IsComboPushOn = true;
 		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));

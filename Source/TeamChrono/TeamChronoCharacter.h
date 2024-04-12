@@ -49,7 +49,7 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ESkillAction;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = StaminaBar, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* StaminaBar;
 
 
