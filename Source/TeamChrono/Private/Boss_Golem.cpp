@@ -32,8 +32,11 @@ void ABoss_Golem::BeginPlay()
 	isTrdGimicCanAttack = false;
 	isTrdGimicNow = false;
 
-	isFst_GimicStart = false;
+	//
+	isSnd_JumpCenterIng = false;
 
+	//Check Gimic Already Run
+	isFst_GimicStart = false;
 	isFoth01_GimicStart = false;
 	isFoth02_GimicStart = false;
 
@@ -118,7 +121,6 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 			//
 			SetInvincible(true);
 
-			UE_LOG(LogTemp, Warning, TEXT("Golem First Gimic Start"));
 			FstGimic();
 
 			//Pause Snd Gimic Timer
@@ -148,6 +150,13 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		}
 	}
 	return 0.0f;
+}
+
+void ABoss_Golem::SndGimicJumpToCenter_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Snd_Jump to Center has Called"));
+
+
 }
 
 void ABoss_Golem::Golem_Destroy()
@@ -191,9 +200,11 @@ void ABoss_Golem::FstGimic_Implementation()
 
 void ABoss_Golem::SndGimic_Implementation()
 {
-	//SetInvincible(true);
-	//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
-	//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", true);
+	UE_LOG(LogTemp, Warning, TEXT("Second Gimic Called"));
+
+	SetInvincible(true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", true);
 }
 
 void ABoss_Golem::SetSndGimicTimer()

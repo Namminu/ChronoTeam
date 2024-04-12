@@ -56,6 +56,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ClearFstGimicTimer();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SndGimicJumpToCenter();
+
 	UFUNCTION()
 	void Golem_Destroy();
 
@@ -81,6 +84,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Calculate_SndBigAttackRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_SndGimicAttackRange();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Calculate_TrdGimicAttackRange();
@@ -159,6 +165,13 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_FST", meta = (AllowPrivateAccess = "true"))
 	float RockSpawnDelay;
 
+	//Snd Gimic Properties
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
+	class AActor* TargetArrowDirection;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
+	bool isSnd_JumpCenterIng;
+
+
 	//Fouth Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
 	bool isFoth01_GimicStart;
@@ -189,9 +202,13 @@ public:
 	float GetGolemMaxAttackCount() const { return MaxAtkCount; }
 
 	bool GetFstGimicIng() const { return isFst_GimicIng; }
+	bool GetSndJumping() const { return isSnd_JumpCenterIng; }
+
 ///Setter
 	UFUNCTION(BlueprintCallable)
 	void SetGolemCurrentAttackCount(const float newCount) { CurrentAtkCount = newCount; }
 	UFUNCTION(BlueprintCallable)
 	void SetFstGimicing(const bool newBool) { isFst_GimicIng = newBool; }
+	UFUNCTION(BlueprintCallable)
+	void SetSndJumping(const bool newBool) { isSnd_JumpCenterIng = newBool; }
 };

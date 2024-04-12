@@ -20,6 +20,7 @@ EBTNodeResult::Type UBTTask_FirstGimicClear::ExecuteTask(UBehaviorTreeComponent&
 	//Clear Properties
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("FirstGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
+	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 
 	return EBTNodeResult::Succeeded;
 }
