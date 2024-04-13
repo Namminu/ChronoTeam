@@ -17,16 +17,36 @@ EBTNodeResult::Type UBTTask_Boss_PlayAnimMontage::ExecuteTask(UBehaviorTreeCompo
 		auto const* const cont = OwnerComp.GetAIOwner();
 		ABase_Boss* const Boss = Cast<ABase_Boss>(cont->GetPawn());
 
-		if (checkPlaying(Boss))
+		//if (checkPlaying(Boss))
+		//{
+		//	Boss->PlayMontage(Montage);
+
+		//	UE_LOG(LogTemp, Warning, TEXT("Montage End"));
+
+		//	return EBTNodeResult::Succeeded;
+		//}
+		//else return EBTNodeResult::Failed;
+
+		if (!isMontagePlay)
 		{
 			Boss->PlayMontage(Montage);
+			
+			isMontagePlay = true;
 		}
-	}
 
-	return EBTNodeResult::Succeeded;
+		if (checkPlaying(Boss))
+		{
+			return EBTNodeResult::Succeeded;
+		}
+		else return EBTNodeResult::Failed;
+
+	}
+	return EBTNodeResult::Failed;
 }
 
 bool UBTTask_Boss_PlayAnimMontage::checkPlaying(class ABase_Boss* const Boss)
 {
+	//While Montage is Playing : return False
+	//While Montage is End : return true
 	return !(Boss->GetMesh()->GetAnimInstance()->IsAnyMontagePlaying());
 }

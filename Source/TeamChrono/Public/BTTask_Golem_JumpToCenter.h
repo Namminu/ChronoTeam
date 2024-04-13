@@ -16,6 +16,7 @@ class TEAMCHRONO_API UBTTask_Golem_JumpToCenter : public UBTTask_BlackboardBase
 public:
 	UBTTask_Golem_JumpToCenter();
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
 private:
 	bool bIsJumpStart;
 };

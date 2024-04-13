@@ -21,4 +21,6 @@ private:
 	class UAnimMontage* Montage;
 
 	bool checkPlaying(class ABase_Boss* const Boss);
+
+	bool isMontagePlay = false;
 };

@@ -88,7 +88,7 @@ void ABase_Boss::ClearFocusToPlayer()
 
 void ABase_Boss::PlayMontage(UAnimMontage* Montage)
 {
-	PlayAnimMontage(Montage);
+	GetMesh()->GetAnimInstance()->Montage_Play(Montage);
 }
 
 void ABase_Boss::SetFlashMTIArray_Implementation(UMaterialInstanceDynamic* MT)

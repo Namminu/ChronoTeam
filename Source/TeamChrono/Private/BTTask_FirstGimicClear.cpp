@@ -22,5 +22,7 @@ EBTNodeResult::Type UBTTask_FirstGimicClear::ExecuteTask(UBehaviorTreeComponent&
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 
+	Golem->SetResumeSndTimer();
+
 	return EBTNodeResult::Succeeded;
 }

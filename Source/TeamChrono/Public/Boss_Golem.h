@@ -176,7 +176,8 @@ private:
 	class AActor* TargetArrowDirection;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
 	bool isSnd_JumpCenterIng;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
+	bool isSnd_GimicIng;
 
 	//Fouth Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
@@ -209,6 +210,7 @@ public:
 
 	bool GetFstGimicIng() const { return isFst_GimicIng; }
 	bool GetSndJumping() const { return isSnd_JumpCenterIng; }
+	bool GetSndGimicIng() const { return isSnd_GimicIng; }
 
 ///Setter
 	UFUNCTION(BlueprintCallable)
@@ -217,4 +219,6 @@ public:
 	void SetFstGimicing(const bool newBool) { isFst_GimicIng = newBool; }
 	UFUNCTION(BlueprintCallable)
 	void SetSndJumping(const bool newBool) { isSnd_JumpCenterIng = newBool; }
+	UFUNCTION()
+	void SetSndGimicIng(const bool newBool) { isSnd_GimicIng = newBool; }
 };

@@ -27,13 +27,14 @@ void ABoss_Golem::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Set Gimic Bool Properties
+	//Set Trd Gimic Bool Properties
 	CurrentAtkCount = 0;
 	isTrdGimicCanAttack = false;
 	isTrdGimicNow = false;
 
-	//
+	//Set Snd Gimic Bool Properties
 	isSnd_JumpCenterIng = false;
+	isSnd_GimicIng = false;
 
 	//Check Gimic Already Run
 	isFst_GimicStart = false;
@@ -57,7 +58,7 @@ void ABoss_Golem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//Check When Not Jumping
-	if (!isJump&&!isTrdGimicNow)
+	if (!isJump&&!isTrdGimicNow&&!isSnd_GimicIng)
 	{
 		//Player is So Far From Golem So Jump Attack To player
 		if (GetDistanceTo(GetPlayerProperty()) >= distanceToPlayer)
@@ -202,9 +203,11 @@ void ABoss_Golem::SndGimic_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Second Gimic Called"));
 
+	isSnd_GimicIng = true;
 	SetInvincible(true);
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", true);
+	SetPauseSndTimer();
 }
 
 void ABoss_Golem::SetSndGimicTimer()
@@ -214,11 +217,13 @@ void ABoss_Golem::SetSndGimicTimer()
 
 void ABoss_Golem::SetPauseSndTimer()
 {
+	UE_LOG(LogTemp, Error, TEXT("Snd Gimic Timer Pause"));
 	GetWorld()->GetTimerManager().PauseTimer(SndGimicTimerHandle);
 }
 
 void ABoss_Golem::SetResumeSndTimer()
 {
+	UE_LOG(LogTemp, Error, TEXT("Snd Gimic Timer Resume"));
 	GetWorld()->GetTimerManager().UnPauseTimer(SndGimicTimerHandle);
 }
 
