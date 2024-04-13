@@ -15,10 +15,14 @@ UBTTask_Golem_SndGimicClear::UBTTask_Golem_SndGimicClear()
 EBTNodeResult::Type UBTTask_Golem_SndGimicClear::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	auto const* const cont = OwnerComp.GetAIOwner();
+	auto* const Boss = Cast<ABase_Boss>(cont->GetPawn());
 	auto* const Golem = Cast<ABoss_Golem>(cont->GetPawn());
 
 	//Clear Properties
+	Boss->SetMontageEnd(false);
 	Golem->SetSndGimicIng(false);
+	Golem->SetSndJumpCenterEnd(false);
+
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", false);
@@ -26,7 +30,7 @@ EBTNodeResult::Type UBTTask_Golem_SndGimicClear::ExecuteTask(UBehaviorTreeCompon
 	UE_LOG(LogTemp, Warning, TEXT("Snd Gimic Clear"));
 
 	//Resume Gimic Timer
-	Golem->SetResumeSndTimer();
+	Golem->SetStartSndTimer();
 
 	return EBTNodeResult::Succeeded;
 }

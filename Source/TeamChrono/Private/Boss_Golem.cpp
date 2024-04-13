@@ -71,6 +71,16 @@ void ABoss_Golem::Tick(float DeltaTime)
 		}
 	}
 
+	ElapsedTime = 0.0f;
+	bIsTimerActive = GetWorld()->GetTimerManager().IsTimerActive(SndGimicTimerHandle);
+
+	if (bIsTimerActive)
+	{
+		// 타이머가 활성화된 경우, 타이머의 현재 진행 시간을 가져옵니다.
+		ElapsedTime = GetWorld()->GetTimerManager().GetTimerElapsed(SndGimicTimerHandle);
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("%.2f"), ElapsedTime);
 }
 
 int ABoss_Golem::MeleeAttack_Implementation()
@@ -119,6 +129,7 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		{
 			isFst_GimicStart = true;
 			isFst_GimicIng = true;
+
 			//
 			SetInvincible(true);
 
@@ -207,24 +218,32 @@ void ABoss_Golem::SndGimic_Implementation()
 	SetInvincible(true);
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", true);
-	SetPauseSndTimer();
+	SetClearSndTimer();
 }
 
 void ABoss_Golem::SetSndGimicTimer()
 {
-	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Golem::SndGimic, SndGimicDelay, true);
+	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Golem::SndGimic_Implementation, SndGimicDelay, true);
 }
 
 void ABoss_Golem::SetPauseSndTimer()
 {
-	UE_LOG(LogTemp, Error, TEXT("Snd Gimic Timer Pause"));
 	GetWorld()->GetTimerManager().PauseTimer(SndGimicTimerHandle);
 }
 
 void ABoss_Golem::SetResumeSndTimer()
 {
-	UE_LOG(LogTemp, Error, TEXT("Snd Gimic Timer Resume"));
 	GetWorld()->GetTimerManager().UnPauseTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Golem::SetClearSndTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Golem::SetStartSndTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Golem::SndGimic_Implementation, SndGimicDelay, true);
 }
 
 void ABoss_Golem::EndPlay(const EEndPlayReason::Type EndPlayReason)

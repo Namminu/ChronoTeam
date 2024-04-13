@@ -117,6 +117,9 @@ public:
 
 	void SetPauseSndTimer();
 	void SetResumeSndTimer();
+	void SetClearSndTimer();
+	void SetStartSndTimer();
+
 
 	/// <summary>
 	/// 패턴 3 : 추격 후 바닥찍기 / 기본공격 4회마다
@@ -178,6 +181,8 @@ private:
 	bool isSnd_JumpCenterIng;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
 	bool isSnd_GimicIng;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_SND", meta = (AllowPrivateAccess = "true"))
+	bool isSndJumpCenterEnd;
 
 	//Fouth Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
@@ -185,6 +190,11 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
 	bool isFoth02_GimicStart;
 	
+
+
+	float ElapsedTime;
+	bool bIsTimerActive;
+
 ///AnimMontage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* SecondAttackMontage;
@@ -209,8 +219,10 @@ public:
 	float GetGolemMaxAttackCount() const { return MaxAtkCount; }
 
 	bool GetFstGimicIng() const { return isFst_GimicIng; }
+
 	bool GetSndJumping() const { return isSnd_JumpCenterIng; }
 	bool GetSndGimicIng() const { return isSnd_GimicIng; }
+	bool GetSndJumpCenterEnd() const { return isSndJumpCenterEnd; }
 
 ///Setter
 	UFUNCTION(BlueprintCallable)
@@ -221,4 +233,6 @@ public:
 	void SetSndJumping(const bool newBool) { isSnd_JumpCenterIng = newBool; }
 	UFUNCTION()
 	void SetSndGimicIng(const bool newBool) { isSnd_GimicIng = newBool; }
+	UFUNCTION()
+	void SetSndJumpCenterEnd(const bool newBool) { isSndJumpCenterEnd = newBool; }
 };

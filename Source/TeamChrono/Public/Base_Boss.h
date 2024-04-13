@@ -139,6 +139,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
 	FVector playerLocation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
+	bool bIsMontageEnd;
+
 ///DamageTypes
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
@@ -158,6 +161,7 @@ public:
 	float GetBossAtkMount() const { return f_bossAtk; }
 	float GetBossInitSpeed() const { return f_bossInitSpeed; }
 	bool GetInvincible() const { return bisInvincible; }
+	bool GetMontageEnd() const { return bIsMontageEnd; }
 
 	UFUNCTION(BlueprintCallable)
 	FVector GetPlayerTargetLocation() const { return playerLocation; }
@@ -177,6 +181,7 @@ public:
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
 	void SetInvincible(const bool newBool) { bisInvincible = newBool; }
+	void SetMontageEnd(const bool newBool) { bIsMontageEnd = newBool; }
 
 	void SetFstMTI(UMaterialInstanceDynamic* MTI) { Fst_FlashMT = MTI; }
 

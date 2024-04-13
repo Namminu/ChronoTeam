@@ -4,6 +4,7 @@
 #include "BTTask_Golem_JumpToCenter.h"
 #include "BossAIController.h"
 #include "Boss_Golem.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_Golem_JumpToCenter::UBTTask_Golem_JumpToCenter()
 {
@@ -16,13 +17,12 @@ EBTNodeResult::Type UBTTask_Golem_JumpToCenter::ExecuteTask(UBehaviorTreeCompone
 	{
 		if (ABoss_Golem* const Boss = Cast<ABoss_Golem>(cont->GetPawn()))
 		{
-			if (!bIsJumpStart)
+			if (!Boss->GetSndJumpCenterEnd())
 			{
 				Boss->SndGimicJumpToCenter();
-				//Boss->SndGimicJumpToCenter_Implementation();
-				bIsJumpStart = true;
+				Boss->SetSndJumpCenterEnd(true);
 			}
-			
+
 			if (Boss->GetSndJumping())
 			{
 				return EBTNodeResult::Failed;

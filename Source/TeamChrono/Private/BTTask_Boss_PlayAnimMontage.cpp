@@ -4,6 +4,7 @@
 #include "BTTask_Boss_PlayAnimMontage.h"
 #include "Base_Boss.h"
 #include "BossAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_Boss_PlayAnimMontage::UBTTask_Boss_PlayAnimMontage(FObjectInitializer const& ObjectInitializer)
 {
@@ -17,21 +18,10 @@ EBTNodeResult::Type UBTTask_Boss_PlayAnimMontage::ExecuteTask(UBehaviorTreeCompo
 		auto const* const cont = OwnerComp.GetAIOwner();
 		ABase_Boss* const Boss = Cast<ABase_Boss>(cont->GetPawn());
 
-		//if (checkPlaying(Boss))
-		//{
-		//	Boss->PlayMontage(Montage);
-
-		//	UE_LOG(LogTemp, Warning, TEXT("Montage End"));
-
-		//	return EBTNodeResult::Succeeded;
-		//}
-		//else return EBTNodeResult::Failed;
-
-		if (!isMontagePlay)
+		if (!Boss->GetMontageEnd())
 		{
 			Boss->PlayMontage(Montage);
-			
-			isMontagePlay = true;
+			Boss->SetMontageEnd(true);
 		}
 
 		if (checkPlaying(Boss))
