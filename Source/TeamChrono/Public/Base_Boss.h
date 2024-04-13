@@ -37,6 +37,9 @@ public:
 	void SetFocusToPlayer();
 	void ClearFocusToPlayer();
 
+	UFUNCTION()
+	void PlayMontage(UAnimMontage* Montage);
+
 	/// <summary>
 	/// Rotate to Player Func When Befor Combo Attack
 	/// </summary>

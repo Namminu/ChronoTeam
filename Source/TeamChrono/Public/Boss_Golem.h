@@ -59,6 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void SndGimicJumpToCenter();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetPlayerToMe();
+
 	UFUNCTION()
 	void Golem_Destroy();
 

@@ -20,6 +20,7 @@ EBTNodeResult::Type UBTTask_Golem_SoFarAndJumpAttack::ExecuteTask(UBehaviorTreeC
 			return EBTNodeResult::Succeeded;
 		}
 		else return EBTNodeResult::Failed;
+
 	}
 	else return EBTNodeResult::Failed;
 

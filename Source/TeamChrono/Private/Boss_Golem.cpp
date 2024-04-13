@@ -155,8 +155,8 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 void ABoss_Golem::SndGimicJumpToCenter_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Snd_Jump to Center has Called"));
-
-
+	SetSndJumping(true);
+	//Another Code Written in BP
 }
 
 void ABoss_Golem::Golem_Destroy()

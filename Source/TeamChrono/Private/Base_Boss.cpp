@@ -86,6 +86,11 @@ void ABase_Boss::ClearFocusToPlayer()
 	}
 }
 
+void ABase_Boss::PlayMontage(UAnimMontage* Montage)
+{
+	PlayAnimMontage(Montage);
+}
+
 void ABase_Boss::SetFlashMTIArray_Implementation(UMaterialInstanceDynamic* MT)
 {
 	if (MT)
