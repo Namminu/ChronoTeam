@@ -21,6 +21,8 @@ EBTNodeResult::Type UBTTask_Boss_PlayAnimMontage::ExecuteTask(UBehaviorTreeCompo
 		if (!Boss->GetMontageEnd())
 		{
 			Boss->PlayMontage(Montage);
+
+			//Need To Init False Where Task End
 			Boss->SetMontageEnd(true);
 		}
 

@@ -36,6 +36,9 @@ void ABoss_Golem::BeginPlay()
 	isSnd_JumpCenterIng = false;
 	isSnd_GimicIng = false;
 
+	//Set Fth Gimic Bool Properties
+	isFothGimicIng = false;
+
 	//Check Gimic Already Run
 	isFst_GimicStart = false;
 	isFoth01_GimicStart = false;
@@ -70,17 +73,6 @@ void ABoss_Golem::Tick(float DeltaTime)
 			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
 		}
 	}
-
-	ElapsedTime = 0.0f;
-	bIsTimerActive = GetWorld()->GetTimerManager().IsTimerActive(SndGimicTimerHandle);
-
-	if (bIsTimerActive)
-	{
-		// 타이머가 활성화된 경우, 타이머의 현재 진행 시간을 가져옵니다.
-		ElapsedTime = GetWorld()->GetTimerManager().GetTimerElapsed(SndGimicTimerHandle);
-	}
-
-	UE_LOG(LogTemp, Warning, TEXT("%.2f"), ElapsedTime);
 }
 
 int ABoss_Golem::MeleeAttack_Implementation()
@@ -120,9 +112,38 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	//Can Take Damage When Boss Not Invincible
 	if (!GetInvincible())
 	{
-		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+		//is Golem on Foth Gimic, Damage Apply to Destroy Hp
+		if (isFothGimicIng)
+		{
+			//Damage Apply Only When Hit in Correct Parts
+			if (Foth_DamageOnCorrectParts(HitLocation))
+			{
+				DestroyCurrentHp -= DamageAmount;
+				if (DestroyCurrentHp <= 0)
+				{
+					//Set Niagara Effect Off
+					if (isFoth01_GimicStart && !isFoth02_GimicStart)
+					{
+						L_PartsBreakEffect->Deactivate();
+					}
+					else if (isFoth01_GimicStart && isFoth02_GimicStart)
+					{
+						R_PartsBreakEffect->Deactivate();
+					}
 
-		DamageFlash();
+					PlayMontage(HittedMontage);
+
+					isFothGimicIng = false;
+				}
+				DamageFlash();
+			}
+		}
+		//else, Damage Apply to Golem
+		else
+		{
+			Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+			DamageFlash();
+		}
 
 		//Fst_Gimic Start
 		if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFst_GimicStart)
@@ -219,6 +240,19 @@ void ABoss_Golem::SndGimic_Implementation()
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", true);
 	SetClearSndTimer();
+}
+
+void ABoss_Golem::FothGimic_Implementation()
+{
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("FouthGimic", true);
+	SetInvincible(true);
+	SetPauseSndTimer();
+	DestroyCurrentHp = DestroyMaxHp;
+}
+
+bool ABoss_Golem::Foth_DamageOnCorrectParts_Implementation(FVector HittedLocation)
+{
+	return false;
 }
 
 void ABoss_Golem::SetSndGimicTimer()

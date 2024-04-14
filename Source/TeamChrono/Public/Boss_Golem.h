@@ -120,7 +120,6 @@ public:
 	void SetClearSndTimer();
 	void SetStartSndTimer();
 
-
 	/// <summary>
 	/// 패턴 3 : 추격 후 바닥찍기 / 기본공격 4회마다
 	/// </summary>
@@ -130,8 +129,11 @@ public:
 	/// <summary>
 	/// 패턴 4 : 부위파괴 2번(왼, 오) / 체력기반, 2번 실행
 	/// </summary>
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void FothGimic();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	bool Foth_DamageOnCorrectParts(FVector HittedLocation);
 
 private:
 ///Set Gimic Start Hp Percent
@@ -186,14 +188,17 @@ private:
 
 	//Fouth Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
-	bool isFoth01_GimicStart;
+	bool isFoth01_GimicStart;	//Left Side
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
-	bool isFoth02_GimicStart;
-	
-
-
-	float ElapsedTime;
-	bool bIsTimerActive;
+	bool isFoth02_GimicStart;	//Right Side
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
+	float DestroyMaxHp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
+	float DestroyCurrentHp;
+	UPROPERTY()
+	bool isFothGimicIng;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GIMIC_FOTH", meta = (AllowPrivateAccess = "true"))
+	FVector HitLocation;
 
 ///AnimMontage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
@@ -212,7 +217,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "EFFECT", meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* R_PartsBreakEffect;
 
-
 public:
 ///Getter
 	float GetGolemCurrentAttackCount() const { return CurrentAtkCount; }
@@ -223,6 +227,16 @@ public:
 	bool GetSndJumping() const { return isSnd_JumpCenterIng; }
 	bool GetSndGimicIng() const { return isSnd_GimicIng; }
 	bool GetSndJumpCenterEnd() const { return isSndJumpCenterEnd; }
+
+	bool GetFth_01_GimicStart() const { return isFoth01_GimicStart; }
+	bool GetFth_02_GimicStart() const { return isFoth02_GimicStart; }
+
+	bool GetFothGimicIng() const { return isFothGimicIng; }
+
+	FVector GetHittedLocation() const { return HitLocation; }
+
+	class UNiagaraComponent* GetLeftEffect() const { return L_PartsBreakEffect; }
+	class UNiagaraComponent* GetRightEffect() const { return R_PartsBreakEffect; }
 
 ///Setter
 	UFUNCTION(BlueprintCallable)
@@ -235,4 +249,8 @@ public:
 	void SetSndGimicIng(const bool newBool) { isSnd_GimicIng = newBool; }
 	UFUNCTION()
 	void SetSndJumpCenterEnd(const bool newBool) { isSndJumpCenterEnd = newBool; }
+	UFUNCTION()
+	void SetFothGimicIng(const bool newBool) { isFothGimicIng = newBool; }
+	UFUNCTION(BlueprintCallable)
+	void SetHittedLocation(const FVector newLocation) { HitLocation = newLocation; }
 };
