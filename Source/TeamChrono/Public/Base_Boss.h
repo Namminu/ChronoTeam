@@ -72,6 +72,9 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void UpdateHpPercent();
+
 	/// <summary>
 	/// Damage Flash When Monster Hitted
 	/// </summary>

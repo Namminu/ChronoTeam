@@ -123,6 +123,7 @@ float ABase_Boss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	AController* EventInstigator, AActor* DamageCauser)
 {
 	SetBossCurrentHp(GetBossCurrentHp() - DamageAmount);
+	UpdateHpPercent();
 	if (GetBossCurrentHp() <= 0) Boss_Death_Implementation();
 	return 0.0f;
 }
