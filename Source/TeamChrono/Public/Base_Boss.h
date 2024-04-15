@@ -101,6 +101,10 @@ public:
 		int const OtherBodyIndex);
 
 private:
+///Boss Name
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BOSS", meta = (AllowPrivateAccess = "true"))
+	FName n_BossName;
+
 ///Behavior Tree
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* BTree;
@@ -177,6 +181,8 @@ public:
 
 	class USphereComponent* GetAttackRangeColl() const { return AttackRange; }
 
+	FName GetBossName() const { return n_BossName; }
+
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
@@ -187,4 +193,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetPlayerTargetLocation(const FVector newLocation) { playerLocation = newLocation; }
+
+	void SetBossName(const FName newName) { n_BossName = newName; }
 };
