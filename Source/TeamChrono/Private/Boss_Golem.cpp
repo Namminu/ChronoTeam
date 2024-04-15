@@ -27,10 +27,19 @@ void ABoss_Golem::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Set Gimic Bool Properties
+	//Set Trd Gimic Bool Properties
 	CurrentAtkCount = 0;
 	isTrdGimicCanAttack = false;
+	isTrdGimicNow = false;
 
+	//Set Snd Gimic Bool Properties
+	isSnd_JumpCenterIng = false;
+	isSnd_GimicIng = false;
+
+	//Set Fth Gimic Bool Properties
+	isFothGimicIng = false;
+
+	//Check Gimic Already Run
 	isFst_GimicStart = false;
 	isFoth01_GimicStart = false;
 	isFoth02_GimicStart = false;
@@ -51,11 +60,27 @@ void ABoss_Golem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//Check When Not Jumping
+	if (!isJump&&!isTrdGimicNow&&!isSnd_GimicIng)
+	{
+		//Player is So Far From Golem So Jump Attack To player
+		if (GetDistanceTo(GetPlayerProperty()) >= distanceToPlayer)
+		{
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
+		}
+		else
+		{
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
+		}
+	}
 }
 
 int ABoss_Golem::MeleeAttack_Implementation()
 {
-	UE_LOG(LogTemp, Error, TEXT("Boss_Golem Attack Func Called"));
+	if (!isJump)
+	{
+		Super::MeleeAttack_Implementation();
+	}
 
 	//Call Normal Attack Func
 	if (CurrentAtkCount < MaxAtkCount)
@@ -63,58 +88,113 @@ int ABoss_Golem::MeleeAttack_Implementation()
 		AttackFunc(0);
 		CurrentAtkCount++;
 	}
-	else TrdGimic();
+	else
+	{
+		isTrdGimicNow = true;
+		TrdGimic();
+	}
 
 	return 0;
 }
 
 void ABoss_Golem::Boss_Death_Implementation()
 {
-	Super::Boss_Death();
+	Super::Boss_Death_Implementation();
 
+	/*FTimerHandle TimerHandle;
+	float delay = 4.3f;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Golem::Golem_Destroy, delay, false);*/
 }
 
 float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-	UE_LOG(LogTemp, Error, TEXT("Golem Take Damage Called"));
-
-	DamageFlash();
-
-	//Fst_Gimic Start
-	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFst_GimicStart)
+	//Can Take Damage When Boss Not Invincible
+	if (!GetInvincible())
 	{
-		isFst_GimicStart = true;
-		UE_LOG(LogTemp, Warning, TEXT("Golem First Gimic Start"));
-		FstGimic();
-	}
-	//Fouth_Gimic_01 Start
-	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFoth01_GimicStart)
-	{
-		isFoth01_GimicStart = true;
-		UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_fisrt Gimic Start"));
-		FothGimic();
-	}
-	//Fouth_Gimic_02 Start
-	if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFoth02_GimicStart)
-	{
-		isFoth02_GimicStart = true;
-		UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_Second Gimic Start"));
-		FothGimic();
-	}
+		//is Golem on Foth Gimic, Damage Apply to Destroy Hp
+		if (isFothGimicIng)
+		{
+			//Damage Apply Only When Hit in Correct Parts
+			if (Foth_DamageOnCorrectParts(HitLocation))
+			{
+				DestroyCurrentHp -= DamageAmount;
+				if (DestroyCurrentHp <= 0)
+				{
+					//Set Niagara Effect Off
+					if (isFoth01_GimicStart && !isFoth02_GimicStart)
+					{
+						L_PartsBreakEffect->Deactivate();
+					}
+					else if (isFoth01_GimicStart && isFoth02_GimicStart)
+					{
+						R_PartsBreakEffect->Deactivate();
+					}
 
+					PlayMontage(HittedMontage);
+
+					isFothGimicIng = false;
+				}
+				DamageFlash();
+			}
+		}
+		//else, Damage Apply to Golem
+		else
+		{
+			Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+			DamageFlash();
+		}
+
+		//Fst_Gimic Start
+		if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFst_GimicStart)
+		{
+			isFst_GimicStart = true;
+			isFst_GimicIng = true;
+
+			//
+			SetInvincible(true);
+
+			FstGimic();
+
+			//Pause Snd Gimic Timer
+			SetPauseSndTimer();
+		}
+		//Fouth_Gimic_01 Start
+		if (GetBossCurrentHp() <= GetBossMaxHp() * (FothGimic_01_StartHp / 100) && !isFoth01_GimicStart)
+		{
+			isFoth01_GimicStart = true;
+
+			UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_fisrt Gimic Start"));
+			FothGimic();
+
+			//Pause Snd Gimic Timer
+			SetPauseSndTimer();
+		}
+		//Fouth_Gimic_02 Start
+		if (GetBossCurrentHp() <= GetBossMaxHp() * (FothGimic_02_StartHp / 100) && !isFoth02_GimicStart)
+		{
+			isFoth02_GimicStart = true;
+
+			UE_LOG(LogTemp, Warning, TEXT("Golem Fourth_Second Gimic Start"));
+			FothGimic();
+
+			//Pause Snd Gimic Timer
+			SetPauseSndTimer();
+		}
+	}
 	return 0.0f;
 }
 
-float ABoss_Golem::CalculateForwardVector(float forwardVector)
+void ABoss_Golem::SndGimicJumpToCenter_Implementation()
 {
-	if (forwardVector >= 0)
-	{
-		return 1.f;
-	}
-	else return -1.f;
+	UE_LOG(LogTemp, Warning, TEXT("Snd_Jump to Center has Called"));
+	SetSndJumping(true);
+	//Another Code Written in BP
+}
+
+void ABoss_Golem::Golem_Destroy()
+{
+	Destroy();
 }
 
 void ABoss_Golem::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
@@ -125,7 +205,6 @@ void ABoss_Golem::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedCompo
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player is in Melee Range"));
 		isTrdGimicCanAttack = true;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
 	}
@@ -138,16 +217,67 @@ void ABoss_Golem::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompone
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player is Not in Melee Range"));
 		isTrdGimicCanAttack = false;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
 	}
 }
 
+void ABoss_Golem::FstGimic_Implementation()
+{
+	//Start Gimic Sub Tree
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", false);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("FirstGimic", true); 
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsFstGimicING", true);
+}
+
+void ABoss_Golem::SndGimic_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Second Gimic Called"));
+
+	isSnd_GimicIng = true;
+	SetInvincible(true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isGimic", true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimeGimic", true);
+	SetClearSndTimer();
+}
+
+void ABoss_Golem::FothGimic_Implementation()
+{
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("FouthGimic", true);
+	SetInvincible(true);
+	SetPauseSndTimer();
+	DestroyCurrentHp = DestroyMaxHp;
+}
+
+bool ABoss_Golem::Foth_DamageOnCorrectParts_Implementation(FVector HittedLocation)
+{
+	return false;
+}
+
 void ABoss_Golem::SetSndGimicTimer()
 {
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Golem::SndGimic, SndGimicDelay, true);
+	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Golem::SndGimic_Implementation, SndGimicDelay, true);
+}
+
+void ABoss_Golem::SetPauseSndTimer()
+{
+	GetWorld()->GetTimerManager().PauseTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Golem::SetResumeSndTimer()
+{
+	GetWorld()->GetTimerManager().UnPauseTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Golem::SetClearSndTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Golem::SetStartSndTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Golem::SndGimic_Implementation, SndGimicDelay, true);
 }
 
 void ABoss_Golem::EndPlay(const EEndPlayReason::Type EndPlayReason)

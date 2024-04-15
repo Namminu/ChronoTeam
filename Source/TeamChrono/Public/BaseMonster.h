@@ -81,7 +81,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void TempAttack();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable)
 	void FocusToPlayer();
 
 protected:
@@ -178,6 +178,9 @@ private:
 	////아처 몬스터 화살 거리
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER_ACHOR", meta = (AllowPrivateAccess = "true"))
 	//float arrow_Distance;
+
+	UPROPERTY()
+	bool isUnDamaged;
 
 	//투명도 조절 시간
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))

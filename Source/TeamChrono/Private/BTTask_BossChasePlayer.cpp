@@ -5,6 +5,7 @@
 #include "BossAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "Base_Boss.h"
 
 UBTTask_BossChasePlayer::UBTTask_BossChasePlayer(FObjectInitializer const& ObjectInitializer)
 {

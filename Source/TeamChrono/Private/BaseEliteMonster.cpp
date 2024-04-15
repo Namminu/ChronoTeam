@@ -144,6 +144,7 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 				{
 					isFstGimic = true;
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+					UE_LOG(LogTemp, Warning, TEXT("First Gimic Start"));
 					EliteGimic();
 				}
 				//Check Monster Hp for  Gimic Time
@@ -151,6 +152,7 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 				{
 					isSndGimic = true;
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
+					UE_LOG(LogTemp, Warning, TEXT("Second Gimic Start"));
 					EliteGimic();
 				}
 				return DamageAmount;
