@@ -22,6 +22,7 @@ EBTNodeResult::Type UBTTask_Golem_SndGimicClear::ExecuteTask(UBehaviorTreeCompon
 	Boss->SetMontageEnd(false);
 	Golem->SetSndGimicIng(false);
 	Golem->SetSndJumpCenterEnd(false);
+	Boss->SetInvincible(false);
 
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Golem)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
