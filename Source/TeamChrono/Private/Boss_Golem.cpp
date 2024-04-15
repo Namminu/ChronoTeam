@@ -27,6 +27,9 @@ void ABoss_Golem::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Set Fight Mode
+	SetIsCanFight(false);
+
 	//Set Trd Gimic Bool Properties
 	CurrentAtkCount = 0;
 	isTrdGimicCanAttack = false;
@@ -53,26 +56,30 @@ void ABoss_Golem::BeginPlay()
 	R_PartsBreakEffect->Deactivate();
 
 	//Set Timer Gimic - Snd Gimic : Jump and player Grab
-	SetSndGimicTimer();
+	//SetSndGimicTimer();
 }					   
 
 void ABoss_Golem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//Check When Not Jumping
-	if (!isJump&&!isTrdGimicNow&&!isSnd_GimicIng)
+	if (GetIsCanFight())
 	{
-		//Player is So Far From Golem So Jump Attack To player
-		if (GetDistanceTo(GetPlayerProperty()) >= distanceToPlayer)
+		//Check When Not Jumping
+		if (!isJump && !isTrdGimicNow && !isSnd_GimicIng)
 		{
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
-		}
-		else
-		{
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
+			//Player is So Far From Golem So Jump Attack To player
+			if (GetDistanceTo(GetPlayerProperty()) >= distanceToPlayer)
+			{
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
+			}
+			else
+			{
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
+			}
 		}
 	}
+
 }
 
 int ABoss_Golem::MeleeAttack_Implementation()

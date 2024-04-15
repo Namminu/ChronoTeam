@@ -149,6 +149,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
 	bool bIsMontageEnd;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
+	bool bCanFightNow;
+
 ///DamageTypes
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
@@ -169,6 +172,7 @@ public:
 	float GetBossInitSpeed() const { return f_bossInitSpeed; }
 	bool GetInvincible() const { return bisInvincible; }
 	bool GetMontageEnd() const { return bIsMontageEnd; }
+	bool GetIsCanFight() const { return bCanFightNow; }
 
 	UFUNCTION(BlueprintCallable)
 	FVector GetPlayerTargetLocation() const { return playerLocation; }
@@ -185,12 +189,13 @@ public:
 	class USphereComponent* GetAttackRangeColl() const { return AttackRange; }
 
 	FName GetBossName() const { return n_BossName; }
+///
 
-///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
 	void SetInvincible(const bool newBool) { bisInvincible = newBool; }
 	void SetMontageEnd(const bool newBool) { bIsMontageEnd = newBool; }
+	void SetIsCanFight(const bool newBool) { bCanFightNow = newBool; }
 
 	void SetFstMTI(UMaterialInstanceDynamic* MTI) { Fst_FlashMT = MTI; }
 

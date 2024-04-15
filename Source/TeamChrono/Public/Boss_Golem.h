@@ -113,6 +113,7 @@ public:
 	/// <summary>
 	/// Set Timer to Start Snd Gimic
 	/// </summary>
+	UFUNCTION(BlueprintCallable)
 	void SetSndGimicTimer();
 
 	void SetPauseSndTimer();
