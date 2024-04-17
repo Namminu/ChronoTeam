@@ -26,10 +26,40 @@ protected:
 
 
 public:
+// 
 
+// Override Functions
+	int MeleeAttack_Implementation() override;
+
+	void Boss_Death_Implementation() override;
+
+	float TakeDamage(float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser) override;
 
 
 private:
+/// Skeletal Mesh
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta =(AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Helm;	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Shoulders;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Chest;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Belt;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Legs;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Cape;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Hands;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Bracers;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* sk_Boots;
+
 
 
 
