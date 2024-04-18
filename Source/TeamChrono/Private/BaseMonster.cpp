@@ -48,11 +48,20 @@ ABaseMonster::ABaseMonster()
 	NiagaraAttackEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Attack Effect"));
 	NiagaraAttackEffect->SetupAttachment(GetCapsuleComponent());
 }
+//
+//void ABaseMonster::FocusToPlayer()
+//{
+//	//FVector newTargetLocation = FVector(UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation().X, 
+//	//	UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation().Y, 0.f);
+//
+//	//SetActorRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Roll, 
+//	//	UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), newTargetLocation).Yaw));
+//
+	//FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(),
+	//	UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation());
 
-void ABaseMonster::FocusToPlayer()
-{
-	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation()));
-}
+	//SetActorRotation(FRotator(GetActorRotation().Roll, GetActorRotation().Pitch, newRotation.Yaw));
+//}
 
 // Called when the game starts or when spawned  
 void ABaseMonster::BeginPlay()
