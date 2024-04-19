@@ -59,12 +59,26 @@ void ABoss_Fighter::BeginPlay()
 // Setup All Flash MTI
 	SetFullFMTI();
 
+	//Reset Attack Count Properties
+	Current_SndCount = 0;
+	Current_TrdCount = 0;
+
+	isComboNow = false;
 }
 
 void ABoss_Fighter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	////Player is So Far From Boss So Jump Attack To player
+	//if (GetDistanceTo(GetPlayerProperty()) >= JumpDistance)
+	//{
+	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
+	//}
+	//else
+	//{
+	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
+	//}
 }
 
 void ABoss_Fighter::DamageFlash_Implementation()
@@ -75,6 +89,38 @@ void ABoss_Fighter::DamageFlash_Implementation()
 
 int ABoss_Fighter::MeleeAttack_Implementation()
 {
+	if (!isJump)
+	{
+		Super::MeleeAttack_Implementation();
+	}
+
+	//2번째 공격, 3번째 공격 둘 다 아닐 때
+	if (Current_SndCount < Snd_AttackCount && Current_TrdCount < Trd_AttackCount)
+	{
+		AttackFunc_Implementation(0);
+		Current_SndCount++;
+		Current_TrdCount++;
+	}
+	//2번째 공격이고 3번째 공격 아닐 때
+	else if (Current_SndCount >= Snd_AttackCount && Current_TrdCount < Trd_AttackCount)
+	{
+		AttackFunc_Implementation(1);
+		Current_SndCount = 0;
+	}
+	//2번째 공격 아니고 3번째 공격일 때
+	else if (Current_SndCount < Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
+	{
+		AttackFunc_Implementation(2);
+		Current_TrdCount = 0;
+	}
+	//2번째 공격이고 3번째 공격일 때 (두 개가 겹칠 때)
+	else if(Current_SndCount >= Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
+	{
+		isComboNow = true;
+		AttackFunc_Implementation(0);
+		Current_SndCount = 0;
+		Current_TrdCount = 0;
+	}
 
 
 	return 0;
@@ -82,8 +128,13 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 
 void ABoss_Fighter::Boss_Death_Implementation()
 {
-	Super::Boss_Death_Implementation();
+	GetBossWeapon()->Destroy();
 
+	Super::Boss_Death_Implementation();
+}
+
+void ABoss_Fighter::AttackFunc_Implementation(int caseNum)
+{
 }
 
 float ABoss_Fighter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

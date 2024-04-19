@@ -68,6 +68,10 @@ int ABase_Boss::MeleeAttack_Implementation()
 	return 0;
 }
 
+void ABase_Boss::AttackFunc_Implementation(int caseNum)
+{
+}
+
 void ABase_Boss::SetFocusToPlayer()
 {
 	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
@@ -126,6 +130,9 @@ void ABase_Boss::Boss_Death_Implementation()
 
 	//Play Death Montage
 	PlayAnimMontage(DeathMontage);
+
+	//Set Boss Hp UI Off
+	SetOffWZ();
 }
 
 float ABase_Boss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,

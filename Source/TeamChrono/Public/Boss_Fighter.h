@@ -37,6 +37,16 @@ public:
 
 	void Boss_Death_Implementation() override;
 
+	/// <summary>
+	/// Fighter Normal Attack Func
+	/// 0 : Default Normal Attack
+	/// 1 : Snd Normal Attack - every Twice
+	/// 2 : Trd Normal Attack - every Triple
+	/// 3 : Foth Jump Attack - when distance so far
+	/// </summary>
+	/// <param name="caseNum"></param>
+	void AttackFunc_Implementation(int caseNum) override;
+
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent,
 		AController* EventInstigator,
@@ -99,8 +109,23 @@ private:
 	float InitMutiplier;
 
 /// Gimic Properties
+	// Normal Attack Count Properties
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
+	int Current_SndCount;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
+	int Snd_AttackCount;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
+	int Current_TrdCount;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
+	int Trd_AttackCount;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "JUMP ATTACK", meta = (AllowPrivateAccess = "true"))
+	float JumpDistance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JUMP ATTACK", meta = (AllowPrivateAccess = "true"))
+	bool isJump;
+
+	bool isComboNow;
 
 public:
 ///Getter

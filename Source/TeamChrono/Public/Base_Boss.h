@@ -34,6 +34,10 @@ public:
 	/// </summary>
 	int MeleeAttack_Implementation() override;
 
+	// Normal Attack Func
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void AttackFunc(int caseNum);
+
 	void SetFocusToPlayer();
 	void ClearFocusToPlayer();
 
@@ -45,6 +49,9 @@ public:
 
 	UFUNCTION()
 	void PlayMontage(UAnimMontage* Montage);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetOffWZ();
 
 	/// <summary>
 	/// Rotate to Player Func When Befor Combo Attack

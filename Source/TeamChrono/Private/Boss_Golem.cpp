@@ -68,7 +68,7 @@ void ABoss_Golem::Tick(float DeltaTime)
 		//Check When Not Jumping
 		if (!isJump && !isTrdGimicNow && !isSnd_GimicIng)
 		{
-			//Player is So Far From Golem So Jump Attack To player
+			//Player is So Far From Boss So Jump Attack To player
 			if (GetDistanceTo(GetPlayerProperty()) >= distanceToPlayer)
 			{
 				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
@@ -92,7 +92,7 @@ int ABoss_Golem::MeleeAttack_Implementation()
 	//Call Normal Attack Func
 	if (CurrentAtkCount < MaxAtkCount)
 	{
-		AttackFunc(0);
+		AttackFunc_Implementation(0);
 		CurrentAtkCount++;
 	}
 	else
@@ -193,6 +193,10 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 }
 
 void ABoss_Golem::DamageFlash_Implementation()
+{
+}
+
+void ABoss_Golem::AttackFunc_Implementation(int caseNum)
 {
 }
 
