@@ -49,7 +49,7 @@ class ATeamChronoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ESkillAction;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = StaminaBar, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* StaminaBar;
 
 
@@ -189,7 +189,9 @@ private:
 	// 회피 기능
 	void Dodge();
 
-
+	// 우클릭 원거리 공격중 확인
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TabSkill", Meta = (AllowPrivateAccess = true))
+	bool IsTabSkillMoving = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	class AASword* SwordInstance;
@@ -203,19 +205,27 @@ private:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "무적", Meta = (AllowPrivateAccess = true))
 	bool Nodamage = false;
 
-public:
 
-	// Q 스킬 눌렀을때 스테미너
+
+	// Q 스킬 눌렀을때 스테미나
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	float QSkillStamina = 25.0f;
 
-	// Q 스킬 쓰는중 스테미너
+	// Q 스킬 쓰는중 스테미나
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	float QSkillingStamina = 5.0f;
 
-	// Q 스킬 썼다 안쓰고 껐을때 스테미너
+	// Q 스킬 썼다 안쓰고 껐을때 스테미나
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	float QSkillEndStamina = 10.0f;
+	
+	
+	// Tab스킬 쓰는중 스테미나
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
+	float TabSkillingStamina = 5.0f;
+
+public:
+
 
 	//무기 장착 호출 함수
 	UFUNCTION(BlueprintCallable)
