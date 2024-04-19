@@ -56,7 +56,7 @@ void ABoss_Fighter::BeginPlay()
 {
 	Super::BeginPlay();
 
-// Setup Flash MTI
+// Setup All Flash MTI
 	SetFullFMTI();
 
 }
@@ -70,6 +70,7 @@ void ABoss_Fighter::Tick(float DeltaTime)
 void ABoss_Fighter::DamageFlash_Implementation()
 {
 	GetBossWeapon()->DamageFlash();
+	//Boss Body Flash Code Written in BP
 }
 
 int ABoss_Fighter::MeleeAttack_Implementation()
