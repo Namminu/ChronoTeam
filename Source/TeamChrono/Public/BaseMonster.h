@@ -81,7 +81,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void TempAttack();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void FocusToPlayer();
 
 protected:

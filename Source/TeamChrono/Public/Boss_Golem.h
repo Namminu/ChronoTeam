@@ -118,6 +118,7 @@ public:
 
 	void SetPauseSndTimer();
 	void SetResumeSndTimer();
+	UFUNCTION(BlueprintCallable)
 	void SetClearSndTimer();
 	void SetStartSndTimer();
 

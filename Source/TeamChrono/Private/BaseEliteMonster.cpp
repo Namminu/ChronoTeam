@@ -37,6 +37,8 @@ void ABaseEliteMonster::BeginPlay()
 	{
 		SpecificEffect->Deactivate();
 	}
+
+	isGimicFirstDamaged = false;
 }
 
 void ABaseEliteMonster::Tick(float DeltaTime)
@@ -161,7 +163,16 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 			else if (isInvincible)	//무적 상태 = 기믹을 하는 상태 = 방어막의 체력이 이때 까일 수 있도록 함
 			{
 				DamageWeaponFlash();
+
+				if (!isGimicFirstDamaged)
+				{
+					isGimicFirstDamaged = true;
+					ReNewBarrierHp();
+					SetGimicTimer();
+				}
+
 				BarrierHp -= DamageAmount;
+
 				if (BarrierHp <= 0)
 				{
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimicClear", true);
@@ -174,15 +185,16 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 void ABaseEliteMonster::ReNewBarrierHp()
 {
+	UE_LOG(LogTemp, Error, TEXT("Now Gimic Start"));
 	//첫번째 기믹 시작 + 두번째 기믹 시작x
-	if (isFstGimic&&!isSndGimic)
+	if (isFstGimic && !isSndGimic)
 	{
 		BarrierHp = Fst_BarrierHp;
 	}
 	//첫번째 기믹 확인 + 두번째 기믹 시작 O
-	else if (isFstGimic&&isSndGimic)
+	else if (isFstGimic && isSndGimic)
 	{
 		BarrierHp = Snd_BarrierHp;
 	}
-	SetGimicTimer();
+	//SetGimicTimer();
 }

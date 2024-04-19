@@ -141,6 +141,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool isPowerUpPlaying;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool isGimicFirstDamaged;
+
 ///Setter
 public:
 	void SetInvincible(bool newBollSet) { isInvincible = newBollSet; }
