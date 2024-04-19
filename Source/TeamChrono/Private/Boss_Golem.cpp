@@ -192,6 +192,10 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	return 0.0f;
 }
 
+void ABoss_Golem::DamageFlash_Implementation()
+{
+}
+
 void ABoss_Golem::SndGimicJumpToCenter_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Snd_Jump to Center has Called"));

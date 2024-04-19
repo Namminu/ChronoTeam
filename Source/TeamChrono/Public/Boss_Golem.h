@@ -35,6 +35,8 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 
+	void DamageFlash_Implementation() override;
+
 // Golem Functions
 
 	/// <summary>

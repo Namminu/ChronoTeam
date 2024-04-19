@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Base_BossWeapon.h"
 
 // Sets default values
 ABase_Boss::ABase_Boss()
@@ -34,9 +35,6 @@ void ABase_Boss::BeginPlay()
 	//Cast to Player
 	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!player) UE_LOG(LogTemp, Error, TEXT("Cast Failed to Player in Base_Boss"));
-
-	//Focus to Player Func
-	//SetFocusToPlayer();
 
 	//Initialize Currnet Boss Hp to Max Hp
 	f_bossCurrentHp = f_bossMaxHp;
@@ -86,6 +84,17 @@ void ABase_Boss::ClearFocusToPlayer()
 	}
 }
 
+void ABase_Boss::AttachWeapon(TSubclassOf<ABase_BossWeapon> Weapon, FName WeaponSocket)
+{
+	weaponInstance = GetWorld()->SpawnActor<ABase_BossWeapon>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+	weaponInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+}
+
+void ABase_Boss::DetachWeapon()
+{
+	weaponInstance->Destroy();
+}
+
 void ABase_Boss::PlayMontage(UAnimMontage* Montage)
 {
 	GetMesh()->GetAnimInstance()->Montage_Play(Montage);
@@ -126,6 +135,10 @@ float ABase_Boss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	UpdateHpPercent();
 	if (GetBossCurrentHp() <= 0) Boss_Death_Implementation();
 	return 0.0f;
+}
+
+void ABase_Boss::DamageFlash_Implementation()
+{
 }
 
 void ABase_Boss::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,

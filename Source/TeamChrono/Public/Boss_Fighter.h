@@ -9,6 +9,7 @@
 /**
  * 
  */
+
 UCLASS()
 class TEAMCHRONO_API ABoss_Fighter : public ABase_Boss
 {
@@ -26,9 +27,12 @@ protected:
 
 
 public:
-// 
+// Fighter Local Funcs
+	void SetupFMTI(class USkeletalMeshComponent* skeleton, int index);
 
-// Override Functions
+	void SetFullFMTI();
+
+// Override Funcs
 	int MeleeAttack_Implementation() override;
 
 	void Boss_Death_Implementation() override;
@@ -38,6 +42,33 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 
+	void DamageFlash_Implementation() override;
+
+// Overlap Events
+	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult) override;
+
+	void OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex) override;
+
+// Gimic Funcs
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FstGimic();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SndGimic();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void TrdGimic();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FothGimic();
 
 private:
 /// Skeletal Mesh
@@ -60,6 +91,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* sk_Boots;
 
+/// Flash MTI Init Array
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
+	TArray<FLinearColor> InitColors;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
+	float InitMutiplier;
+
+/// Gimic Properties
 
 
 
