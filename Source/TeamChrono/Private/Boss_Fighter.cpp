@@ -71,15 +71,22 @@ void ABoss_Fighter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	////Player is So Far From Boss So Jump Attack To player
-	//if (GetDistanceTo(GetPlayerProperty()) >= JumpDistance)
-	//{
-	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
-	//}
-	//else
-	//{
-	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
-	//}
+	//Player is So Far From Boss So Jump Attack To player
+	if (GetIsCanFight())
+	{
+		if (!isJump)
+		{
+			if (GetDistanceTo(GetPlayerProperty()) >= JumpDistance)
+			{
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
+			}
+			else
+			{
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
+			}
+		}
+	}
+
 }
 
 void ABoss_Fighter::DamageFlash_Implementation()
@@ -111,7 +118,7 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 	//2번째 공격 아니고 3번째 공격일 때
 	else if (Current_SndCount < Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
 	{
-		AttackFunc(2);
+		AttackFunc(3);
 		Current_TrdCount = 0;
 	}
 	//2번째 공격이고 3번째 공격일 때 (두 개가 겹칠 때)

@@ -46,6 +46,12 @@ public:
 	/// <param name="caseNum"></param>
 	void AttackFunc_Implementation(int caseNum) override;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetJumpAttackLocation();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BeforeJumpRotate();
+
 	float TakeDamage(float DamageAmount,
 		struct FDamageEvent const& DamageEvent,
 		AController* EventInstigator,
@@ -65,6 +71,19 @@ public:
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex) override;
+
+// Calculate Attack Range Func
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_DefaultAttack();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_SndAttack();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_TrdAttack();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_JumpAttack();
 
 // Gimic Funcs
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
