@@ -124,12 +124,19 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JUMP ATTACK", meta = (AllowPrivateAccess = "true"))
 	bool isJump;
 
+	//콤보 공격인지 체크
 	bool isComboNow;
+	//몇번째 공격중인지 체크
+	bool isSndComboNow;
+
 
 public:
 ///Getter
 	bool GetComboCheck() const { return isComboNow; }
+	bool GetComboNumCheck() const { return isSndComboNow; }
 
 ///Setter
+	void SetComboCheck(const bool newBool) { isComboNow = newBool; }
+	void SetComboNum(const bool newBool) { isSndComboNow = newBool; }
 
 };

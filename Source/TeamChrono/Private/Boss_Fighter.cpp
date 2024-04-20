@@ -64,6 +64,7 @@ void ABoss_Fighter::BeginPlay()
 	Current_TrdCount = 0;
 
 	isComboNow = false;
+	isSndComboNow = false;
 }
 
 void ABoss_Fighter::Tick(float DeltaTime)

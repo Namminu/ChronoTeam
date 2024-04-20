@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "MyAnimNotify.generated.h"
+#include "Notify_Fighter_CheckCombo.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TEAMCHRONO_API UMyAnimNotify : public UAnimNotify
+class TEAMCHRONO_API UNotify_Fighter_CheckCombo : public UAnimNotify
 {
 	GENERATED_BODY()
 public:
-
+	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
 };
