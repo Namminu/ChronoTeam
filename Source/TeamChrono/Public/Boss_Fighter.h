@@ -42,7 +42,6 @@ public:
 	/// 0 : Default Normal Attack
 	/// 1 : Snd Normal Attack - every Twice
 	/// 2 : Trd Normal Attack - every Triple
-	/// 3 : Foth Jump Attack - when distance so far
 	/// </summary>
 	/// <param name="caseNum"></param>
 	void AttackFunc_Implementation(int caseNum) override;
@@ -129,7 +128,7 @@ private:
 
 public:
 ///Getter
-
+	bool GetComboCheck() const { return isComboNow; }
 
 ///Setter
 

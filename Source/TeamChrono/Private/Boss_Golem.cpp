@@ -92,7 +92,7 @@ int ABoss_Golem::MeleeAttack_Implementation()
 	//Call Normal Attack Func
 	if (CurrentAtkCount < MaxAtkCount)
 	{
-		AttackFunc_Implementation(0);
+		AttackFunc(0);
 		CurrentAtkCount++;
 	}
 	else
