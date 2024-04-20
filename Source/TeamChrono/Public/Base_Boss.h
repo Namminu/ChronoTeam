@@ -34,11 +34,24 @@ public:
 	/// </summary>
 	int MeleeAttack_Implementation() override;
 
+	// Normal Attack Func
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void AttackFunc(int caseNum);
+
 	void SetFocusToPlayer();
 	void ClearFocusToPlayer();
 
+	UFUNCTION(BlueprintCallable)
+	void AttachWeapon(TSubclassOf<ABase_BossWeapon> Weapon, FName WeaponSocket);
+
+	UFUNCTION(BlueprintCallable)
+	void DetachWeapon();
+
 	UFUNCTION()
 	void PlayMontage(UAnimMontage* Montage);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetOffWZ();
 
 	/// <summary>
 	/// Rotate to Player Func When Befor Combo Attack
@@ -78,7 +91,7 @@ public:
 	/// <summary>
 	/// Damage Flash When Monster Hitted
 	/// </summary>
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void DamageFlash();
 
 	/// <summary>
@@ -152,7 +165,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
 	bool bCanFightNow;
 
-///DamageTypes
+/// Weapon
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
+	class ABase_BossWeapon* weaponInstance;
+
+/// DamageTypes
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
 
@@ -189,8 +206,10 @@ public:
 	class USphereComponent* GetAttackRangeColl() const { return AttackRange; }
 
 	FName GetBossName() const { return n_BossName; }
-///
 
+	class ABase_BossWeapon* GetBossWeapon() const { return weaponInstance; }
+
+///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
 	void SetInvincible(const bool newBool) { bisInvincible = newBool; }

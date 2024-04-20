@@ -35,6 +35,8 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 
+	void DamageFlash_Implementation() override;
+
 // Golem Functions
 
 	/// <summary>
@@ -44,8 +46,7 @@ public:
 	/// 2 : Second Big Combo Attack
 	/// 3 : Third Gimic Attack
 	/// </summary>
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void AttackFunc(int caseNum);
+	void AttackFunc_Implementation(int caseNum) override;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetJumpAttackLocation();
