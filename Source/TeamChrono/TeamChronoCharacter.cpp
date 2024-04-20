@@ -16,6 +16,8 @@
 #include "ABAnimInstance.h"
 #include "ASword.h"
 #include "PlayerArrow.h"
+#include <Kismet/GameplayStatics.h>
+
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -264,19 +266,31 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+
+
+		FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		
 		
 		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		//GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("RightDirection.Rotation = %f"), RightDirection.Rotation().Yaw));
 		
-
+		
 
 		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+		if (IsClimbing)
+		{
+			ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
+			AddMovementInput(ForwardDirection, MovementVector.Y);
+		}
+		else
+		{
+			AddMovementInput(ForwardDirection, MovementVector.Y);
+			AddMovementInput(RightDirection, MovementVector.X);
+		}
+		
 		
 
 		//GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("MovementVector.X = %f,  MovementVector.Y = %f"), MovementVector.X, MovementVector.Y));
