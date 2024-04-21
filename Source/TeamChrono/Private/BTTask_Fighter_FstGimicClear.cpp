@@ -18,7 +18,6 @@ EBTNodeResult::Type UBTTask_Fighter_FstGimicClear::ExecuteTask(UBehaviorTreeComp
 	auto* const Fighter = Cast<ABoss_Fighter>(cont->GetPawn());
 
 	Fighter->ClearMarbleArray();
-	UE_LOG(LogTemp, Error, TEXT("%d"), Fighter->GetMarbleArray().Num());
 	Fighter->SetMontageEnd(false);
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsFstGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);

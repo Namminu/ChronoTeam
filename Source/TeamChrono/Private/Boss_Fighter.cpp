@@ -250,4 +250,13 @@ void ABoss_Fighter::Fst_MarbleChange()
 			Marble->SetEffectToBarrier();
 		}
 	}
+
+	FTimerHandle TimerHandle;
+	float delay = 1.3f;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Fighter::Fst_SpawnArrow, delay, false);
+}
+
+void ABoss_Fighter::Fst_SpawnArrow_Implementation()
+{
+	UE_LOG(LogTemp, Error, TEXT("Spawn Arrow Func Called"));
 }

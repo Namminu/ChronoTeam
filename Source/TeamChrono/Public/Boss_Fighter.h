@@ -94,6 +94,9 @@ public:
 	void Fst_SpawnEffect();
 	UFUNCTION(BlueprintCallable)
 	void Fst_MarbleChange();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Fst_SpawnArrow();
+
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SndGimic();
