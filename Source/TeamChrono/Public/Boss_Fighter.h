@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Base_Boss.h"
+#include <Fighter_Fst_Marble.h>
 #include "Boss_Fighter.generated.h"
 
 /**
@@ -86,8 +87,13 @@ public:
 	void Calculate_JumpAttack();
 
 // Gimic Funcs
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void FstGimic();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Fst_SpawnEffect();
+	UFUNCTION(BlueprintCallable)
+	void Fst_MarbleChange();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SndGimic();
@@ -148,14 +154,30 @@ private:
 	//몇번째 공격중인지 체크
 	bool isSndComboNow;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FST GIMIC", meta = (AllowPrivateAccess = "true"))
+	int Fst_CurrentAttackCount;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FST GIMIC", meta = (AllowPrivateAccess = "true"))
+	int Fst_MaxAttackCount;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FST GIMIC", meta = (AllowPrivateAccess = "true"))
+	TArray<AFighter_Fst_Marble*> Fst_MarbleArray;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FST GIMIC", meta = (AllowPrivateAccess = "true"))
+	int Fst_MaxMarbleCount;
 
 public:
 ///Getter
 	bool GetComboCheck() const { return isComboNow; }
 	bool GetComboNumCheck() const { return isSndComboNow; }
+	UFUNCTION(BlueprintCallable)
+	TArray<AFighter_Fst_Marble*> GetMarbleArray() const { return Fst_MarbleArray; }
+	int GetFstAttackCount() const { return Fst_CurrentAttackCount; }
+	int GetFstMaxCount() const { return Fst_MaxAttackCount; }
+	int GetFstMaxMarbleCount() const { return Fst_MaxMarbleCount; }
 
 ///Setter
 	void SetComboCheck(const bool newBool) { isComboNow = newBool; }
 	void SetComboNum(const bool newBool) { isSndComboNow = newBool; }
 
+	void SetFstAttackCount(const int newCount) { Fst_CurrentAttackCount = newCount; }
+	UFUNCTION(BlueprintImplementableEvent)
+	void ClearMarbleArray();
 };

@@ -65,6 +65,9 @@ void ABoss_Fighter::BeginPlay()
 
 	isComboNow = false;
 	isSndComboNow = false;
+
+	//Reset Fst Gimic Properties
+	Fst_CurrentAttackCount = 0;
 }
 
 void ABoss_Fighter::Tick(float DeltaTime)
@@ -108,18 +111,24 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		AttackFunc(0);
 		Current_SndCount++;
 		Current_TrdCount++;
+		//For Fst Gimic Attack
+		Fst_CurrentAttackCount++;
 	}
 	//2번째 공격이고 3번째 공격 아닐 때
 	else if (Current_SndCount >= Snd_AttackCount && Current_TrdCount < Trd_AttackCount)
 	{
 		AttackFunc(1);
 		Current_SndCount = 0;
+		//For Fst Gimic Attack
+		Fst_CurrentAttackCount++;
 	}
 	//2번째 공격 아니고 3번째 공격일 때
 	else if (Current_SndCount < Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
 	{
 		AttackFunc(3);
 		Current_TrdCount = 0;
+		//For Fst Gimic Attack
+		Fst_CurrentAttackCount++;
 	}
 	//2번째 공격이고 3번째 공격일 때 (두 개가 겹칠 때)
 	else if(Current_SndCount >= Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
@@ -128,6 +137,8 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		AttackFunc(0);
 		Current_SndCount = 0;
 		Current_TrdCount = 0;
+		//For Fst Gimic Attack
+		Fst_CurrentAttackCount++;
 	}
 
 
@@ -221,4 +232,22 @@ void ABoss_Fighter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
+}
+
+void ABoss_Fighter::FstGimic_Implementation()
+{
+	//Set Gimic On
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsFstGimic", true);
+}
+
+void ABoss_Fighter::Fst_MarbleChange()
+{
+	for (AFighter_Fst_Marble* Marble : Fst_MarbleArray)
+	{
+		if (Marble)
+		{
+			Marble->SetEffectToBarrier();
+		}
+	}
 }
