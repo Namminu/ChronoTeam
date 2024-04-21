@@ -16,7 +16,6 @@
 #include "ABAnimInstance.h"
 #include "ASword.h"
 #include "PlayerArrow.h"
-#include <Kismet/GameplayStatics.h>
 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
