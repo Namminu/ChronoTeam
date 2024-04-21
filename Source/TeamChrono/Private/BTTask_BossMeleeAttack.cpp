@@ -44,8 +44,6 @@ EBTNodeResult::Type UBTTask_BossMeleeAttack::ExecuteTask(UBehaviorTreeComponent&
 	//finish the task
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Type();
-
-	return EBTNodeResult::Type();
 }
 
 bool UBTTask_BossMeleeAttack::MontageHasFinished(ABase_Boss* const Monster)

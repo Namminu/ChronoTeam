@@ -34,6 +34,31 @@ public:
 	/// </summary>
 	int MeleeAttack_Implementation() override;
 
+	// Normal Attack Func
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void AttackFunc(int caseNum);
+
+	void SetFocusToPlayer();
+	void ClearFocusToPlayer();
+
+	UFUNCTION(BlueprintCallable)
+	void AttachWeapon(TSubclassOf<ABase_BossWeapon> Weapon, FName WeaponSocket);
+
+	UFUNCTION(BlueprintCallable)
+	void DetachWeapon();
+
+	UFUNCTION()
+	void PlayMontage(UAnimMontage* Montage);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetOffWZ();
+
+	/// <summary>
+	/// Rotate to Player Func When Befor Combo Attack
+	/// </summary>
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void RotateToPlayer();
+
 	/// <summary>
 	/// Check Boss to Can do Combo Attack
 	/// </summary>
@@ -60,10 +85,13 @@ public:
 		AController* EventInstigator,
 		AActor* DamageCauser) override;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void UpdateHpPercent();
+
 	/// <summary>
 	/// Damage Flash When Monster Hitted
 	/// </summary>
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void DamageFlash();
 
 	/// <summary>
@@ -89,6 +117,10 @@ public:
 		int const OtherBodyIndex);
 
 private:
+///Boss Name
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BOSS", meta = (AllowPrivateAccess = "true"))
+	FName n_BossName;
+
 ///Behavior Tree
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* BTree;
@@ -110,6 +142,9 @@ private:
 
 ///Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	bool bisInvincible;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	float f_bossMaxHp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
@@ -121,7 +156,20 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	float f_bossInitSpeed;
 
-///DamageTypes
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
+	FVector playerLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
+	bool bIsMontageEnd;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
+	bool bCanFightNow;
+
+/// Weapon
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
+	class ABase_BossWeapon* weaponInstance;
+
+/// DamageTypes
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
 
@@ -139,6 +187,12 @@ public:
 	float GetBossCurrentHp() const { return f_bossCurrentHp; }
 	float GetBossAtkMount() const { return f_bossAtk; }
 	float GetBossInitSpeed() const { return f_bossInitSpeed; }
+	bool GetInvincible() const { return bisInvincible; }
+	bool GetMontageEnd() const { return bIsMontageEnd; }
+	bool GetIsCanFight() const { return bCanFightNow; }
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetPlayerTargetLocation() const { return playerLocation; }
 
 	TArray<UMaterialInstanceDynamic*> GetMTIArray() const { return MTIArray; }
 	UMaterialInstanceDynamic* GetFstMTI() const { return Fst_FlashMT; }
@@ -151,9 +205,21 @@ public:
 
 	class USphereComponent* GetAttackRangeColl() const { return AttackRange; }
 
+	FName GetBossName() const { return n_BossName; }
+
+	class ABase_BossWeapon* GetBossWeapon() const { return weaponInstance; }
+
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
+	void SetInvincible(const bool newBool) { bisInvincible = newBool; }
+	void SetMontageEnd(const bool newBool) { bIsMontageEnd = newBool; }
+	void SetIsCanFight(const bool newBool) { bCanFightNow = newBool; }
 
 	void SetFstMTI(UMaterialInstanceDynamic* MTI) { Fst_FlashMT = MTI; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerTargetLocation(const FVector newLocation) { playerLocation = newLocation; }
+
+	void SetBossName(const FName newName) { n_BossName = newName; }
 };

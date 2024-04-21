@@ -17,6 +17,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 #include "Monster_Weapon.h"
+#include <Kismet/KismetMathLibrary.h>
 
 // Sets default values
 ABaseMonster::ABaseMonster()
@@ -47,6 +48,20 @@ ABaseMonster::ABaseMonster()
 	NiagaraAttackEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Attack Effect"));
 	NiagaraAttackEffect->SetupAttachment(GetCapsuleComponent());
 }
+//
+//void ABaseMonster::FocusToPlayer()
+//{
+//	//FVector newTargetLocation = FVector(UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation().X, 
+//	//	UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation().Y, 0.f);
+//
+//	//SetActorRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Roll, 
+//	//	UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), newTargetLocation).Yaw));
+//
+	//FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(),
+	//	UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation());
+
+	//SetActorRotation(FRotator(GetActorRotation().Roll, GetActorRotation().Pitch, newRotation.Yaw));
+//}
 
 // Called when the game starts or when spawned  
 void ABaseMonster::BeginPlay()
@@ -72,6 +87,8 @@ void ABaseMonster::BeginPlay()
 	monAtk = 1;
 	isMonsterBorn = false; 
 	isMonsterLive = true;
+
+	isUnDamaged = true;
 
 	//if (WeaponCollisionBox != nullptr)
 	//{
@@ -192,6 +209,12 @@ float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 {
 	if (GetIsBorn())
 	{
+		if (isUnDamaged)
+		{
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsFirstDamaged", true);
+			isUnDamaged = false;
+		}
+
 		monNowHp -= DamageAmount;	//피해 입은 만큼 체력 감소
 		if (monNowHp <= 0)	//몬스터 체력이 0 미만일 경우 사망 함수 호출
 		{
