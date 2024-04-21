@@ -16,6 +16,8 @@
 #include "ABAnimInstance.h"
 #include "ASword.h"
 #include "PlayerArrow.h"
+#include <Kismet/GameplayStatics.h>
+
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -162,7 +164,7 @@ void ATeamChronoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATeamChronoCharacter::Attack()
 {
-	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving && P_CurrentHP > 0)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving && P_CurrentHP > 0 && !IsClimbing)
 	{
 		if (IsAttacking)
 		{
@@ -197,7 +199,7 @@ void ATeamChronoCharacter::Attack()
 
 void ATeamChronoCharacter::AttackClickStart()
 {
-	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving && P_CurrentHP > 0)
+	if (!m_bIsDodgingEnd && !IsQSkillBuilding && !IsTabSkillMoving && P_CurrentHP > 0 && !IsClimbing)
 	{
 		IsComboPushOn = true;
 		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("AttackClickStart")));
@@ -264,19 +266,32 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+
+
+		FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		
 		
 		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		//GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("RightDirection.Rotation = %f"), RightDirection.Rotation().Yaw));
 		
-
+		
 
 		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+		if (IsClimbing)
+		{
+			ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
+			AddMovementInput(ForwardDirection, MovementVector.Y);
+			AxisX = MovementVector.Y;
+		}
+		else
+		{
+			AddMovementInput(ForwardDirection, MovementVector.Y);
+			AddMovementInput(RightDirection, MovementVector.X);
+		}
+		
 		
 
 		//GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("MovementVector.X = %f,  MovementVector.Y = %f"), MovementVector.X, MovementVector.Y));
@@ -289,7 +304,7 @@ void ATeamChronoCharacter::Move(const FInputActionValue& Value)
 void ATeamChronoCharacter::Dodge()
 {
 	//GEngine->AddOnScreenDebugMessage(-0, 2.0f, FColor::Red, FString::Printf(TEXT("%f"), pcMoveStamina));
-	if (!m_bIsDodging && !IsQSkillBuilding)
+	if (!m_bIsDodging && !IsQSkillBuilding && !IsClimbing)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("123"));
 		// 현재 스테미너가 구르기 스테미너보다 있으면

@@ -179,6 +179,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ESkill", Meta = (AllowPrivateAccess = true))
 	bool IsESkillDoing;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Climbing", Meta = (AllowPrivateAccess = true))
+	bool IsClimbing = false;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Climbing", Meta = (AllowPrivateAccess = true))
+	float AxisX = 0;
+
 	// 우클릭 원거리 공격중 확인
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "LongAttack", Meta = (AllowPrivateAccess = true))
 	bool LongAttacking = false;
