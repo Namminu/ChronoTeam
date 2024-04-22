@@ -48,7 +48,6 @@ ABoss_Fighter::ABoss_Fighter()
 	sk_Boots = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Boots Mesh"));
 	sk_Boots->SetupAttachment(GetMesh());
 	sk_Boots->SetLeaderPoseComponent(GetMesh());
-
 	
 }
 
@@ -71,6 +70,9 @@ void ABoss_Fighter::BeginPlay()
 
 	//Reset Snd GImic Properties
 	isJumpMontageING = false;
+
+	//Reset Trd GImic Properties
+	TrdGimicCurrentCount = 0;
 }
 
 void ABoss_Fighter::Tick(float DeltaTime)
@@ -116,6 +118,8 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		Current_TrdCount++;
 		//For Fst Gimic Attack
 		Fst_CurrentAttackCount++;
+		//For Trd Gimic Attack
+		CheckTrdAttackCount();
 	}
 	//2번째 공격이고 3번째 공격 아닐 때
 	else if (Current_SndCount >= Snd_AttackCount && Current_TrdCount < Trd_AttackCount)
@@ -124,6 +128,8 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		Current_SndCount = 0;
 		//For Fst Gimic Attack
 		Fst_CurrentAttackCount++;
+		//For Trd Gimic Attack
+		CheckTrdAttackCount();
 	}
 	//2번째 공격 아니고 3번째 공격일 때
 	else if (Current_SndCount < Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
@@ -132,6 +138,8 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		Current_TrdCount = 0;
 		//For Fst Gimic Attack
 		Fst_CurrentAttackCount++;
+		//For Trd Gimic Attack
+		CheckTrdAttackCount();
 	}
 	//2번째 공격이고 3번째 공격일 때 (두 개가 겹칠 때)
 	else if(Current_SndCount >= Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
@@ -142,8 +150,9 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		Current_TrdCount = 0;
 		//For Fst Gimic Attack
 		Fst_CurrentAttackCount++;
+		//For Trd Gimic Attack
+		CheckTrdAttackCount();
 	}
-
 
 	return 0;
 }
@@ -293,4 +302,20 @@ void ABoss_Fighter::SetResumeSndTimer()
 void ABoss_Fighter::SetClearSndTimer()
 {
 	GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Fighter::CheckTrdAttackCount()
+{
+	TrdGimicCurrentCount++;
+	if (TrdGimicCurrentCount >= TrdGimicAttackMaxCount)
+	{
+		TrdGimic_Implementation();
+		TrdGimicCurrentCount = 0;
+	}
+}
+
+void ABoss_Fighter::TrdGimic_Implementation()
+{
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTrdGimic", true);
 }

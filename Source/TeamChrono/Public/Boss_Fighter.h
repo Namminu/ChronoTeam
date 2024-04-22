@@ -116,8 +116,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SndGimicJumpAttack();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	//TrdGimic Funcs
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void TrdGimic();
+	void CheckTrdAttackCount();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void TrdGimicCallElectric();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void FothGimic();
@@ -192,6 +196,12 @@ private:
 	int Snd_AuraCount;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SND GIMIC", meta = (AllowPrivateAccess = "true"))
 	bool isJumpMontageING;
+
+	// Trd Gimic Properties
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "TRD GIMIC", meta = (AllowPrivateAccess = "true"))
+	int TrdGimicAttackMaxCount;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "TRD GIMIC", meta = (AllowPrivateAccess = "true"))
+	int TrdGimicCurrentCount;
 
 public:
 ///Getter
