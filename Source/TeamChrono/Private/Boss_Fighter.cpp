@@ -68,6 +68,9 @@ void ABoss_Fighter::BeginPlay()
 
 	//Reset Fst Gimic Properties
 	Fst_CurrentAttackCount = 0;
+
+	//Reset Snd GImic Properties
+	isJumpMontageING = false;
 }
 
 void ABoss_Fighter::Tick(float DeltaTime)
@@ -239,6 +242,8 @@ void ABoss_Fighter::FstGimic_Implementation()
 	//Set Gimic On
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsFstGimic", true);
+	// Pause Snd Gimic Timer
+	SetPauseSndTimer();
 }
 
 void ABoss_Fighter::Fst_MarbleChange()
@@ -256,7 +261,36 @@ void ABoss_Fighter::Fst_MarbleChange()
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Fighter::Fst_SpawnArrow, delay, false);
 }
 
+void ABoss_Fighter::SndGimic_Implementation()
+{
+	//Set Snd Gimic On
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsSndGimic", true);
+	// Set Off Gimic Timer
+	SetClearSndTimer();
+}
+
+void ABoss_Fighter::SetSndGimicTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Fighter::SndGimic_Implementation, Snd_GimicDelay, true);
+}
+
 void ABoss_Fighter::Fst_SpawnArrow_Implementation()
 {
 	UE_LOG(LogTemp, Error, TEXT("Spawn Arrow Func Called"));
+}
+
+void ABoss_Fighter::SetPauseSndTimer()
+{
+	GetWorld()->GetTimerManager().PauseTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Fighter::SetResumeSndTimer()
+{
+	GetWorld()->GetTimerManager().UnPauseTimer(SndGimicTimerHandle);
+}
+
+void ABoss_Fighter::SetClearSndTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Base_Boss.h"
 #include <Fighter_Fst_Marble.h>
+#include <Fighter_Tornado.h>
 #include "Boss_Fighter.generated.h"
 
 /**
@@ -86,10 +87,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Calculate_JumpAttack();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_SndGimicJumpAttack();
+
 // Gimic Funcs
+	// Fst Gimic
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void FstGimic();
-
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Fst_SpawnEffect();
 	UFUNCTION(BlueprintCallable)
@@ -97,9 +101,20 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Fst_SpawnArrow();
 
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	// Snd Gimic
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void SndGimic();
+	UFUNCTION(BlueprintCallable)
+	void SetSndGimicTimer();
+	//Snd Gimic Timer Funcs
+	void SetPauseSndTimer();
+	void SetResumeSndTimer();
+	UFUNCTION(BlueprintCallable)
+	void SetClearSndTimer();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SpawnAura();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SndGimicJumpAttack();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void TrdGimic();
@@ -157,6 +172,7 @@ private:
 	//몇번째 공격중인지 체크
 	bool isSndComboNow;
 
+	// Fst Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FST GIMIC", meta = (AllowPrivateAccess = "true"))
 	int Fst_CurrentAttackCount;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FST GIMIC", meta = (AllowPrivateAccess = "true"))
@@ -166,21 +182,41 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FST GIMIC", meta = (AllowPrivateAccess = "true"))
 	int Fst_MaxMarbleCount;
 
+	// Snd Gimic Properties
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SND GIMIC", meta = (AllowPrivateAccess = "true"))
+	int Snd_GimicDelay;
+	FTimerHandle SndGimicTimerHandle;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SND GIMIC", meta = (AllowPrivateAccess = "true"))
+	TArray<AFighter_Tornado*> Snd_TornadoArray;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SND GIMIC", meta = (AllowPrivateAccess = "true"))
+	int Snd_AuraCount;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SND GIMIC", meta = (AllowPrivateAccess = "true"))
+	bool isJumpMontageING;
+
 public:
 ///Getter
+	// Normal
 	bool GetComboCheck() const { return isComboNow; }
 	bool GetComboNumCheck() const { return isSndComboNow; }
+	// Fst Gimic
 	UFUNCTION(BlueprintCallable)
 	TArray<AFighter_Fst_Marble*> GetMarbleArray() const { return Fst_MarbleArray; }
 	int GetFstAttackCount() const { return Fst_CurrentAttackCount; }
 	int GetFstMaxCount() const { return Fst_MaxAttackCount; }
 	int GetFstMaxMarbleCount() const { return Fst_MaxMarbleCount; }
+	// Snd Gimic
+	bool GetSndJumpMonING() const { return isJumpMontageING; }
+	TArray<AFighter_Tornado*> GetTornadoArray() const { return Snd_TornadoArray; }
+	int GetAuraMaxCount() const { return Snd_AuraCount; }
 
 ///Setter
+	// Normal
 	void SetComboCheck(const bool newBool) { isComboNow = newBool; }
 	void SetComboNum(const bool newBool) { isSndComboNow = newBool; }
-
+	// Fst
 	void SetFstAttackCount(const int newCount) { Fst_CurrentAttackCount = newCount; }
 	UFUNCTION(BlueprintImplementableEvent)
 	void ClearMarbleArray();
+	UFUNCTION(BlueprintImplementableEvent)
+	void ClearTornadoArray();
 };

@@ -23,5 +23,8 @@ EBTNodeResult::Type UBTTask_Fighter_FstGimicClear::ExecuteTask(UBehaviorTreeComp
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 
+	// Resume Snd Gimic Timer
+	Fighter->SetResumeSndTimer();
+
 	return EBTNodeResult::Succeeded;
 }
