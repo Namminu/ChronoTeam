@@ -90,6 +90,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Calculate_SndGimicJumpAttack();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Calculate_FothGimicAttack();
+
 // Gimic Funcs
 	// Fst Gimic
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
@@ -123,8 +126,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void TrdGimicCallElectric();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	//Foth Gimic Funcs
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void FothGimic();
+	void CheckHpPercent();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FothGimicSpawnAuraAttack();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void FothGimicMontage();
 
 private:
 /// Skeletal Mesh
@@ -202,6 +211,21 @@ private:
 	int TrdGimicAttackMaxCount;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "TRD GIMIC", meta = (AllowPrivateAccess = "true"))
 	int TrdGimicCurrentCount;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "TRD GIMIC", meta = (AllowPrivateAccess = "true"))
+	int TrdGimicMaxLightning;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "TRD GIMIC", meta = (AllowPrivateAccess = "true"))
+	int TrdGimicCurrentLightning;
+
+	// Foth Gimic Properties
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FOTH GIMIC", meta = (AllowPrivateAccess = "true"))
+	int FothGimicHpPercent;
+	bool FothGimic_1stStarted;
+	bool FothGimic_2ndStarted;
+	bool FothGimic_3rdStarted;
+	bool FothGimic_4thStarted;
+	bool FotheGimic_MontageING;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "FOTH GIMIC", meta = (AllowPrivateAccess = "true"))
+	bool FothGimic_MontageEnd;
 
 public:
 ///Getter
@@ -218,15 +242,28 @@ public:
 	bool GetSndJumpMonING() const { return isJumpMontageING; }
 	TArray<AFighter_Tornado*> GetTornadoArray() const { return Snd_TornadoArray; }
 	int GetAuraMaxCount() const { return Snd_AuraCount; }
+	// Trd Gimic
+	int GetMaxLightCount() const { return TrdGimicMaxLightning; }
+	int GetCurrentLightCount() const { return TrdGimicCurrentLightning; }
+	// Foth Gimic
+	bool GetFothMontageING() const { return FotheGimic_MontageING; }
+	bool GetFothMontageEnd() const { return FothGimic_MontageEnd; }
 
 ///Setter
 	// Normal
 	void SetComboCheck(const bool newBool) { isComboNow = newBool; }
 	void SetComboNum(const bool newBool) { isSndComboNow = newBool; }
-	// Fst
+	// Fst Gimic
 	void SetFstAttackCount(const int newCount) { Fst_CurrentAttackCount = newCount; }
 	UFUNCTION(BlueprintImplementableEvent)
 	void ClearMarbleArray();
 	UFUNCTION(BlueprintImplementableEvent)
 	void ClearTornadoArray();
+	// Trd Gimic
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentLightCount(const int newInt) { TrdGimicCurrentLightning = newInt; }
+	// Foth Gimic
+	UFUNCTION(BlueprintCallable)
+	void SetFothMontageING(const bool newBool) { FotheGimic_MontageING = newBool; }
+	void SetFothMontageEnd(const bool newBool) { FothGimic_MontageEnd = newBool; }
 };

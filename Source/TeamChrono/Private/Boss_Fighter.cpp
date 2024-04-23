@@ -73,6 +73,15 @@ void ABoss_Fighter::BeginPlay()
 
 	//Reset Trd GImic Properties
 	TrdGimicCurrentCount = 0;
+	TrdGimicCurrentLightning = 0;
+
+	//Reset Foth Gimic Properties
+	FothGimic_1stStarted = false;
+	FothGimic_2ndStarted = false;
+	FothGimic_3rdStarted = false;
+	FothGimic_4thStarted = false;
+	FotheGimic_MontageING = false;
+	FothGimic_MontageEnd = false;
 }
 
 void ABoss_Fighter::Tick(float DeltaTime)
@@ -171,8 +180,10 @@ void ABoss_Fighter::AttackFunc_Implementation(int caseNum)
 float ABoss_Fighter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 	DamageFlash();
+
+	// Check Hp for Foth Gimic Start
+	CheckHpPercent();
 
 	return 0.0f;
 }
@@ -311,6 +322,42 @@ void ABoss_Fighter::CheckTrdAttackCount()
 	{
 		TrdGimic_Implementation();
 		TrdGimicCurrentCount = 0;
+	}
+}
+
+void ABoss_Fighter::FothGimic_Implementation()
+{
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsFothGimic", true);
+}
+
+void ABoss_Fighter::CheckHpPercent()
+{
+	float CurrentPercent = (GetBossCurrentHp() / GetBossMaxHp() * 100.f);
+
+	if (CurrentPercent <= 80.f && CurrentPercent > 60.f && !FothGimic_1stStarted)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Foth Gimic 1 Start"));
+		FothGimic_1stStarted = true;
+		FothGimic_Implementation();
+	}
+	else if (CurrentPercent <= 60.f && CurrentPercent > 40.f && !FothGimic_2ndStarted)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Foth Gimic 2 Start"));
+		FothGimic_2ndStarted = true;
+		FothGimic_Implementation();
+	}
+	else if (CurrentPercent <= 40.f && CurrentPercent > 20.f && !FothGimic_3rdStarted)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Foth Gimic 3 Start"));
+		FothGimic_3rdStarted = true;
+		FothGimic_Implementation();
+	}
+	else if (CurrentPercent <= 20.f && CurrentPercent > 0.f && !FothGimic_4thStarted)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Foth Gimic 4 Start"));
+		FothGimic_4thStarted = true;
+		FothGimic_Implementation();
 	}
 }
 
