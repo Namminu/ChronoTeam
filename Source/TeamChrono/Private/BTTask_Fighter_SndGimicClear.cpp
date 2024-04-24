@@ -28,5 +28,11 @@ EBTNodeResult::Type UBTTask_Fighter_SndGimicClear::ExecuteTask(UBehaviorTreeComp
 	Fighter->SetIsSndGimicING(false);
 	Fighter->ClearTornadoArray();
 
+	// Check Once More if Fst Gimic has to Start
+	if (Fighter->GetMarbleArray().Num() >= Fighter->GetFstMaxMarbleCount())
+	{
+		Fighter->FstGimic();
+	}
+
 	return EBTNodeResult::Succeeded;
 }
