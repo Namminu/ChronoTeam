@@ -23,13 +23,39 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void OnBoxOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult);
+
+	UFUNCTION()
+	void OnBoxOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex);
+
+	void SetDamageTimer();
+	UFUNCTION(BlueprintCallable)
+	void SetClearTimer();
+
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void Calculate_SwordAuraAttack();
+	void ApplyDamageToPlayer();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* RootScene;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* BoxColl;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* SwordAuraEffect;
+
+	FTimerHandle DamageTimer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
+	class ATeamChronoCharacter* player;
 };
