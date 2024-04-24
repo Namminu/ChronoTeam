@@ -17,7 +17,6 @@ EBTNodeResult::Type UBTTask_Fighter_SndGimicClear::ExecuteTask(UBehaviorTreeComp
 	auto const* const cont = OwnerComp.GetAIOwner();
 	auto* const Fighter = Cast<ABoss_Fighter>(cont->GetPawn());
 
-	Fighter->ClearTornadoArray();
 	Fighter->SetMontageEnd(false);
 
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsSndGimic", false);
@@ -27,6 +26,7 @@ EBTNodeResult::Type UBTTask_Fighter_SndGimicClear::ExecuteTask(UBehaviorTreeComp
 
 	Fighter->SetSndGimicTimer();
 	Fighter->SetIsSndGimicING(false);
+	Fighter->ClearTornadoArray();
 
 	return EBTNodeResult::Succeeded;
 }
