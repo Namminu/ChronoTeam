@@ -185,6 +185,12 @@ private:
 	//몇번째 공격중인지 체크
 	bool isSndComboNow;
 
+	// Check Other Gimic ING
+	bool isFstGimic;
+	bool isSndGimic;
+	bool isTrdGimic;
+	bool isFothGimic;
+
 	// Fst Gimic Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FST GIMIC", meta = (AllowPrivateAccess = "true"))
 	int Fst_CurrentAttackCount;
@@ -217,7 +223,7 @@ private:
 	int TrdGimicCurrentLightning;
 
 	// Foth Gimic Properties
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FOTH GIMIC", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "FOTH GIMIC", meta = (AllowPrivateAccess = "true"))
 	int FothGimicHpPercent;
 	bool FothGimic_1stStarted;
 	bool FothGimic_2ndStarted;
@@ -232,6 +238,11 @@ public:
 	// Normal
 	bool GetComboCheck() const { return isComboNow; }
 	bool GetComboNumCheck() const { return isSndComboNow; }
+	// Gimic Check Properties
+	bool GetIsFstGimicING() const { return isFstGimic; }
+	bool GetIsSndGimicING() const { return isSndGimic; }
+	bool GetIsTrdGimicING() const { return isTrdGimic; }
+	bool GetIsFothGimicING() const { return isFothGimic; }
 	// Fst Gimic
 	UFUNCTION(BlueprintCallable)
 	TArray<AFighter_Fst_Marble*> GetMarbleArray() const { return Fst_MarbleArray; }
@@ -253,6 +264,11 @@ public:
 	// Normal
 	void SetComboCheck(const bool newBool) { isComboNow = newBool; }
 	void SetComboNum(const bool newBool) { isSndComboNow = newBool; }
+	// Gimic Check Properties
+	void SetIsFstGimicING(const bool newBool) { isFstGimic = newBool; }
+	void SetIsSndGimicING(const bool newBool) { isSndGimic = newBool; }
+	void SetIsTrdGimicING(const bool newBool) { isTrdGimic = newBool; }
+	void SetIsFothGimicING(const bool newBool) { isFothGimic = newBool; }
 	// Fst Gimic
 	void SetFstAttackCount(const int newCount) { Fst_CurrentAttackCount = newCount; }
 	UFUNCTION(BlueprintImplementableEvent)

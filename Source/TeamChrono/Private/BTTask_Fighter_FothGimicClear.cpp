@@ -18,11 +18,15 @@ EBTNodeResult::Type UBTTask_Fighter_FothGimicClear::ExecuteTask(UBehaviorTreeCom
 	auto* const Fighter = Cast<ABoss_Fighter>(cont->GetPawn());
 
 	Fighter->SetMontageEnd(false);
+	Fighter->SetFothMontageING(false);
 	Fighter->SetFothMontageEnd(false);
 	//Clear Properties
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsFothGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
+
+	Fighter->SetInvincible(false);
+	Fighter->SetIsFothGimicING(false);
 
 	return EBTNodeResult::Succeeded;
 }

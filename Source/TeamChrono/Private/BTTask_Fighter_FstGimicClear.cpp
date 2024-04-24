@@ -25,6 +25,7 @@ EBTNodeResult::Type UBTTask_Fighter_FstGimicClear::ExecuteTask(UBehaviorTreeComp
 
 	// Resume Snd Gimic Timer
 	Fighter->SetResumeSndTimer();
+	Fighter->SetIsFstGimicING(false);
 
 	return EBTNodeResult::Succeeded;
 }

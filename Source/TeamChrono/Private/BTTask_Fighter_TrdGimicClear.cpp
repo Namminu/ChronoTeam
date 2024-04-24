@@ -23,5 +23,7 @@ EBTNodeResult::Type UBTTask_Fighter_TrdGimicClear::ExecuteTask(UBehaviorTreeComp
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 
+	Fighter->SetIsTrdGimicING(false);
+
 	return EBTNodeResult::Succeeded;
 }
