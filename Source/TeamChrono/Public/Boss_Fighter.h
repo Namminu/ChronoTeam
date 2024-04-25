@@ -135,6 +135,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void FothGimicMontage();
 
+	//Death Funcs
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetSwordReverse();
+
 private:
 /// Skeletal Mesh
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta =(AllowPrivateAccess = "true"))

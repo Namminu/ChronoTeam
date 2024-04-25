@@ -175,6 +175,7 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 void ABoss_Fighter::Boss_Death_Implementation()
 {
 	GetBossWeapon()->Destroy();
+	AttachWeapon(GetBossWeapon()->GetClass(), "Weapon_ReverseSocket");
 
 	Super::Boss_Death_Implementation();
 }
