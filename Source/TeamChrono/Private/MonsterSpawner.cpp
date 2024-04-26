@@ -34,7 +34,10 @@ void AMonsterSpawner::Tick(float DeltaTime)
 		{
 			isMonsterDied = true;
 			RemoveMonster();
-			SpawnMonster_Implementation();
+
+			FTimerHandle TimerHandle;
+			float delay = 1.f;
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::SpawnMonster_Implementation, delay, false);	//Destory Actor After DeathDelay
 		}
 	}
 }

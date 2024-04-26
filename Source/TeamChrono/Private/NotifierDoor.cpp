@@ -5,6 +5,8 @@
 #include "Components/BoxComponent.h"
 #include "MonsterSpawner.h"
 #include "DoorNextDoor.h"
+#include <TeamChrono/TeamChronoCharacter.h>
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ANotifierDoor::ANotifierDoor()
@@ -51,6 +53,8 @@ void ANotifierDoor::OnOverlapEnd(UPrimitiveComponent* OverlappedComp,
 	{
 		if (!isGetWorked)
 		{
+			SetPlayerESkillLocation();
+
 			for (AMonsterSpawner* Spawner : SpawnerArray)
 			{
 				Spawner->SpawnMonster();

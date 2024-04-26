@@ -35,6 +35,9 @@ public:
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetPlayerESkillLocation();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawner", meta = (AllowPrivateAccess = "true"))
 	TArray<AMonsterSpawner*> SpawnerArray;
