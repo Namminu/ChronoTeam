@@ -41,6 +41,9 @@ public:
 	void AddMonster();
 	UFUNCTION(BlueprintImplementableEvent)
 	void RemoveMonster();
+	UFUNCTION(BlueprintImplementableEvent)
+	void RemoveSelf();
+
 
 	TSubclassOf<ABaseMonster> GetMyMonster() const { return myMonster; }
 
@@ -60,4 +63,11 @@ private:
 	bool isMonsterDied;
 
 	class ANotifierDoor* MyDoor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool isAllMonsterDie;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	bool GetAllMonsterDie() const { return isAllMonsterDie; }
 };
