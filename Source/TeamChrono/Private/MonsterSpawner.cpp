@@ -20,6 +20,7 @@ void AMonsterSpawner::BeginPlay()
 	CurrentSpawn = 0;
 
 	isMonsterDied = true;
+	isAllMonsterDie = false;
 	//MyDoor = ConnectDoor;
 }
 
@@ -35,9 +36,18 @@ void AMonsterSpawner::Tick(float DeltaTime)
 			isMonsterDied = true;
 			RemoveMonster();
 
-			FTimerHandle TimerHandle;
-			float delay = 1.f;
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::SpawnMonster_Implementation, delay, false);	//Destory Actor After DeathDelay
+			if (CurrentSpawn < SpawnCount)
+			{
+				//Destory Actor After DeathDelay
+				FTimerHandle TimerHandle;
+				float delay = 1.f;
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::SpawnMonster_Implementation, delay, false);
+			}
+			else
+			{
+				isAllMonsterDie = true;
+				SetActorTickEnabled(false);
+			}
 		}
 	}
 }
@@ -69,7 +79,6 @@ void AMonsterSpawner::SpawnMonster_Implementation()
 
 			CurrentSpawn++;
 		}
-		else SetActorTickEnabled(false);
 
 	}
 	else
