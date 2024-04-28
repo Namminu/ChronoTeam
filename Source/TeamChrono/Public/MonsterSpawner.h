@@ -22,9 +22,12 @@ protected:
 
 private:
 	//Spawner 가 생성할 몬스터 변수 - BP에서 정할 수 있도록 함
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Monster", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ABaseMonster> myMonster;
 	//ABaseMonster* myMonster;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class ABaseMonster* SpawnedMonster;
 
 public:
 	// Called every frame
@@ -34,6 +37,27 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MonsterSpawn")
 	void SpawnMonster();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void AddMonster();
+	UFUNCTION(BlueprintImplementableEvent)
+	void RemoveMonster();
+
 	TSubclassOf<ABaseMonster> GetMyMonster() const { return myMonster; }
 
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	int SpawnCount;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	int CurrentSpawn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	bool IsDoorConnect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (EditCondition = "IsDoorConnect", AllowPrivateAccess = "true"))
+	class ANotifierDoor* ConnectDoor;
+
+	bool isMonsterDied;
+
+	class ANotifierDoor* MyDoor;
 };

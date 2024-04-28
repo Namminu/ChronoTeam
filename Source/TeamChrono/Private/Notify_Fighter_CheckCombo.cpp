@@ -24,7 +24,7 @@ void UNotify_Fighter_CheckCombo::Notify(USkeletalMeshComponent* MeshComp, UAnimS
 				else if (Fighter->GetComboNumCheck())
 				{
 					//Trd Normal Attack
-					Fighter->AttackFunc(2);
+					Fighter->AttackFunc(3);
 					Fighter->SetComboNum(false);
 					Fighter->SetComboCheck(false);
 				}
