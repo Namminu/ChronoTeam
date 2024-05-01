@@ -48,6 +48,7 @@ ABoss_Fighter::ABoss_Fighter()
 	sk_Boots = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Boots Mesh"));
 	sk_Boots->SetupAttachment(GetMesh());
 	sk_Boots->SetLeaderPoseComponent(GetMesh());
+
 	
 }
 
@@ -55,13 +56,7 @@ void ABoss_Fighter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Reset Bool Properties for Check Gimic Ready
-	isFstGimic = false;
-	isSndGimic = false;
-	isTrdGimic = false;
-	isFothGimic = false;
-
-	// Setup All Flash MTI
+// Setup All Flash MTI
 	SetFullFMTI();
 
 	//Reset Attack Count Properties
@@ -70,46 +65,21 @@ void ABoss_Fighter::BeginPlay()
 
 	isComboNow = false;
 	isSndComboNow = false;
-
-	//Reset Fst Gimic Properties
-	Fst_CurrentAttackCount = 0;
-
-	//Reset Snd GImic Properties
-	isJumpMontageING = false;
-
-	//Reset Trd GImic Properties
-	TrdGimicCurrentCount = 0;
-	TrdGimicCurrentLightning = 0;
-
-	//Reset Foth Gimic Properties
-	FothGimicHpPercent = 20.f;
-	FothGimic_1stStarted = false;
-	FothGimic_2ndStarted = false;
-	FothGimic_3rdStarted = false;
-	FothGimic_4thStarted = false;
-	FotheGimic_MontageING = false;
-	FothGimic_MontageEnd = false;
 }
 
 void ABoss_Fighter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//Player is So Far From Boss So Jump Attack To player
-	if (GetIsCanFight())
-	{
-		if (!isJump)
-		{
-			if (GetDistanceTo(GetPlayerProperty()) >= JumpDistance)
-			{
-				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
-			}
-			else
-			{
-				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
-			}
-		}
-	}
+	////Player is So Far From Boss So Jump Attack To player
+	//if (GetDistanceTo(GetPlayerProperty()) >= JumpDistance)
+	//{
+	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", true);
+	//}
+	//else
+	//{
+	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPlayerSoFar", false);
+	//}
 }
 
 void ABoss_Fighter::DamageFlash_Implementation()
@@ -131,30 +101,18 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		AttackFunc(0);
 		Current_SndCount++;
 		Current_TrdCount++;
-		//For Fst Gimic Attack
-		Fst_CurrentAttackCount++;
-		//For Trd Gimic Attack
-		CheckTrdAttackCount();
 	}
 	//2번째 공격이고 3번째 공격 아닐 때
 	else if (Current_SndCount >= Snd_AttackCount && Current_TrdCount < Trd_AttackCount)
 	{
 		AttackFunc(1);
 		Current_SndCount = 0;
-		//For Fst Gimic Attack
-		Fst_CurrentAttackCount++;
-		//For Trd Gimic Attack
-		CheckTrdAttackCount();
 	}
 	//2번째 공격 아니고 3번째 공격일 때
 	else if (Current_SndCount < Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
 	{
-		AttackFunc(3);
+		AttackFunc(2);
 		Current_TrdCount = 0;
-		//For Fst Gimic Attack
-		Fst_CurrentAttackCount++;
-		//For Trd Gimic Attack
-		CheckTrdAttackCount();
 	}
 	//2번째 공격이고 3번째 공격일 때 (두 개가 겹칠 때)
 	else if(Current_SndCount >= Snd_AttackCount && Current_TrdCount >= Trd_AttackCount)
@@ -163,11 +121,8 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		AttackFunc(0);
 		Current_SndCount = 0;
 		Current_TrdCount = 0;
-		//For Fst Gimic Attack
-		Fst_CurrentAttackCount++;
-		//For Trd Gimic Attack
-		CheckTrdAttackCount();
 	}
+
 
 	return 0;
 }
@@ -175,7 +130,6 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 void ABoss_Fighter::Boss_Death_Implementation()
 {
 	GetBossWeapon()->Destroy();
-	AttachWeapon(GetBossWeapon()->GetClass(), "Weapon_ReverseSocket");
 
 	Super::Boss_Death_Implementation();
 }
@@ -186,14 +140,9 @@ void ABoss_Fighter::AttackFunc_Implementation(int caseNum)
 
 float ABoss_Fighter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (!GetInvincible())
-	{
-		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-		DamageFlash();
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-		// Check Hp for Foth Gimic Start
-	}
-	CheckHpPercent();
+	DamageFlash();
 
 	return 0.0f;
 }
@@ -266,157 +215,3 @@ void ABoss_Fighter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 
 }
-
-void ABoss_Fighter::FstGimic_Implementation()
-{
-	if (!isSndGimic && !isTrdGimic && !isFothGimic)
-	{
-		isFstGimic = true;
-		//Set Gimic On
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimerGimic", false);
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsFstGimic", true);
-		// Pause Snd Gimic Timer
-		SetPauseSndTimer();
-	}
-}
-
-void ABoss_Fighter::Fst_MarbleChange()
-{
-	for (AFighter_Fst_Marble* Marble : Fst_MarbleArray)
-	{
-		if (Marble)
-		{
-			Marble->SetEffectToBarrier();
-		}
-	}
-
-	FTimerHandle TimerHandle;
-	float delay = 1.3f;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Fighter::Fst_SpawnArrow, delay, false);
-}
-
-void ABoss_Fighter::SndGimic_Implementation()
-{
-	if (!isFstGimic && !isTrdGimic && !isFothGimic)
-	{
-		//Check Snd Gimic Start
-		isSndGimic = true;
-
-		//Set Snd Gimic On
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimerGimic", true);
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsSndGimic", true);
-		// Set Off Gimic Timer
-		SetClearSndTimer();
-	}
-}
-
-void ABoss_Fighter::SetSndGimicTimer()
-{
-	GetWorld()->GetTimerManager().SetTimer(SndGimicTimerHandle, this, &ABoss_Fighter::SndGimic_Implementation, Snd_GimicDelay, true);
-}
-
-void ABoss_Fighter::Fst_SpawnArrow_Implementation()
-{
-	UE_LOG(LogTemp, Error, TEXT("Spawn Arrow Func Called"));
-}
-
-void ABoss_Fighter::SetPauseSndTimer()
-{
-	GetWorld()->GetTimerManager().PauseTimer(SndGimicTimerHandle);
-}
-
-void ABoss_Fighter::SetResumeSndTimer()
-{
-	GetWorld()->GetTimerManager().UnPauseTimer(SndGimicTimerHandle);
-}
-
-void ABoss_Fighter::SetClearSndTimer()
-{
-	GetWorld()->GetTimerManager().ClearTimer(SndGimicTimerHandle);
-}
-
-void ABoss_Fighter::TrdGimic_Implementation()
-{
-	if (!isFstGimic && !isSndGimic && !isFothGimic)
-	{
-		isTrdGimic = true;
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimerGimic", false);
-		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTrdGimic", true);
-	}
-}
-
-void ABoss_Fighter::CheckTrdAttackCount()
-{
-	TrdGimicCurrentCount++;
-	if (TrdGimicCurrentCount >= TrdGimicAttackMaxCount)
-	{
-		TrdGimic_Implementation();
-		TrdGimicCurrentCount = 0;
-	}
-}
-
-void ABoss_Fighter::FothGimic_Implementation()
-{
-	isFothGimic = true;
-	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimic", true);
-	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsTimerGimic", false);
-	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsFothGimic", true);
-}
-
-void ABoss_Fighter::CheckHpPercent()
-{
-	int CurrentPercent = ((GetBossCurrentHp() / GetBossMaxHp()) * 100);
-
-	if (CurrentPercent <= 80 && CurrentPercent > 60 && !FothGimic_1stStarted)
-	{
-		if (!isFstGimic && !isSndGimic && !isTrdGimic)
-		{
-			SetInvincible(true);
-			FothGimic_1stStarted = true;
-			FothGimic_Implementation();
-
-			UE_LOG(LogTemp, Error, TEXT("Foth Gimic 1 Start"));
-		}
-	}
-	else if (CurrentPercent <= 60 && CurrentPercent > 40 && !FothGimic_2ndStarted)
-	{
-		if (!isFstGimic && !isSndGimic && !isTrdGimic)
-		{
-			SetInvincible(true);
-			FothGimic_2ndStarted = true;
-			FothGimic_Implementation();
-
-			UE_LOG(LogTemp, Error, TEXT("Foth Gimic 2 Start"));
-		}
-	}
-	else if (CurrentPercent <= 40 && CurrentPercent > 20 && !FothGimic_3rdStarted)
-	{
-		if (!isFstGimic && !isSndGimic && !isTrdGimic)
-		{
-			SetInvincible(true);
-			FothGimic_3rdStarted = true;
-			FothGimic_Implementation();
-
-			UE_LOG(LogTemp, Error, TEXT("Foth Gimic 3 Start"));
-		}
-	}
-	else if (CurrentPercent <= 20 && CurrentPercent > 0 && !FothGimic_4thStarted)
-	{
-		if (!isFstGimic && !isSndGimic && !isTrdGimic)
-		{
-			SetInvincible(true);
-			FothGimic_4thStarted = true;
-			FothGimic_Implementation();
-
-			UE_LOG(LogTemp, Error, TEXT("Foth Gimic 4 Start"));
-		}
-	}
-}
-
-/*
-	if (!isFstGimic && !isSndGimic && !isTrdGimic)
-	{
-*/
