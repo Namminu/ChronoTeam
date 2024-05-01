@@ -128,8 +128,8 @@ void ABase_Boss::Boss_Death_Implementation()
 	ABossAIController* BossAI = Cast<ABossAIController>(GetController());
 	BossAI->StopAI();
 
-	//Set Death Property
-	bIsDie = true;
+	//Play Death Montage
+	PlayAnimMontage(DeathMontage);
 
 	//Set Boss Hp UI Off
 	SetOffWZ();

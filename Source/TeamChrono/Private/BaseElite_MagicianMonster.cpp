@@ -50,6 +50,11 @@ void ABaseElite_MagicianMonster::BeginPlay()
 
 	//Set BlackBoard Property to true So Can Take Damage Immediately
 	UAIBlueprintHelperLibrary::GetAIController(GetOwner())->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", true);
+
+	//GetBigAttackRange()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapBegin);
+	//GetBigAttackRange()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnBigRangeOverlapEnd);
+	//GetAttackRangeColl()->OnComponentBeginOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapBegin);
+	//GetAttackRangeColl()->OnComponentEndOverlap.AddDynamic(this, &ABaseElite_MagicianMonster::OnRangeOverlapEnd);
 }
 
 void ABaseElite_MagicianMonster::Tick(float DeltaTime)
@@ -62,6 +67,18 @@ void ABaseElite_MagicianMonster::Tick(float DeltaTime)
 	}
 }
 
+//void ABaseElite_MagicianMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+//	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
+//	int const OtherBodyIndex, bool const FromSweep, FHitResult const& SweepResult)
+//{
+//
+//}
+//
+//void ABaseElite_MagicianMonster::OnAttackOverlapEnd(UPrimitiveComponent* const OverlappedComponent, 
+//	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
+//{
+//}
+
 /// <summary>
 /// 일반 공격 범위 Overlap
 /// </summary>
@@ -73,6 +90,8 @@ void ABaseElite_MagicianMonster::OnRangeOverlapBegin(UPrimitiveComponent* const 
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
+		//isBigAck = false;
+		//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", true);
 
 		isCanAttack = true;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", true);
@@ -96,12 +115,46 @@ void ABaseElite_MagicianMonster::OnRangeOverlapEnd(UPrimitiveComponent* const Ov
 
 }
 
+/// <summary>
+/// 강한 공격 범위 Overlap
+/// </summary>
+//void ABaseElite_MagicianMonster::OnBigRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+//	AActor* const otherActor, UPrimitiveComponent* const OtherComponent,
+//	int const OtherBodyIndex, bool const FromSweep, FHitResult const& SweepResult)
+//{
+//	if (otherActor == this) return;
+//
+//	if (otherActor->ActorHasTag("PLAYER"))
+//	{
+//		isBigAck = true;
+//		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", true);
+//		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", false);
+//	}
+//}
+
+//void ABaseElite_MagicianMonster::OnBigRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
+//	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
+//{
+//	if (otherActor == this) return;
+//
+//	if (otherActor->ActorHasTag("PLAYER"))
+//	{
+//		isBigAck = false;
+//		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", false);
+//	}
+//}
+
 int ABaseElite_MagicianMonster::MeleeAttack_Implementation()
 {
 	Super::MeleeAttack_Implementation();
 
 	return 0;
 }
+
+//void ABaseElite_MagicianMonster::CreateMTI()
+//{
+//	Super::CreateMTI();
+//}
 
 /// <summary>
 /// ReDefine mon_Death in Magician

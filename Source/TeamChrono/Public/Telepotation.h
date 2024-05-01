@@ -27,9 +27,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void ChangeOrb();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void DamageToActor(AActor* DamagedActor);
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -48,6 +45,4 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TELEPORT", meta = (AllowPrivateAccess = "true"))
 	class UArrowComponent* arrowTarget;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TELEPORT", meta = (AllowPrivateAccess = "true"))
-	bool isDamage;
 };
