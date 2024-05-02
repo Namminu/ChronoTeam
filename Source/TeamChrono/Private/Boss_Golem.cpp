@@ -212,6 +212,32 @@ void ABoss_Golem::Golem_Destroy()
 	Destroy();
 }
 
+//void ABoss_Golem::InitFunc_Implementation()
+//{
+//	Super::InitFunc_Implementation();
+//
+//	//Set Trd Gimic Bool Properties
+//	CurrentAtkCount = 0;
+//	isTrdGimicCanAttack = false;
+//	isTrdGimicNow = false;
+//
+//	//Set Snd Gimic Bool Properties
+//	isSnd_JumpCenterIng = false;
+//	isSnd_GimicIng = false;
+//
+//	//Set Fth Gimic Bool Properties
+//	isFothGimicIng = false;
+//
+//	//Check Gimic Already Run
+//	isFst_GimicStart = false;
+//	isFoth01_GimicStart = false;
+//	isFoth02_GimicStart = false;
+//
+//	//Set off Niagara Effect
+//	L_PartsBreakEffect->Deactivate();
+//	R_PartsBreakEffect->Deactivate();
+//}
+
 void ABoss_Golem::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
 	int const OtherBodyIndex, bool const FromSweep, FHitResult const& SweepResult)

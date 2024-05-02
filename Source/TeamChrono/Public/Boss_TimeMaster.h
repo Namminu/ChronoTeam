@@ -28,22 +28,19 @@ public:
 /// Chrono Local Func
 
 	/// <summary>
-	/// Attach Chrono to Cube for AirMoving + Animation Work
-	/// </summary>
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetAttachToPlate();
-
-	/// <summary>
 	/// To Always Keep Distance from Player
 	/// </summary>
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetFarfromPlayer(float distance);
+	void SetFarfromPlayer(float distance, float newTime);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StayLookPlayer(FVector TargetLocation, float newTime);
 
 	/// <summary>
 	/// Get Random Number to Attack&Gimic
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
-	int GetRandomAttackNum(int num);
+	int GetRandomAttackNum(int min, int max);
 
 	UFUNCTION(BlueprintCallable)
 	void SetFlashMT(class USkeletalMeshComponent* skeleton, int index);
@@ -57,6 +54,8 @@ public:
 	int MeleeAttack_Implementation() override;
 
 	void Boss_Death_Implementation() override;
+
+	//void InitFunc_Implementation() override;
 
 	/// <summary>
 	/// Chrono Attack Func
@@ -156,6 +155,7 @@ public:
 ///Getter
 	// Default 
 	int GetBossPase() const { return CurrentPase; }
+	int GetPlayerByDistance() const { return DistanceToPlayer; }
 
 	// Normal Attack
 	int GetNormalAtkType() const { return NormalAttackTotalCount; }

@@ -78,6 +78,12 @@ public:
 	void Boss_Death();
 
 	/// <summary>
+	/// Func When Called Player Die
+	/// </summary>
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void InitFunc(FVector FirstLocation);
+
+	/// <summary>
 	/// Take Damage Func
 	/// </summary>
 	float TakeDamage(float DamageAmount,
@@ -167,6 +173,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	bool bIsDie;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
+	FVector BeginLocation;
 
 /// Weapon
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))

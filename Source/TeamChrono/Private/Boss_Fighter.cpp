@@ -118,6 +118,46 @@ void ABoss_Fighter::DamageFlash_Implementation()
 	//Boss Body Flash Code Written in BP
 }
 
+//void ABoss_Fighter::InitFunc_Implementation()
+//{
+//	Super::InitFunc_Implementation();
+//
+//	// Reset Bool Properties for Check Gimic Ready
+//	isFstGimic = false;
+//	isSndGimic = false;
+//	isTrdGimic = false;
+//	isFothGimic = false;
+//
+//	//Reset Attack Count Properties
+//	Current_SndCount = 0;
+//	Current_TrdCount = 0;
+//
+//	isComboNow = false;
+//	isSndComboNow = false;
+//
+//	//Reset Fst Gimic Properties
+//	Fst_CurrentAttackCount = 0;
+//
+//	//Reset Snd GImic Properties
+//	isJumpMontageING = false;
+//
+//	//Reset Trd GImic Properties
+//	TrdGimicCurrentCount = 0;
+//	TrdGimicCurrentLightning = 0;
+//
+//	//Reset Foth Gimic Properties
+//	FothGimicHpPercent = 20.f;
+//	FothGimic_1stStarted = false;
+//	FothGimic_2ndStarted = false;
+//	FothGimic_3rdStarted = false;
+//	FothGimic_4thStarted = false;
+//	FotheGimic_MontageING = false;
+//	FothGimic_MontageEnd = false;
+//
+//	ClearTornadoArray();
+//	ClearMarbleArray();
+//}
+
 int ABoss_Fighter::MeleeAttack_Implementation()
 {
 	if (!isJump)

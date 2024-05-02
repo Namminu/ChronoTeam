@@ -51,9 +51,9 @@ void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-int ABoss_TimeMaster::GetRandomAttackNum(int num)
+int ABoss_TimeMaster::GetRandomAttackNum(int min, int max)
 {
-	return FMath::RandRange(0, num);
+	return FMath::RandRange(min, max);
 }
 
 void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
@@ -94,7 +94,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsAttack = true;
 
-		AttackFunc(GetRandomAttackNum(NormalAttackTotalCount));
+		AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount));
 		cur_StrikeCount++;
 		cur_SkillCount++;
 	}
@@ -111,7 +111,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsGimic = true;
 
-		GimicFunc(GetRandomAttackNum(GimicTotalCount));
+		GimicFunc(GetRandomAttackNum(0, GimicTotalCount));
 		cur_SkillCount = 0;
 	}
 	// Both Gimic Attack and Strike Attack / Not Normal Attack
@@ -120,7 +120,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 		bIsAttack = true;
 		bIsGimic = true;
 
-		StrikeGimic(GetRandomAttackNum(GimicTotalCount));
+		StrikeGimic(GetRandomAttackNum(0, GimicTotalCount));
 		cur_StrikeCount = 0;
 		cur_SkillCount = 0;
 	}
@@ -132,6 +132,12 @@ void ABoss_TimeMaster::Boss_Death_Implementation()
 {
 	Super::Boss_Death_Implementation();
 }
+
+//void ABoss_TimeMaster::InitFunc_Implementation()
+//{
+//	Super::InitFunc_Implementation();
+//
+//}
 
 void ABoss_TimeMaster::AttackFunc_Implementation(int caseNum)
 {
