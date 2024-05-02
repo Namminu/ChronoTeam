@@ -50,6 +50,9 @@ public:
 
 	void CheckCurrentPase();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void OpenOtherBossPortal(int paseNum);
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
@@ -113,15 +116,25 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	float InitMultiplier;
 
-	// Default Properties
+	// Boss Pase Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	int CurrentPase;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	float f_2PaseHp;
+	bool is2PaseStart;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	float f_3PaseHp;
+	bool is3PaseStart;
+
+	// Default Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	float DistanceToPlayer;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	bool bIsAttack;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	bool bIsGimic;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
+	int BossDamage;
 
 	// Normal Attack Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))

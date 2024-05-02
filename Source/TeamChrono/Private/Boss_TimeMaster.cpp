@@ -2,6 +2,9 @@
 
 
 #include "Boss_TimeMaster.h"
+#include <Blueprint/AIBlueprintHelperLibrary.h>
+#include "BossAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 ABoss_TimeMaster::ABoss_TimeMaster()
 {
@@ -25,18 +28,22 @@ void ABoss_TimeMaster::BeginPlay()
 	// Reset Checking Attack Type Properties
 	bIsAttack = false;
 	bIsGimic = false;
-	// Reset Current Boss Pase
+	// Reset Boss Pase Properties
 	CurrentPase = 1;
+	is2PaseStart = false;
+	is3PaseStart = false;
+	// Reset Boss Damage
+	BossDamage = 1;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!bIsAttack&&!bIsGimic)
-	{
-		SetFarfromPlayer(DistanceToPlayer);
-	}
+	//if (!bIsAttack&&!bIsGimic)
+	//{
+	//	SetFarfromPlayer(DistanceToPlayer);
+	//}
 }
 
 void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -58,7 +65,26 @@ void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
 
 void ABoss_TimeMaster::CheckCurrentPase()
 {
-	//if(GetBossCurrentHp())
+	if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_2PaseHp && (GetBossCurrentHp() / GetBossMaxHp()) > f_3PaseHp)
+	{
+		CurrentPase = 2;
+		if (!is2PaseStart)
+		{
+			is2PaseStart = true;
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
+			//OpenOtherBossPortal(CurrentPase);
+		}
+	}
+	else if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_3PaseHp)
+	{
+		CurrentPase = 3;
+		if (!is3PaseStart)
+		{
+			is3PaseStart = true;
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
+			//OpenOtherBossPortal(CurrentPase);
+		}
+	}
 }
 
 int ABoss_TimeMaster::MeleeAttack_Implementation()
@@ -118,6 +144,7 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 		DamageFlash();
 	}
+	//Check Boss Pase for Damage Change & Load Other Boss Stage
 	CheckCurrentPase();
 
 	return 0.0f;
