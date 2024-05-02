@@ -128,6 +128,9 @@ void ABase_Boss::Boss_Death_Implementation()
 	ABossAIController* BossAI = Cast<ABossAIController>(GetController());
 	BossAI->StopAI();
 
+	//Stop Tick
+	SetActorTickEnabled(false);
+
 	//Set Death Property
 	bIsDie = true;
 

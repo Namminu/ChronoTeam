@@ -27,7 +27,6 @@ protected:
 	// Called when Actor Destroy
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-
 public:
 // Fighter Local Funcs
 	void SetupFMTI(class USkeletalMeshComponent* skeleton, int index);

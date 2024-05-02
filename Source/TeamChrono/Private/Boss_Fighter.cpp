@@ -228,8 +228,6 @@ void ABoss_Fighter::SetupFMTI(class USkeletalMeshComponent* skeleton, int index)
 	MT->GetVectorParameterValue(TEXT("EmissiveColor"), ColorValue);
 	SetFlashMTIArray_Implementation(MT);
 	InitColors.Add(ColorValue);
-
-	UE_LOG(LogTemp, Error, TEXT("%s : clear to Setup Flash MT"), *skeleton->GetName());
 }
 
 void ABoss_Fighter::SetFullFMTI()
