@@ -2,6 +2,7 @@
 
 
 #include "MonsterSpawner.h"
+#include <NotifierDoor.h>
 
 // Sets default values
 AMonsterSpawner::AMonsterSpawner()
@@ -16,8 +17,11 @@ void AMonsterSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//임시용 몬스터 생성 확인
-	//SpawnMonster();
+	CurrentSpawn = 0;
+
+	isMonsterDied = true;
+	isAllMonsterDie = false;
+	//MyDoor = ConnectDoor;
 }
 
 // Called every frame
@@ -25,23 +29,57 @@ void AMonsterSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (IsDoorConnect&& SpawnedMonster)
+	{
+		if (!SpawnedMonster->GetMonsterLive())
+		{
+			isMonsterDied = true;
+			RemoveMonster();
+
+			if (CurrentSpawn < SpawnCount)
+			{
+				//Destory Actor After DeathDelay
+				FTimerHandle TimerHandle;
+				float delay = 1.f;
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::SpawnMonster_Implementation, delay, false);
+			}
+			else
+			{
+				isAllMonsterDie = true;
+				SetActorTickEnabled(false);
+			}
+		}
+	}
 }
 
 void AMonsterSpawner::SpawnMonster_Implementation()
 {
 	if (myMonster) 
 	{
-		// 할당된 액터의 위치와 로테이션 가져오기
-		FVector SpawnLocation = GetActorLocation();
-		FRotator SpawnRotation = GetActorRotation();
+		if ((CurrentSpawn < SpawnCount) && isMonsterDied)
+		{
+			isMonsterDied = false;
 
-		bool bNoCollisionFail = true;
-		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride =
-			bNoCollisionFail ? ESpawnActorCollisionHandlingMethod::AlwaysSpawn : ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+			// 할당된 액터의 위치와 로테이션 가져오기
+			FVector SpawnLocation = GetActorLocation();
+			FRotator SpawnRotation = GetActorRotation();
 
-		// 액터 스폰
-		ABaseMonster* SpawnedMonster = GetWorld()->SpawnActor<ABaseMonster>(myMonster, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			bool bNoCollisionFail = true;
+			FActorSpawnParameters ActorSpawnParams;
+			ActorSpawnParams.SpawnCollisionHandlingOverride =
+				bNoCollisionFail ? ESpawnActorCollisionHandlingMethod::AlwaysSpawn : ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+
+			// 액터 스폰
+			SpawnedMonster = GetWorld()->SpawnActor<ABaseMonster>(myMonster, SpawnLocation, SpawnRotation, ActorSpawnParams);
+
+			if (IsDoorConnect)
+			{
+				AddMonster();
+			}
+
+			CurrentSpawn++;
+		}
+
 	}
 	else
 	{
