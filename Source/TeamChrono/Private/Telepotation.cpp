@@ -33,6 +33,10 @@ void ATelepotation::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		FadeIn(OtherActor);
 		Teleport(OtherActor);
+		if (isDamage)
+		{
+			DamageToActor(OtherActor);
+		}
 	}
 }
 

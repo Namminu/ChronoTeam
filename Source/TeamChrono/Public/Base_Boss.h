@@ -165,6 +165,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONTAGE", meta = (AllowPrivateAccess = "true"))
 	bool bCanFightNow;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
+	bool bIsDie;
+
 /// Weapon
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	class ABase_BossWeapon* weaponInstance;
@@ -190,6 +193,7 @@ public:
 	bool GetInvincible() const { return bisInvincible; }
 	bool GetMontageEnd() const { return bIsMontageEnd; }
 	bool GetIsCanFight() const { return bCanFightNow; }
+	bool GetIsDie() const { return bIsDie; }
 
 	UFUNCTION(BlueprintCallable)
 	FVector GetPlayerTargetLocation() const { return playerLocation; }
