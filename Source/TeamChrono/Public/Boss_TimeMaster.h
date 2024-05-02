@@ -26,13 +26,22 @@ protected:
 
 public:
 /// Chrono Local Func
-	// Function - Attach Chrono to Cube for AirMoving + Animation Work
+
+	/// <summary>
+	/// Attach Chrono to Cube for AirMoving + Animation Work
+	/// </summary>
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetAttachToPlate();
 
+	/// <summary>
+	/// To Always Keep Distance from Player
+	/// </summary>
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetFarfromPlayer(float distance);
 
+	/// <summary>
+	/// Get Random Number to Attack&Gimic
+	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	int GetRandomAttackNum(int num);
 

@@ -118,7 +118,6 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 		DamageFlash();
 	}
-
 	CheckCurrentPase();
 
 	return 0.0f;
