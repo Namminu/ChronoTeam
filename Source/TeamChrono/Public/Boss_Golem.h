@@ -66,6 +66,8 @@ public:
 	UFUNCTION()
 	void Golem_Destroy();
 
+	//void InitFunc_Implementation() override;
+
 // Overlap Events
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,

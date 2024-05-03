@@ -28,32 +28,34 @@ public:
 /// Chrono Local Func
 
 	/// <summary>
-	/// Attach Chrono to Cube for AirMoving + Animation Work
-	/// </summary>
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetAttachToPlate();
-
-	/// <summary>
 	/// To Always Keep Distance from Player
 	/// </summary>
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetFarfromPlayer(float distance);
+	void SetFarfromPlayer(float distance, float newTime);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StayLookPlayer(FVector TargetLocation, float newTime);
 
 	/// <summary>
 	/// Get Random Number to Attack&Gimic
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
-	int GetRandomAttackNum(int num);
+	int GetRandomAttackNum(int min, int max);
 
 	UFUNCTION(BlueprintCallable)
 	void SetFlashMT(class USkeletalMeshComponent* skeleton, int index);
 
 	void CheckCurrentPase();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void OpenOtherBossPortal(int paseNum);
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
 	void Boss_Death_Implementation() override;
+
+	//void InitFunc_Implementation() override;
 
 	/// <summary>
 	/// Chrono Attack Func
@@ -113,15 +115,25 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	float InitMultiplier;
 
-	// Default Properties
+	// Boss Pase Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	int CurrentPase;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	float f_2PaseHp;
+	bool is2PaseStart;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	float f_3PaseHp;
+	bool is3PaseStart;
+
+	// Default Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	float DistanceToPlayer;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	bool bIsAttack;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	bool bIsGimic;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
+	int BossDamage;
 
 	// Normal Attack Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
@@ -143,6 +155,7 @@ public:
 ///Getter
 	// Default 
 	int GetBossPase() const { return CurrentPase; }
+	int GetPlayerByDistance() const { return DistanceToPlayer; }
 
 	// Normal Attack
 	int GetNormalAtkType() const { return NormalAttackTotalCount; }

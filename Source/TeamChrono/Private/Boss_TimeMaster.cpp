@@ -2,6 +2,9 @@
 
 
 #include "Boss_TimeMaster.h"
+#include <Blueprint/AIBlueprintHelperLibrary.h>
+#include "BossAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 ABoss_TimeMaster::ABoss_TimeMaster()
 {
@@ -25,18 +28,22 @@ void ABoss_TimeMaster::BeginPlay()
 	// Reset Checking Attack Type Properties
 	bIsAttack = false;
 	bIsGimic = false;
-	// Reset Current Boss Pase
+	// Reset Boss Pase Properties
 	CurrentPase = 1;
+	is2PaseStart = false;
+	is3PaseStart = false;
+	// Reset Boss Damage
+	BossDamage = 1;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!bIsAttack&&!bIsGimic)
-	{
-		SetFarfromPlayer(DistanceToPlayer);
-	}
+	//if (!bIsAttack&&!bIsGimic)
+	//{
+	//	SetFarfromPlayer(DistanceToPlayer);
+	//}
 }
 
 void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -44,9 +51,9 @@ void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-int ABoss_TimeMaster::GetRandomAttackNum(int num)
+int ABoss_TimeMaster::GetRandomAttackNum(int min, int max)
 {
-	return FMath::RandRange(0, num);
+	return FMath::RandRange(min, max);
 }
 
 void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
@@ -58,7 +65,26 @@ void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
 
 void ABoss_TimeMaster::CheckCurrentPase()
 {
-	//if(GetBossCurrentHp())
+	if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_2PaseHp && (GetBossCurrentHp() / GetBossMaxHp()) > f_3PaseHp)
+	{
+		CurrentPase = 2;
+		if (!is2PaseStart)
+		{
+			is2PaseStart = true;
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
+			//OpenOtherBossPortal(CurrentPase);
+		}
+	}
+	else if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_3PaseHp)
+	{
+		CurrentPase = 3;
+		if (!is3PaseStart)
+		{
+			is3PaseStart = true;
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
+			//OpenOtherBossPortal(CurrentPase);
+		}
+	}
 }
 
 int ABoss_TimeMaster::MeleeAttack_Implementation()
@@ -68,7 +94,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsAttack = true;
 
-		AttackFunc(GetRandomAttackNum(NormalAttackTotalCount));
+		AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount));
 		cur_StrikeCount++;
 		cur_SkillCount++;
 	}
@@ -85,7 +111,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsGimic = true;
 
-		GimicFunc(GetRandomAttackNum(GimicTotalCount));
+		GimicFunc(GetRandomAttackNum(0, GimicTotalCount));
 		cur_SkillCount = 0;
 	}
 	// Both Gimic Attack and Strike Attack / Not Normal Attack
@@ -94,7 +120,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 		bIsAttack = true;
 		bIsGimic = true;
 
-		StrikeGimic(GetRandomAttackNum(GimicTotalCount));
+		StrikeGimic(GetRandomAttackNum(0, GimicTotalCount));
 		cur_StrikeCount = 0;
 		cur_SkillCount = 0;
 	}
@@ -107,6 +133,12 @@ void ABoss_TimeMaster::Boss_Death_Implementation()
 	Super::Boss_Death_Implementation();
 }
 
+//void ABoss_TimeMaster::InitFunc_Implementation()
+//{
+//	Super::InitFunc_Implementation();
+//
+//}
+
 void ABoss_TimeMaster::AttackFunc_Implementation(int caseNum)
 {
 }
@@ -118,6 +150,7 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 		DamageFlash();
 	}
+	//Check Boss Pase for Damage Change & Load Other Boss Stage
 	CheckCurrentPase();
 
 	return 0.0f;

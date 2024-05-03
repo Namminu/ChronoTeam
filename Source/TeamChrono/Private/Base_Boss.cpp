@@ -29,6 +29,8 @@ void ABase_Boss::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	BeginLocation = GetActorLocation();
+
 	//Save Boss Init Max Walk Speed
 	f_bossInitSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
@@ -136,6 +138,26 @@ void ABase_Boss::Boss_Death_Implementation()
 
 	//Set Boss Hp UI Off
 	SetOffWZ();
+}
+
+void ABase_Boss::InitFunc_Implementation(FVector FirstLocation)
+{
+	//f_bossCurrentHp = f_bossMaxHp;
+	//f_bossInitSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	//bCanFightNow = false;
+	
+	SetActorTickEnabled(false);
+	SetIsCanFight(false);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	//Stop all Montages Before Death
+	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
+
+	//Stop BT 
+	ABossAIController* BossAI = Cast<ABossAIController>(GetController());
+	BossAI->StopAI();
 }
 
 float ABase_Boss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
