@@ -18,6 +18,8 @@ ABoss_TimeMaster::ABoss_TimeMaster()
 
 void ABoss_TimeMaster::BeginPlay()
 {
+	IsEscape = false;
+
 	Super::BeginPlay();
 
 	// Reset Flash Material For Damage Flash
@@ -85,6 +87,11 @@ void ABoss_TimeMaster::CheckCurrentPase()
 			//OpenOtherBossPortal(CurrentPase);
 		}
 	}
+}
+
+void ABoss_TimeMaster::AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket)
+{
+
 }
 
 int ABoss_TimeMaster::MeleeAttack_Implementation()
