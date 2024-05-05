@@ -177,3 +177,18 @@ void ABoss_TimeMaster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCo
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
 }
+
+void ABoss_TimeMaster::SetAttackTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &ABoss_TimeMaster::CallAttackBB, AttackDelay, true);
+}
+
+void ABoss_TimeMaster::ResetAttackTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
+}
+
+void ABoss_TimeMaster::CallAttackBB()
+{
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", true);
+}

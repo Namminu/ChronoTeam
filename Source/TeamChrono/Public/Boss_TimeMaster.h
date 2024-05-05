@@ -97,6 +97,14 @@ public:
 
 
 /// Attack Funcs
+	// About Timer Funcs
+	UFUNCTION(BlueprintCallable)
+	void SetAttackTimer();
+	UFUNCTION(BlueprintCallable)
+	void ResetAttackTimer();
+	UFUNCTION(BlueprintCallable)
+	void CallAttackBB();
+
 	// Normal Attack - Strike
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void StrikeAttack();
@@ -153,8 +161,10 @@ private:
 
 	bool IsEscape;
 
-
 	// Normal Attack Properties
+	FTimerHandle AttackTimer;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK", meta = (AllowPrivateAccess = "true"))
+	float AttackDelay;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
 	int NormalAttackTotalCount;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
