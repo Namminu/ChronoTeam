@@ -165,8 +165,8 @@ private:
 	FTimerHandle AttackTimer;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK", meta = (AllowPrivateAccess = "true"))
 	float AttackDelay;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
-	int NormalAttackTotalCount;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
+	int NormalAttackTotalCount = 3;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
 	int cur_StrikeCount;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
