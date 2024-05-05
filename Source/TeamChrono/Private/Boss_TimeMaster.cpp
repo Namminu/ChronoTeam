@@ -5,6 +5,7 @@
 #include <Blueprint/AIBlueprintHelperLibrary.h>
 #include "BossAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Chrono_Weapon_ClockPin.h"
 
 ABoss_TimeMaster::ABoss_TimeMaster()
 {
@@ -18,6 +19,8 @@ ABoss_TimeMaster::ABoss_TimeMaster()
 
 void ABoss_TimeMaster::BeginPlay()
 {
+	IsEscape = false;
+
 	Super::BeginPlay();
 
 	// Reset Flash Material For Damage Flash
@@ -53,7 +56,9 @@ void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 int ABoss_TimeMaster::GetRandomAttackNum(int min, int max)
 {
-	return FMath::RandRange(min, max);
+	int num = FMath::RandRange(min, max);
+	UE_LOG(LogTemp, Error, TEXT("%d"), num);
+	return num;
 }
 
 void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
@@ -87,14 +92,24 @@ void ABoss_TimeMaster::CheckCurrentPase()
 	}
 }
 
+void ABoss_TimeMaster::AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket)
+{
+	class AChrono_Weapon_ClockPin* ClockWeapon;
+	ClockWeapon = GetWorld()->SpawnActor<AChrono_Weapon_ClockPin>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+	ClockWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+
+	ClockPinWeapon.Add(ClockWeapon);
+}
+
 int ABoss_TimeMaster::MeleeAttack_Implementation()
 {
+	ResetAttackTimer();
 	// Default Normal Attack / Not Strike, Not Gimic
 	if (cur_StrikeCount < max_StrikeCount && cur_SkillCount < max_SkillCount)
 	{
 		bIsAttack = true;
 
-		AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount));
+		AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount - 1));
 		cur_StrikeCount++;
 		cur_SkillCount++;
 	}
@@ -169,4 +184,21 @@ void ABoss_TimeMaster::OnRangeOverlapBegin(UPrimitiveComponent* const Overlapped
 void ABoss_TimeMaster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
+}
+
+void ABoss_TimeMaster::SetAttackTimer()
+{
+	UE_LOG(LogTemp, Error, TEXT("Set Attack Timer"));
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &ABoss_TimeMaster::CallAttackBB, AttackDelay, true);
+}
+
+void ABoss_TimeMaster::ResetAttackTimer()
+{
+	UE_LOG(LogTemp, Error, TEXT("Clear Attack Timer"));
+	GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
+}
+
+void ABoss_TimeMaster::CallAttackBB()
+{
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", true);
 }
