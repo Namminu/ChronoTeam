@@ -92,13 +92,21 @@ void ABoss_TimeMaster::CheckCurrentPase()
 	}
 }
 
-void ABoss_TimeMaster::AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket)
-{
-	class AChrono_Weapon_ClockPin* ClockWeapon;
-	ClockWeapon = GetWorld()->SpawnActor<AChrono_Weapon_ClockPin>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
-	ClockWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+//void ABoss_TimeMaster::AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket)
+//{
+//	class AChrono_Weapon_ClockPin* ClockWeapon;
+//	ClockWeapon = GetWorld()->SpawnActor<AChrono_Weapon_ClockPin>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+//	ClockWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+//
+//	ClockPinWeapon.Add(ClockWeapon);
+//}
 
-	ClockPinWeapon.Add(ClockWeapon);
+void ABoss_TimeMaster::TempAttachPin(TSubclassOf<AActor> Weapon, FName WeaponSocket)
+{
+	class AActor* ClockPin;
+	ClockPin = GetWorld()->SpawnActor<AActor>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+	ClockPin->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+	ClockPinArray.Add(ClockPin);
 }
 
 int ABoss_TimeMaster::MeleeAttack_Implementation()
@@ -109,7 +117,8 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsAttack = true;
 
-		AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount - 1));
+		//AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount - 1));
+		AttackFunc(0);
 		cur_StrikeCount++;
 		cur_SkillCount++;
 	}
@@ -184,6 +193,13 @@ void ABoss_TimeMaster::OnRangeOverlapBegin(UPrimitiveComponent* const Overlapped
 void ABoss_TimeMaster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
+}
+
+void ABoss_TimeMaster::AttackEnd()
+{
+	UE_LOG(LogTemp, Error, TEXT("Attack End Called, go back to Not Attack Now BT"));
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", false);
+	SetAttackTimer();
 }
 
 void ABoss_TimeMaster::SetAttackTimer()

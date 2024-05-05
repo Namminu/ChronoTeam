@@ -10,8 +10,11 @@ AChrono_Weapon_ClockPin::AChrono_Weapon_ClockPin()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root Scene"));
+	RootComponent = RootScene;
+
 	BoxColl = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Coll"));
-	RootComponent = BoxColl;
+	BoxColl->SetupAttachment(RootScene);
 
 	PinMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pin Mesh"));
 	PinMesh->SetupAttachment(BoxColl);

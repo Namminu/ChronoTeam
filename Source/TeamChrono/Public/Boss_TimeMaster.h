@@ -55,8 +55,11 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OpenOtherBossPortal(int paseNum);
 
+	//UFUNCTION(BlueprintCallable)
+	//void AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket);
+
 	UFUNCTION(BlueprintCallable)
-	void AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket);
+	void TempAttachPin(TSubclassOf<AActor> Weapon, FName WeaponSocket);
 
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
@@ -97,6 +100,15 @@ public:
 
 
 /// Attack Funcs
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void LaunchPins();
+	/// <summary>
+	/// Almost Called By Notify
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
+
+
 	// About Timer Funcs
 	UFUNCTION(BlueprintCallable)
 	void SetAttackTimer();
@@ -128,7 +140,10 @@ private:
 
 /// Weapon
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-	TArray<AChrono_Weapon_ClockPin*> ClockPinWeapon;
+	TArray<AActor*> ClockPinArray;
+
+	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	//TArray<AChrono_Weapon_ClockPin*> ClockPinWeapon;
 
 /// For Attack Properties
 	// Flash MTI
