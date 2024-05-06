@@ -6,6 +6,7 @@
 #include "BossAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Chrono_Weapon_ClockPin.h"
+#include "Chrono_JustMeshPin.h"
 
 ABoss_TimeMaster::ABoss_TimeMaster()
 {
@@ -101,12 +102,20 @@ void ABoss_TimeMaster::CheckCurrentPase()
 //	ClockPinWeapon.Add(ClockWeapon);
 //}
 
-void ABoss_TimeMaster::TempAttachPin(TSubclassOf<AActor> Weapon, FName WeaponSocket)
+//void ABoss_TimeMaster::TempAttachPin(TSubclassOf<AChrono_JustPinMesh> Weapon, FName WeaponSocket)
+//{
+//	class AChrono_JustPinMesh* ClockPin;
+//	ClockPin = GetWorld()->SpawnActor<AChrono_JustPinMesh>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+//	ClockPin->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+//	ClockPinArray.AddUnique(ClockPin);
+//}
+
+void ABoss_TimeMaster::TempAttachPin(TSubclassOf<AChrono_JustMeshPin> Weapon, FName WeaponSocket)
 {
-	class AActor* ClockPin;
-	ClockPin = GetWorld()->SpawnActor<AActor>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+	class AChrono_JustMeshPin* ClockPin;
+	ClockPin = GetWorld()->SpawnActor<AChrono_JustMeshPin>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
 	ClockPin->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
-	ClockPinArray.Add(ClockPin);
+	ClockPinArray.AddUnique(ClockPin);
 }
 
 int ABoss_TimeMaster::MeleeAttack_Implementation()

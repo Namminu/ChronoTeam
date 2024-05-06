@@ -13,26 +13,17 @@ AChrono_Weapon_ClockPin::AChrono_Weapon_ClockPin()
 	RootScene = CreateDefaultSubobject<USceneComponent>(TEXT("Root Scene"));
 	RootComponent = RootScene;
 
-	BoxColl = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Coll"));
-	BoxColl->SetupAttachment(RootScene);
-
 	PinMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pin Mesh"));
-	PinMesh->SetupAttachment(BoxColl);
+	PinMesh->SetupAttachment(RootScene);
 
 	ImplusePoint = CreateDefaultSubobject<USceneComponent>(TEXT("Impulse Point"));
-	ImplusePoint->SetupAttachment(BoxColl);
-
-	ProjectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Component"));
+	ImplusePoint->SetupAttachment(RootScene);
 }
 
 // Called when the game starts or when spawned
 void AChrono_Weapon_ClockPin::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	// For Not Launch Begin
-	ProjectileComponent->InitialSpeed = 0.f;
-	ProjectileComponent->MaxSpeed = 0.f;
 }
 
 // Called every frame
@@ -40,13 +31,4 @@ void AChrono_Weapon_ClockPin::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void AChrono_Weapon_ClockPin::LaunchPin_Implementation(float Speed)
-{
-	ProjectileComponent->InitialSpeed = Speed;
-	ProjectileComponent->MaxSpeed = Speed + 100;
-
-	ProjectileComponent->InitialSpeed = Speed;
-	ProjectileComponent->MaxSpeed = Speed + 100;
 }

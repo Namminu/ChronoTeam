@@ -27,8 +27,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RotateToPlayer();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void LaunchPin(float Speed);
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void LaunchPin();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void BackToBossSocket();
@@ -43,19 +43,13 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* RootScene;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* BoxColl;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* PinMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* ImplusePoint;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UProjectileMovementComponent* ProjectileComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "LAUNCH", meta = (AllowPrivateAccess = "true"))
-	float LaunchSpeed;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Z Force", meta = (AllowPrivateAccess = "true"))
+	float Z_DownDegree;
 
 };

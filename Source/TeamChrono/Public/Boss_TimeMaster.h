@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Base_Boss.h"
 #include "Chrono_Weapon_ClockPin.h"
+#include "Chrono_JustMeshPin.h"
 #include "Boss_TimeMaster.generated.h"
 
 /**
@@ -58,7 +59,7 @@ public:
 	//void AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket);
 
 	UFUNCTION(BlueprintCallable)
-	void TempAttachPin(TSubclassOf<AActor> Weapon, FName WeaponSocket);
+	void TempAttachPin(TSubclassOf<AChrono_JustMeshPin> Weapon, FName WeaponSocket);
 
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
@@ -139,7 +140,7 @@ private:
 
 /// Weapon
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-	TArray<AActor*> ClockPinArray;
+	TArray<AChrono_JustMeshPin*> ClockPinArray;
 
 	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	//TArray<AChrono_Weapon_ClockPin*> ClockPinWeapon;
