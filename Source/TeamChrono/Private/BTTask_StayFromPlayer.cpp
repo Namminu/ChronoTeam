@@ -18,14 +18,17 @@ EBTNodeResult::Type UBTTask_StayFromPlayer::ExecuteTask(UBehaviorTreeComponent& 
 	{
 		if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
 		{
-			//Chrono->SetFarfromPlayer(Chrono->GetPlayerByDistance(), GetRandomFloat(minTime, maxTime));
+			Chrono->SetFarfromPlayer(Chrono->GetCenterByDistance(), GetRandomFloat(minTime, maxTime));
 
+			currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
 
+			FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation() 
+				+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
 
+			FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Chrono->GetCenterArrow()->GetActorLocation().Z + UpAmount);
 
-			FVector newLocation = FVector(0.f, 0.f, 0.f);
+			Chrono->SetActorLocation(newLocation);
 
-			UAIBlueprintHelperLibrary::SimpleMoveToLocation(cont, newLocation);
 			return EBTNodeResult::Succeeded;
 		}
 	}

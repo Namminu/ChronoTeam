@@ -19,6 +19,14 @@ public:
 
 	float GetRandomFloat(float min, float max);
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Orbit Speed", meta = (AllowPrivateAccess = "true"))
+	float OrbitDistance;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Orbit Speed", meta = (AllowPrivateAccess = "true"))
+	float RotateSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit Speed", meta = (AllowPrivateAccess = "true"))
+	float UpAmount;
+	float currentAngle;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LOOK TIME", meta = (AllowPrivateAccess = "true"))
 	float minTime;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LOOK TIME", meta = (AllowPrivateAccess = "true"))
