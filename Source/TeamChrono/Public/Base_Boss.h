@@ -214,13 +214,13 @@ public:
 
 	ATeamChronoCharacter* GetPlayerProperty() const { return player; }
 
-	UBehaviorTree* GetBehaviorTree() const { return BTree; }
-
 	class USphereComponent* GetAttackRangeColl() const { return AttackRange; }
 
 	FName GetBossName() const { return n_BossName; }
 
 	class ABase_BossWeapon* GetBossWeapon() const { return weaponInstance; }
+
+	UBehaviorTree* GetBehaviorTree() const { return BTree; }
 
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
