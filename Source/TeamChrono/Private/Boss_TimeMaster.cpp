@@ -7,6 +7,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Chrono_Weapon_ClockPin.h"
 #include "Chrono_JustMeshPin.h"
+#include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 
 ABoss_TimeMaster::ABoss_TimeMaster()
 {
@@ -16,8 +18,10 @@ ABoss_TimeMaster::ABoss_TimeMaster()
 	sk_Halo = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Halo"));
 	sk_Halo->SetupAttachment(GetMesh());
 	sk_Halo->SetLeaderPoseComponent(GetMesh());
-}
 
+	ArrowCollBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Coll for Arrow"));
+	ArrowCollBox->SetupAttachment(GetCapsuleComponent());
+}
 void ABoss_TimeMaster::BeginPlay()
 {
 	IsEscape = false;

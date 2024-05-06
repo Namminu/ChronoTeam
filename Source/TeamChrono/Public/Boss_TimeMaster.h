@@ -138,6 +138,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* sk_Halo;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Component", meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* ArrowCollBox;
+
 /// Weapon
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	TArray<AChrono_JustMeshPin*> ClockPinArray;
