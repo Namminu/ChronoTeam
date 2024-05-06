@@ -34,12 +34,11 @@ public:
 	/// </summary>
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetFarfromPlayer(float distance, float newTime);
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SuddenEscapeFromPlayer();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void StayLookPlayer(FVector TargetLocation, float newTime);
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void SuddenEscapeFromPlayer();
 
 	/// <summary>
 	/// Get Random Number to Attack&Gimic
@@ -100,14 +99,14 @@ public:
 
 
 /// Attack Funcs
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void LaunchPins();
 	/// <summary>
 	/// Almost Called By Notify
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void LaunchPins();
 
 	// About Timer Funcs
 	UFUNCTION(BlueprintCallable)

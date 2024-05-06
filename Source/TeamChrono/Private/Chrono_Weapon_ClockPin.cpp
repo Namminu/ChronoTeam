@@ -41,3 +41,12 @@ void AChrono_Weapon_ClockPin::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+void AChrono_Weapon_ClockPin::LaunchPin_Implementation(float Speed)
+{
+	ProjectileComponent->InitialSpeed = Speed;
+	ProjectileComponent->MaxSpeed = Speed + 100;
+
+	ProjectileComponent->InitialSpeed = Speed;
+	ProjectileComponent->MaxSpeed = Speed + 100;
+}

@@ -27,7 +27,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void RotateToPlayer();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void LaunchPin(float Speed);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
@@ -35,6 +35,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void CalculateHitRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ChangeOpacity();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
