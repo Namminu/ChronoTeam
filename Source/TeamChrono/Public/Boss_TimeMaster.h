@@ -109,6 +109,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void LaunchPins();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SpawnDash();
+
 	// About Timer Funcs
 	UFUNCTION(BlueprintCallable)
 	void SetAttackTimer();

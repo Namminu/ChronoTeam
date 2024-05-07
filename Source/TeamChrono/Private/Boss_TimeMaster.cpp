@@ -131,7 +131,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 		bIsAttack = true;
 
 		//AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount - 1));
-		AttackFunc(0);
+		AttackFunc(2);
 		cur_StrikeCount++;
 		cur_SkillCount++;
 	}
