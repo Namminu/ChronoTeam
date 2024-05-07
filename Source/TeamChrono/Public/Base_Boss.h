@@ -78,6 +78,12 @@ public:
 	void Boss_Death();
 
 	/// <summary>
+	/// Func When Called Player Die
+	/// </summary>
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void InitFunc(FVector FirstLocation);
+
+	/// <summary>
 	/// Take Damage Func
 	/// </summary>
 	float TakeDamage(float DamageAmount,
@@ -168,6 +174,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
 	bool bIsDie;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
+	FVector BeginLocation;
+
 /// Weapon
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	class ABase_BossWeapon* weaponInstance;
@@ -205,13 +214,13 @@ public:
 
 	ATeamChronoCharacter* GetPlayerProperty() const { return player; }
 
-	UBehaviorTree* GetBehaviorTree() const { return BTree; }
-
 	class USphereComponent* GetAttackRangeColl() const { return AttackRange; }
 
 	FName GetBossName() const { return n_BossName; }
 
 	class ABase_BossWeapon* GetBossWeapon() const { return weaponInstance; }
+
+	UBehaviorTree* GetBehaviorTree() const { return BTree; }
 
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }

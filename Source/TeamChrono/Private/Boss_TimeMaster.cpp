@@ -2,6 +2,13 @@
 
 
 #include "Boss_TimeMaster.h"
+#include <Blueprint/AIBlueprintHelperLibrary.h>
+#include "BossAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Chrono_Weapon_ClockPin.h"
+#include "Chrono_JustMeshPin.h"
+#include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 
 ABoss_TimeMaster::ABoss_TimeMaster()
 {
@@ -11,10 +18,14 @@ ABoss_TimeMaster::ABoss_TimeMaster()
 	sk_Halo = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Halo"));
 	sk_Halo->SetupAttachment(GetMesh());
 	sk_Halo->SetLeaderPoseComponent(GetMesh());
-}
 
+	ArrowCollBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Coll for Arrow"));
+	ArrowCollBox->SetupAttachment(GetCapsuleComponent());
+}
 void ABoss_TimeMaster::BeginPlay()
 {
+	IsEscape = false;
+
 	Super::BeginPlay();
 
 	// Reset Flash Material For Damage Flash
@@ -25,18 +36,22 @@ void ABoss_TimeMaster::BeginPlay()
 	// Reset Checking Attack Type Properties
 	bIsAttack = false;
 	bIsGimic = false;
-	// Reset Current Boss Pase
+	// Reset Boss Pase Properties
 	CurrentPase = 1;
+	is2PaseStart = false;
+	is3PaseStart = false;
+	// Reset Boss Damage
+	BossDamage = 1;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!bIsAttack&&!bIsGimic)
-	{
-		SetFarfromPlayer(DistanceToPlayer);
-	}
+	//if (!bIsAttack&&!bIsGimic)
+	//{
+	//	SetFarfromPlayer(DistanceToPlayer);
+	//}
 }
 
 void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -44,9 +59,11 @@ void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-int ABoss_TimeMaster::GetRandomAttackNum(int num)
+int ABoss_TimeMaster::GetRandomAttackNum(int min, int max)
 {
-	return FMath::RandRange(0, num);
+	int num = FMath::RandRange(min, max);
+	UE_LOG(LogTemp, Error, TEXT("%d"), num);
+	return num;
 }
 
 void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
@@ -58,17 +75,63 @@ void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
 
 void ABoss_TimeMaster::CheckCurrentPase()
 {
-	//if(GetBossCurrentHp())
+	if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_2PaseHp && (GetBossCurrentHp() / GetBossMaxHp()) > f_3PaseHp)
+	{
+		CurrentPase = 2;
+		if (!is2PaseStart)
+		{
+			is2PaseStart = true;
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
+			//OpenOtherBossPortal(CurrentPase);
+		}
+	}
+	else if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_3PaseHp)
+	{
+		CurrentPase = 3;
+		if (!is3PaseStart)
+		{
+			is3PaseStart = true;
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
+			//OpenOtherBossPortal(CurrentPase);
+		}
+	}
+}
+
+//void ABoss_TimeMaster::AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket)
+//{
+//	class AChrono_Weapon_ClockPin* ClockWeapon;
+//	ClockWeapon = GetWorld()->SpawnActor<AChrono_Weapon_ClockPin>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+//	ClockWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+//
+//	ClockPinWeapon.Add(ClockWeapon);
+//}
+
+//void ABoss_TimeMaster::TempAttachPin(TSubclassOf<AChrono_JustPinMesh> Weapon, FName WeaponSocket)
+//{
+//	class AChrono_JustPinMesh* ClockPin;
+//	ClockPin = GetWorld()->SpawnActor<AChrono_JustPinMesh>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+//	ClockPin->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+//	ClockPinArray.AddUnique(ClockPin);
+//}
+
+void ABoss_TimeMaster::TempAttachPin(TSubclassOf<AChrono_JustMeshPin> Weapon, FName WeaponSocket)
+{
+	class AChrono_JustMeshPin* ClockPin;
+	ClockPin = GetWorld()->SpawnActor<AChrono_JustMeshPin>(Weapon, GetMesh()->GetSocketTransform(WeaponSocket, ERelativeTransformSpace::RTS_World));
+	ClockPin->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, WeaponSocket);
+	ClockPinArray.AddUnique(ClockPin);
 }
 
 int ABoss_TimeMaster::MeleeAttack_Implementation()
 {
+	ResetAttackTimer();
 	// Default Normal Attack / Not Strike, Not Gimic
 	if (cur_StrikeCount < max_StrikeCount && cur_SkillCount < max_SkillCount)
 	{
 		bIsAttack = true;
 
-		AttackFunc(GetRandomAttackNum(NormalAttackTotalCount));
+		//AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount - 1));
+		AttackFunc(0);
 		cur_StrikeCount++;
 		cur_SkillCount++;
 	}
@@ -85,7 +148,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsGimic = true;
 
-		GimicFunc(GetRandomAttackNum(GimicTotalCount));
+		GimicFunc(GetRandomAttackNum(0, GimicTotalCount));
 		cur_SkillCount = 0;
 	}
 	// Both Gimic Attack and Strike Attack / Not Normal Attack
@@ -94,7 +157,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 		bIsAttack = true;
 		bIsGimic = true;
 
-		StrikeGimic(GetRandomAttackNum(GimicTotalCount));
+		StrikeGimic(GetRandomAttackNum(0, GimicTotalCount));
 		cur_StrikeCount = 0;
 		cur_SkillCount = 0;
 	}
@@ -107,6 +170,12 @@ void ABoss_TimeMaster::Boss_Death_Implementation()
 	Super::Boss_Death_Implementation();
 }
 
+//void ABoss_TimeMaster::InitFunc_Implementation()
+//{
+//	Super::InitFunc_Implementation();
+//
+//}
+
 void ABoss_TimeMaster::AttackFunc_Implementation(int caseNum)
 {
 }
@@ -118,6 +187,7 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 		DamageFlash();
 	}
+	//Check Boss Pase for Damage Change & Load Other Boss Stage
 	CheckCurrentPase();
 
 	return 0.0f;
@@ -136,4 +206,28 @@ void ABoss_TimeMaster::OnRangeOverlapBegin(UPrimitiveComponent* const Overlapped
 void ABoss_TimeMaster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
+}
+
+void ABoss_TimeMaster::AttackEnd()
+{
+	UE_LOG(LogTemp, Error, TEXT("Attack End Called, go back to Not Attack Now BT"));
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", false);
+	SetAttackTimer();
+}
+
+void ABoss_TimeMaster::SetAttackTimer()
+{
+	UE_LOG(LogTemp, Error, TEXT("Set Attack Timer"));
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &ABoss_TimeMaster::CallAttackBB, AttackDelay, true);
+}
+
+void ABoss_TimeMaster::ResetAttackTimer()
+{
+	UE_LOG(LogTemp, Error, TEXT("Clear Attack Timer"));
+	GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
+}
+
+void ABoss_TimeMaster::CallAttackBB()
+{
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", true);
 }
