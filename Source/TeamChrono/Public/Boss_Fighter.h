@@ -60,6 +60,8 @@ public:
 
 	void DamageFlash_Implementation() override;
 
+	//void InitFunc_Implementation() override;
+
 // Overlap Events
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
@@ -274,9 +276,9 @@ public:
 	void SetIsFothGimicING(const bool newBool) { isFothGimic = newBool; }
 	// Fst Gimic
 	void SetFstAttackCount(const int newCount) { Fst_CurrentAttackCount = newCount; }
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void ClearMarbleArray();
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void ClearTornadoArray();
 	// Trd Gimic
 	UFUNCTION(BlueprintCallable)
