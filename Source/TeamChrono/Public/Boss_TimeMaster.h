@@ -96,7 +96,8 @@ public:
 		int const OtherBodyIndex) override;
 
 /// Calculate Funs
-
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void CalculateStrikeHitRange();
 
 
 /// Attack Funcs
@@ -120,9 +121,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CallAttackBB();
 
-	// Normal Attack - Strike
+/// Normal Attack - Strike
+	// Call Montage Func
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void StrikeAttack();
+	// Add Strike Effect Func
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void Strike_AddNiagaraEffect(class UNiagaraComponent* Effect);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void Strike_AttackLine();
+
 
 	// Gimic Attack Funcs
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

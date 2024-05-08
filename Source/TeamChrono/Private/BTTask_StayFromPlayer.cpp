@@ -18,7 +18,7 @@ EBTNodeResult::Type UBTTask_StayFromPlayer::ExecuteTask(UBehaviorTreeComponent& 
 	{
 		if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
 		{
-			Chrono->SetFarfromPlayer(Chrono->GetCenterByDistance(), GetRandomFloat(minTime, maxTime));
+			//Chrono->SetFarfromPlayer(Chrono->GetCenterByDistance(), GetRandomFloat(minTime, maxTime));
 
 			currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
 
