@@ -125,12 +125,13 @@ public:
 	// Call Montage Func
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void StrikeAttack();
-	// Add Strike Effect Func
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void Strike_AddNiagaraEffect(class UNiagaraComponent* Effect);
+	void Strike_FrontFunc();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void Strike_AttackLine();
 
+
+	
 
 	// Gimic Attack Funcs
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
