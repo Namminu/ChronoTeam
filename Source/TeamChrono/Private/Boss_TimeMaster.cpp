@@ -42,6 +42,8 @@ void ABoss_TimeMaster::BeginPlay()
 	is3PaseStart = false;
 	// Reset Boss Damage
 	BossDamage = 1;
+	// Reset Boss Hp Rate For Spawn Monster by Hp Rate
+	beforeHpRate = 100;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
@@ -75,6 +77,7 @@ void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
 
 void ABoss_TimeMaster::CheckCurrentPase()
 {
+	// Set Pase 2
 	if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_2PaseHp && (GetBossCurrentHp() / GetBossMaxHp()) > f_3PaseHp)
 	{
 		CurrentPase = 2;
@@ -85,6 +88,7 @@ void ABoss_TimeMaster::CheckCurrentPase()
 			//OpenOtherBossPortal(CurrentPase);
 		}
 	}
+	// Set Pase 3
 	else if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_3PaseHp)
 	{
 		CurrentPase = 3;
@@ -93,6 +97,22 @@ void ABoss_TimeMaster::CheckCurrentPase()
 			is3PaseStart = true;
 			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
 			//OpenOtherBossPortal(CurrentPase);
+		}
+	}
+}
+
+void ABoss_TimeMaster::CheckSpawnHpRate()
+{
+	// Check Hp Percent When Boss Doesn't Die
+	if (!(GetBossCurrentHp() <= 0))
+	{
+		float currentHpRate = ((GetBossCurrentHp() / GetBossMaxHp()) * 100);
+
+		if ((beforeHpRate - currentHpRate) >= SpawnHpPercent)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Spawn Monster Time"));
+			beforeHpRate = beforeHpRate - SpawnHpPercent;
+			SpawnMonsterFlip();
 		}
 	}
 }
@@ -130,8 +150,8 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsAttack = true;
 
-		//AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount - 1));
-		AttackFunc(2);
+		AttackFunc(GetRandomAttackNum(0, NormalAttackTotalCount - 1));
+		//AttackFunc(2);
 		cur_StrikeCount++;
 		cur_SkillCount++;
 	}
@@ -148,7 +168,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsGimic = true;
 
-		GimicFunc(GetRandomAttackNum(0, GimicTotalCount));
+		GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
 		cur_SkillCount = 0;
 	}
 	// Both Gimic Attack and Strike Attack / Not Normal Attack
@@ -189,7 +209,8 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	}
 	//Check Boss Pase for Damage Change & Load Other Boss Stage
 	CheckCurrentPase();
-
+	//Check Boss Hp Percent for Spawn Normal Monsters
+	CheckSpawnHpRate();
 	return 0.0f;
 }
 

@@ -6,6 +6,7 @@
 #include "Base_Boss.h"
 #include "Chrono_Weapon_ClockPin.h"
 #include "Chrono_JustMeshPin.h"
+#include "DownGradeMonsterSpawner.h"
 #include "Boss_TimeMaster.generated.h"
 
 /**
@@ -51,6 +52,8 @@ public:
 	void SetFlashMT(class USkeletalMeshComponent* skeleton, int index);
 
 	void CheckCurrentPase();
+	void CheckSpawnHpRate();
+
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OpenOtherBossPortal(int paseNum);
@@ -128,10 +131,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void Strike_FrontFunc();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void Strike_AttackLine();
-
-
-	
+	void Strike_AttackLine();	
 
 	// Gimic Attack Funcs
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
@@ -140,6 +140,11 @@ public:
 	// Gimic Attack After Strike
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void StrikeGimic(int GimicNum);
+
+/// Gimic Attack Funcs
+	// Fst Gimic - Spawn Monster by Hp Rate
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SpawnMonsterFlip();
 
 private:
 /// Center Arrow
@@ -206,9 +211,19 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))
 	int max_SkillCount;
 
-	// Gimic Properties
+/// Gimic Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	int GimicTotalCount;
+
+	// Fst Gimic - Spawn Monster by Hp Rate
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SPAWN", meta = (AllowPrivateAccess = "true"))
+	float SpawnHpPercent;
+	UPROPERTY(VisibleAnywhere, Category = "SPAWN", meta = (AllowPrivateAccess = "true"))
+	float beforeHpRate;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SPAWN", meta = (AllowPrivateAccess = "true"))
+	TArray<ADownGradeMonsterSpawner*> SpawnerFstArray;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SPAWN", meta = (AllowPrivateAccess = "true"))
+	TArray<ADownGradeMonsterSpawner*> SpawnerSndArray;
 
 public:
 ///Getter
