@@ -40,8 +40,6 @@ void ABoss_TimeMaster::BeginPlay()
 	CurrentPase = 1;
 	is2PaseStart = false;
 	is3PaseStart = false;
-	// Reset Boss Damage
-	BossDamage = 1;
 	// Reset Boss Hp Rate For Spawn Monster by Hp Rate
 	beforeHpRate = 100;
 }

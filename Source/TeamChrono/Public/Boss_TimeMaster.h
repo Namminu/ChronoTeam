@@ -146,6 +146,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SpawnMonsterFlip();
 
+	// Snd Gimic - Spawn Meteor Random Space
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SpawnMeteor(int currentPase);
+
+	// Trd Gimic - Spawn GroundOrb 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SpawnGroundOrb();
+
 private:
 /// Center Arrow
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default", meta = (AllowPrivateAccess = "true"))
@@ -191,8 +199,6 @@ private:
 	bool bIsAttack;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	bool bIsGimic;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
-	int BossDamage;
 
 	bool IsEscape;
 
