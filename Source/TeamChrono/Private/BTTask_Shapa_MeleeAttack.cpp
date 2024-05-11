@@ -1,20 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_ChronoMeleeAttack.h"
-#include "Boss_TimeMaster.h"
+#include "BTTask_Shapa_MeleeAttack.h"
+#include "Boss_Chrono_ShadowPartner.h"
 #include "BossAIController.h"
 
-UBTTask_ChronoMeleeAttack::UBTTask_ChronoMeleeAttack()
+UBTTask_Shapa_MeleeAttack::UBTTask_Shapa_MeleeAttack()
 {
-	NodeName = TEXT("Chrono Melee Attack");
+	NodeName = TEXT("Shapa Melee Attack");
 }
 
-EBTNodeResult::Type UBTTask_ChronoMeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_Shapa_MeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	//monster in range so get the AI's controller and the Monster itself
 	auto const* const cont = OwnerComp.GetAIOwner();
-	auto* const Monster = Cast<ABoss_TimeMaster>(cont->GetPawn());
+	auto* const Monster = Cast<ABoss_Chrono_ShadowPartner>(cont->GetPawn());
 
 	//if the Monster supports the ICombatInterface, cast and call the Execute_MeleeAttack function 
 	if (auto* const icombat = Cast<ICombatInterface>(Monster))
@@ -31,7 +30,7 @@ EBTNodeResult::Type UBTTask_ChronoMeleeAttack::ExecuteTask(UBehaviorTreeComponen
 	return EBTNodeResult::Type();
 }
 
-bool UBTTask_ChronoMeleeAttack::MontageHasFinished(ABoss_TimeMaster* const Monster)
+bool UBTTask_Shapa_MeleeAttack::MontageHasFinished(ABoss_Chrono_ShadowPartner* const Monster)
 {
 	return !(Monster->GetMesh()->GetAnimInstance()->IsAnyMontagePlaying());
 }

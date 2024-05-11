@@ -166,7 +166,8 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsGimic = true;
 
-		GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
+		//GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
+		GimicFunc(3);
 		cur_SkillCount = 0;
 	}
 	// Both Gimic Attack and Strike Attack / Not Normal Attack

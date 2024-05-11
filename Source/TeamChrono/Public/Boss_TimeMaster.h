@@ -54,7 +54,6 @@ public:
 	void CheckCurrentPase();
 	void CheckSpawnHpRate();
 
-
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OpenOtherBossPortal(int paseNum);
 
@@ -153,6 +152,10 @@ public:
 	// Trd Gimic - Spawn GroundOrb 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SpawnGroundOrb();
+
+	// Foth Gimic - Spawn ShadowPartner
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ShadowPartner();
 
 private:
 /// Center Arrow
