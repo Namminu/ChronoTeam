@@ -6,6 +6,7 @@
 #include "BossAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "Boss_Chrono_ShadowPartner.h"
 
 UBTTask_StayFromPlayer::UBTTask_StayFromPlayer()
 {
@@ -16,21 +17,41 @@ EBTNodeResult::Type UBTTask_StayFromPlayer::ExecuteTask(UBehaviorTreeComponent& 
 {
 	if (auto* const cont = Cast<ABossAIController>(OwnerComp.GetAIOwner()))
 	{
-		if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
+		if (OwnerComp.GetOwner()->ActorHasTag("SHAPA"))
 		{
-			//Chrono->SetFarfromPlayer(Chrono->GetCenterByDistance(), GetRandomFloat(minTime, maxTime));
+			if (auto* const Shapa = Cast<ABoss_Chrono_ShadowPartner>(cont->GetPawn()))
+			{
+				currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
 
-			currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
+				FVector CircleLocation = Shapa->GetCenterArrow()->GetActorLocation()
+					+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
 
-			FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation() 
-				+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
+				FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Shapa->GetCenterArrow()->GetActorLocation().Z + UpAmount);
 
-			FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Chrono->GetCenterArrow()->GetActorLocation().Z + UpAmount);
+				Shapa->SetActorLocation(newLocation);
 
-			Chrono->SetActorLocation(newLocation);
-
-			return EBTNodeResult::Succeeded;
+				return EBTNodeResult::Succeeded;
+			}
 		}
+		else
+		{
+			if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
+			{
+				//Chrono->SetFarfromPlayer(Chrono->GetCenterByDistance(), GetRandomFloat(minTime, maxTime));
+
+				currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
+
+				FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation()
+					+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
+
+				FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Chrono->GetCenterArrow()->GetActorLocation().Z + UpAmount);
+
+				Chrono->SetActorLocation(newLocation);
+
+				return EBTNodeResult::Succeeded;
+			}
+		}
+
 	}
 
 	return EBTNodeResult::Failed;
