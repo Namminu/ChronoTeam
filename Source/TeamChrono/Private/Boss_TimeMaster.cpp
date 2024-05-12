@@ -167,7 +167,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 		bIsGimic = true;
 
 		//GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
-		GimicFunc(3);
+		GimicFunc(2);
 		cur_SkillCount = 0;
 	}
 	// Both Gimic Attack and Strike Attack / Not Normal Attack
@@ -230,7 +230,6 @@ void ABoss_TimeMaster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCo
 
 void ABoss_TimeMaster::AttackEnd()
 {
-	UE_LOG(LogTemp, Error, TEXT("Attack End Called, go back to Not Attack Now BT"));
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", false);
 	SetAttackTimer();
 }

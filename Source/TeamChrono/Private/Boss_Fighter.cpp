@@ -453,8 +453,3 @@ void ABoss_Fighter::CheckHpPercent()
 		}
 	}
 }
-
-/*
-	if (!isFstGimic && !isSndGimic && !isTrdGimic)
-	{
-*/
