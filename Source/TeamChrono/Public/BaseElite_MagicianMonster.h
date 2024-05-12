@@ -6,7 +6,7 @@
 #include "BaseEliteMonster.h"
 #include <TeamChrono/TeamChronoCharacter.h>
 #include "Magician_BigAttack.h"
-#include "MonsterSpawner.h"
+#include "DownGradeMonsterSpawner.h"
 #include "BaseElite_MagicianMonster.generated.h"
 /**
  * 
@@ -122,7 +122,7 @@ private:
 	bool isBigAck;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
-	TArray<AMonsterSpawner*> SpawnerArray;
+	TArray<ADownGradeMonsterSpawner*> SpawnerArray;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
 	float SpawnDelay;

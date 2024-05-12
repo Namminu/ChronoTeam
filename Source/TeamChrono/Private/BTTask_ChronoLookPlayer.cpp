@@ -5,6 +5,7 @@
 #include "Boss_TimeMaster.h"
 #include "BossAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Boss_Chrono_ShadowPartner.h"
 
 UBTTask_ChronoLookPlayer::UBTTask_ChronoLookPlayer()
 {
@@ -15,10 +16,20 @@ EBTNodeResult::Type UBTTask_ChronoLookPlayer::ExecuteTask(UBehaviorTreeComponent
 {
 	if (auto const* const cont = OwnerComp.GetAIOwner())
 	{
-		if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
+		if (OwnerComp.GetOwner()->ActorHasTag("SHAPA"))
 		{
-			Chrono->StayLookPlayer(OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey()), GetRandomFloat(minTime, maxTime));
+			if (auto* const Shapa = Cast<ABoss_Chrono_ShadowPartner>(cont->GetPawn()))
+			{
+				Shapa->StayLookPlayer(OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey()), GetRandomFloat(minTime, maxTime));
+			}
 		}
+		else
+		{
+			if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
+			{
+				Chrono->StayLookPlayer(OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey()), GetRandomFloat(minTime, maxTime));
+			}
+		}	
 	}
 	
 	return EBTNodeResult::Succeeded;

@@ -5,7 +5,6 @@
 #include "Boss_TimeMaster.h"
 #include "BossAIController.h"
 
-
 UBTTask_ChronoMeleeAttack::UBTTask_ChronoMeleeAttack()
 {
 	NodeName = TEXT("Chrono Melee Attack");
