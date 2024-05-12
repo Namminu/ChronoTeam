@@ -97,6 +97,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default", meta = (AllowPrivateAccess = "true"))
 	class AActor* CenterArrow;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
+	bool shapa_OrbitFinish;
+
 /// SKM
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* sk_Halo;
@@ -121,5 +124,11 @@ private:
 	float ShapaAttackDelay;
 
 public:
+/// Getter
 	AActor* GetCenterArrow() const { return CenterArrow; }
+	bool GetShapaOrbitFinish() const { return shapa_OrbitFinish; }
+
+/// Setter
+	UFUNCTION(BlueprintCallable)
+	void SetShapaOrbitFinish(const bool newBool) { shapa_OrbitFinish = newBool; }
 };

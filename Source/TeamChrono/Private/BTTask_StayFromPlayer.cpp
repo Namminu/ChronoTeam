@@ -20,30 +20,41 @@ EBTNodeResult::Type UBTTask_StayFromPlayer::ExecuteTask(UBehaviorTreeComponent& 
 		if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
 		{
 			//Chrono->SetFarfromPlayer(Chrono->GetCenterByDistance(), GetRandomFloat(minTime, maxTime));
-
 			currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
 
-			FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation()
-				+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
+			if (!Chrono->GetOrbitFinish())
+			{
+				Chrono->SetOrbitFinish(true);
 
-			FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Chrono->GetCenterArrow()->GetActorLocation().Z + UpAmount);
+				FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation()
+					+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
 
-			Chrono->SetActorLocation(newLocation);
+				FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Chrono->GetCenterArrow()->GetActorLocation().Z + UpAmount);
 
-			return EBTNodeResult::Succeeded;
+				//Chrono->SetActorLocation(newLocation);
+
+				Chrono->SetLocationToOrbit(newLocation);
+
+				return EBTNodeResult::Succeeded;
+			}
+			else return EBTNodeResult::Failed;
 		}
 		else if (auto* const Shapa = Cast<ABoss_Chrono_ShadowPartner>(cont->GetPawn()))
 		{
-			currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
+			if (!Shapa->GetShapaOrbitFinish())
+			{
+				currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
 
-			FVector CircleLocation = Shapa->GetCenterArrow()->GetActorLocation()
-				+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
+				FVector CircleLocation = Shapa->GetCenterArrow()->GetActorLocation()
+					+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
 
-			FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Shapa->GetCenterArrow()->GetActorLocation().Z + UpAmount);
+				FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Shapa->GetCenterArrow()->GetActorLocation().Z + UpAmount);
 
-			Shapa->SetActorLocation(newLocation);
+				Shapa->SetActorLocation(newLocation);
 
-			return EBTNodeResult::Succeeded;
+				return EBTNodeResult::Succeeded;
+			}
+			else return EBTNodeResult::Failed;
 		}
 	}
 

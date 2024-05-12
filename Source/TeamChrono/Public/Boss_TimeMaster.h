@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void StayLookPlayer(FVector TargetLocation, float newTime);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetLocationToOrbit(FVector TargetLocation);
+
 	/// <summary>
 	/// Get Random Number to Attack&Gimic
 	/// </summary>
@@ -207,6 +210,9 @@ private:
 
 	bool IsEscape;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
+	bool bIsOrbitFinish;
+
 	// Normal Attack Properties
 	FTimerHandle AttackTimer;
 	int BeforeAttackNum;
@@ -245,6 +251,7 @@ public:
 	AActor* GetCenterArrow() const { return CenterArrow; }
 
 	bool GetEscapse() const { return IsEscape; }
+	bool GetOrbitFinish() const { return bIsOrbitFinish; }
 
 	// Normal Attack
 	int GetNormalAtkType() const { return NormalAttackTotalCount; }
@@ -255,5 +262,6 @@ public:
 ///Setter
 	UFUNCTION(BlueprintCallable)
 	void SetEscape(const bool newBool) { IsEscape = newBool; }
-
+	UFUNCTION(BlueprintCallable)
+	void SetOrbitFinish(const bool newBool) { bIsOrbitFinish = newBool; }
 };

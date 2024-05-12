@@ -25,6 +25,7 @@ ABoss_TimeMaster::ABoss_TimeMaster()
 void ABoss_TimeMaster::BeginPlay()
 {
 	IsEscape = false;
+	bIsOrbitFinish = false;
 
 	Super::BeginPlay();
 
