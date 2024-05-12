@@ -62,8 +62,15 @@ void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 int ABoss_TimeMaster::GetRandomAttackNum(int min, int max)
 {
 	int num = FMath::RandRange(min, max);
-	UE_LOG(LogTemp, Error, TEXT("%d"), num);
-	return num;
+	if (BeforeAttackNum == num && num == 1)
+	{
+		return GetRandomAttackNum(min, max);
+	}
+	else
+	{
+		BeforeAttackNum = num;
+		return num;
+	}
 }
 
 void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
@@ -166,8 +173,8 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsGimic = true;
 
-		//GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
-		GimicFunc(3);
+		GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
+		//GimicFunc(2);
 		cur_SkillCount = 0;
 	}
 	// Both Gimic Attack and Strike Attack / Not Normal Attack
@@ -230,7 +237,6 @@ void ABoss_TimeMaster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCo
 
 void ABoss_TimeMaster::AttackEnd()
 {
-	UE_LOG(LogTemp, Error, TEXT("Attack End Called, go back to Not Attack Now BT"));
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", false);
 	SetAttackTimer();
 }

@@ -56,9 +56,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OpenOtherBossPortal(int paseNum);
-
-	//UFUNCTION(BlueprintCallable)
-	//void AttachWeaponPin(TSubclassOf<AChrono_Weapon_ClockPin> Weapon, FName WeaponSocket);
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void Boss2PaseAttachPin();
+	UFUNCTION(BlueprintImplementableEvent)
+	void Boss3PaseAttachPin();
 
 	UFUNCTION(BlueprintCallable)
 	void TempAttachPin(TSubclassOf<AChrono_JustMeshPin> Weapon, FName WeaponSocket);
@@ -207,6 +209,7 @@ private:
 
 	// Normal Attack Properties
 	FTimerHandle AttackTimer;
+	int BeforeAttackNum;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ATTACK", meta = (AllowPrivateAccess = "true"))
 	float AttackDelay;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NORMAL ATTACK", meta = (AllowPrivateAccess = "true"))

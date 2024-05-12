@@ -45,6 +45,9 @@ public:
 
 /// Local Funcs
 	UFUNCTION(BlueprintCallable)
+	void SetupCenterArrow(class AActor* centerArrow);
+
+	UFUNCTION(BlueprintCallable)
 	void TempAttachPin(TSubclassOf<AChrono_JustMeshPin> Weapon, FName WeaponSocket);
 
 	UFUNCTION(BlueprintCallable)
@@ -53,16 +56,28 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void LoopByChronoPase(int ChronoPase);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetMTI();
+
+	UFUNCTION(BlueprintCallable)
+	void SetPinMeshMTI();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ChangeOpacity(int start, int end);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ClockPinChangeOpacity(int start, int end);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void StayLookPlayer(FVector TargetLocation, float newTime);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void CheckDisappearTime();
+
 /// Timer Funcs	
+	UFUNCTION()
+	void Shapa_AttackEnd();
+
 	UFUNCTION(BlueprintCallable)
 	void SetAttackTimer();
 	UFUNCTION(BlueprintCallable)
@@ -96,6 +111,9 @@ private:
 /// MTI
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MTI", meta = (AllowPrivateAccess = "true"))
 	class UMaterialInstanceDynamic* MTI;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MTI", meta = (AllowPrivateAccess = "true"))
+	TArray<UMaterialInstanceDynamic*> ClockPinMTIArray;
 
 /// Attack Timer
 	FTimerHandle ShapaAttackTimer;

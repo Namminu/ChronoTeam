@@ -29,4 +29,7 @@ public:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "COMPONENT", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* PinMesh;
+
+public:
+	UStaticMeshComponent* GetMesh() const { return PinMesh; }
 };
