@@ -160,12 +160,12 @@ void ABaseElite_MagicianMonster::MakeBigAttack_Implementation()
 
 void ABaseElite_MagicianMonster::SpawnMonster()
 {
-	for (AMonsterSpawner* Spawner : SpawnerArray)
+	for (ADownGradeMonsterSpawner* Spawner : SpawnerArray)
 	{
 		if (Spawner)
 		{
 			//Spawn Monster
-			Spawner->SpawnMonster();
+			Spawner->MonsterSpawn();
 		}
 	}
 }
