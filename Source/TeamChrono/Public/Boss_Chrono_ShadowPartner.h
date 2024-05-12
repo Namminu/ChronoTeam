@@ -71,6 +71,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void StayLookPlayer(FVector TargetLocation, float newTime);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void CheckDisappearTime();
+
 /// Timer Funcs	
 	UFUNCTION()
 	void Shapa_AttackEnd();

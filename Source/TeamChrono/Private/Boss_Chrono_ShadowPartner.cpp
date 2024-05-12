@@ -26,13 +26,6 @@ void ABoss_Chrono_ShadowPartner::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentAttackCount = 0;
-
-	//// Setup Material Instance for Change Opacity
-	//SetMTI();
-	//SetPinMeshMTI();
-	//// Call Change Opacity
-	//ChangeOpacity(0, 1);
-	//ClockPinChangeOpacity(0, 1);
 }
 
 void ABoss_Chrono_ShadowPartner::Tick(float DeltaTime)
@@ -49,18 +42,11 @@ void ABoss_Chrono_ShadowPartner::EndPlay(const EEndPlayReason::Type EndPlayReaso
 
 int ABoss_Chrono_ShadowPartner::MeleeAttack_Implementation()
 {
-	if (CurrentAttackCount < LifeAttackCount)
-	{
-		CurrentAttackCount++;
-		AttackFunc(GetRandomAttackNum(0, 2));
-	}
-	else if (CurrentAttackCount >= LifeAttackCount)
-	{
-		//Destroy Actor
-		ChangeOpacity(1, 0);
-		ClockPinChangeOpacity(1, 0);
-	}
+	CurrentAttackCount++;
+	AttackFunc(GetRandomAttackNum(0, 2));
 
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Chrono_ShadowPartner::CheckDisappearTime_Implementation, 4.f, false);
 	return 0;
 }
 
@@ -110,6 +96,16 @@ void ABoss_Chrono_ShadowPartner::SetPinMeshMTI()
 			UMaterialInstanceDynamic* PinMTI = PinMT->GetMesh()->CreateDynamicMaterialInstance(0);
 			ClockPinMTIArray.Add(PinMTI);
 		}
+	}
+}
+
+void ABoss_Chrono_ShadowPartner::CheckDisappearTime_Implementation()
+{
+	if (CurrentAttackCount >= LifeAttackCount)
+	{
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanFightNow", false);
+		ChangeOpacity(1, 0);
+		ClockPinChangeOpacity(1, 0);
 	}
 }
 
