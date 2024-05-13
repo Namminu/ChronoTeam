@@ -98,7 +98,7 @@ private:
 	class AActor* CenterArrow;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
-	bool shapa_OrbitFinish;
+	bool shapa_OrbitING;
 
 /// SKM
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
@@ -126,9 +126,9 @@ private:
 public:
 /// Getter
 	AActor* GetCenterArrow() const { return CenterArrow; }
-	bool GetShapaOrbitFinish() const { return shapa_OrbitFinish; }
+	bool GetShapaOrbitING() const { return shapa_OrbitING; }
 
 /// Setter
 	UFUNCTION(BlueprintCallable)
-	void SetShapaOrbitFinish(const bool newBool) { shapa_OrbitFinish = newBool; }
+	void SetShapaOrbitING(const bool newBool) { shapa_OrbitING = newBool; }
 };

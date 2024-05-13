@@ -26,7 +26,7 @@ void ABoss_Chrono_ShadowPartner::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentAttackCount = 0;
-	shapa_OrbitFinish = false;
+	shapa_OrbitING = false;
 }
 
 void ABoss_Chrono_ShadowPartner::Tick(float DeltaTime)

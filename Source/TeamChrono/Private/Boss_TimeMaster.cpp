@@ -25,7 +25,7 @@ ABoss_TimeMaster::ABoss_TimeMaster()
 void ABoss_TimeMaster::BeginPlay()
 {
 	IsEscape = false;
-	bIsOrbitFinish = false;
+	bIsOrbitING = false;
 
 	Super::BeginPlay();
 
@@ -184,7 +184,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 		bIsAttack = true;
 		bIsGimic = true;
 
-		StrikeGimic(GetRandomAttackNum(0, GimicTotalCount));
+		StrikeGimic();
 		cur_StrikeCount = 0;
 		cur_SkillCount = 0;
 	}

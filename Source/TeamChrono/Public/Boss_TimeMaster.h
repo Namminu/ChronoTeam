@@ -143,7 +143,7 @@ public:
 
 	// Gimic Attack After Strike
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void StrikeGimic(int GimicNum);
+	void StrikeGimic();
 
 /// Gimic Attack Funcs
 	// Fst Gimic - Spawn Monster by Hp Rate
@@ -210,8 +210,8 @@ private:
 
 	bool IsEscape;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
-	bool bIsOrbitFinish;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
+	bool bIsOrbitING;
 
 	// Normal Attack Properties
 	FTimerHandle AttackTimer;
@@ -251,7 +251,7 @@ public:
 	AActor* GetCenterArrow() const { return CenterArrow; }
 
 	bool GetEscapse() const { return IsEscape; }
-	bool GetOrbitFinish() const { return bIsOrbitFinish; }
+	bool GetOrbitING() const { return bIsOrbitING; }
 
 	// Normal Attack
 	int GetNormalAtkType() const { return NormalAttackTotalCount; }
@@ -263,5 +263,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetEscape(const bool newBool) { IsEscape = newBool; }
 	UFUNCTION(BlueprintCallable)
-	void SetOrbitFinish(const bool newBool) { bIsOrbitFinish = newBool; }
+	void SetOrbitING(const bool newBool) { bIsOrbitING = newBool; }
 };

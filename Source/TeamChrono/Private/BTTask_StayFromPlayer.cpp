@@ -22,26 +22,34 @@ EBTNodeResult::Type UBTTask_StayFromPlayer::ExecuteTask(UBehaviorTreeComponent& 
 			//Chrono->SetFarfromPlayer(Chrono->GetCenterByDistance(), GetRandomFloat(minTime, maxTime));
 			currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
 
-			if (!Chrono->GetOrbitFinish())
-			{
-				Chrono->SetOrbitFinish(true);
+			FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation()
+				+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
 
-				FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation()
-					+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
+			FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Chrono->GetCenterArrow()->GetActorLocation().Z + UpAmount);
 
-				FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Chrono->GetCenterArrow()->GetActorLocation().Z + UpAmount);
+			Chrono->SetActorLocation(newLocation);
+			return EBTNodeResult::Succeeded;
 
-				//Chrono->SetActorLocation(newLocation);
+			//if (!Chrono->GetOrbitING())
+			//{
+			//	Chrono->SetOrbitING(true);
 
-				Chrono->SetLocationToOrbit(newLocation);
+			//	FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation()
+			//		+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
 
-				return EBTNodeResult::Succeeded;
-			}
-			else return EBTNodeResult::Failed;
+			//	FVector newLocation = FVector(CircleLocation.X, CircleLocation.Y, Chrono->GetCenterArrow()->GetActorLocation().Z + UpAmount);
+
+			//	//Chrono->SetActorLocation(newLocation);
+
+			//	Chrono->SetLocationToOrbit(newLocation);
+
+			//	return EBTNodeResult::Succeeded;
+			//}
+			//else return EBTNodeResult::Succeeded;
 		}
 		else if (auto* const Shapa = Cast<ABoss_Chrono_ShadowPartner>(cont->GetPawn()))
 		{
-			if (!Shapa->GetShapaOrbitFinish())
+			if (!Shapa->GetShapaOrbitING())
 			{
 				currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
 
