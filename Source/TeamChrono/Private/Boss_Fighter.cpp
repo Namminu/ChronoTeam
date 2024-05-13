@@ -218,6 +218,11 @@ void ABoss_Fighter::Boss_Death_Implementation()
 	AttachWeapon(GetBossWeapon()->GetClass(), "Weapon_ReverseSocket");
 
 	Super::Boss_Death_Implementation();
+
+	if (this->ActorHasTag("CLONE"))
+	{
+		WhenThisIsClone();
+	}
 }
 
 void ABoss_Fighter::AttackFunc_Implementation(int caseNum)

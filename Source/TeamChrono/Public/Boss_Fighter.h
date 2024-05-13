@@ -138,7 +138,11 @@ public:
 
 	//Death Funcs
 	UFUNCTION(BlueprintImplementableEvent)
-	void SetSwordReverse();
+	void SetSwordReverse();	
+
+/// When This is Spawned by Chrono
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void WhenThisIsClone();
 
 private:
 /// Skeletal Mesh

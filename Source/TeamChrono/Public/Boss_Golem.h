@@ -140,6 +140,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	bool Foth_DamageOnCorrectParts(FVector HittedLocation);
 
+/// When This is Spawned by Chrono
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void WhenThisIsClone();
+
 private:
 ///Set Gimic Start Hp Percent
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GIMIC_Fst", meta = (AllowPrivateAccess = "true"))
