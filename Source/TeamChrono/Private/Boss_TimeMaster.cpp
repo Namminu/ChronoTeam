@@ -43,6 +43,8 @@ void ABoss_TimeMaster::BeginPlay()
 	is3PaseStart = false;
 	// Reset Boss Hp Rate For Spawn Monster by Hp Rate
 	beforeHpRate = 100;
+	// Reset Boss Hp Gimic Property
+	bIsHpGimicStart = false;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
@@ -116,7 +118,6 @@ void ABoss_TimeMaster::CheckSpawnHpRate()
 
 		if ((beforeHpRate - currentHpRate) >= SpawnHpPercent)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Spawn Monster Time"));
 			beforeHpRate = beforeHpRate - SpawnHpPercent;
 			SpawnMonsterFlip();
 		}
@@ -218,6 +219,14 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	CheckCurrentPase();
 	//Check Boss Hp Percent for Spawn Normal Monsters
 	CheckSpawnHpRate();
+
+	//Check Boss Hp Percent for Start Player Slow Scene
+	if ((GetBossCurrentHp()/GetBossMaxHp()) * 100 <= HpGimicRate && !bIsHpGimicStart)
+	{
+		bIsHpGimicStart = true;
+		StartPlayerSlow(HpGimicSlowRate, HpGimicDuration);
+	}
+
 	return 0.0f;
 }
 

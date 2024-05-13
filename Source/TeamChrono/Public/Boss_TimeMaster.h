@@ -60,6 +60,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OpenOtherBossPortal(int paseNum);
 	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StartPlayerSlow(float slowRate, float slowDuration);
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void Boss2PaseAttachPin();
 	UFUNCTION(BlueprintImplementableEvent)
@@ -242,6 +245,15 @@ private:
 	TArray<ADownGradeMonsterSpawner*> SpawnerFstArray;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SPAWN", meta = (AllowPrivateAccess = "true"))
 	TArray<ADownGradeMonsterSpawner*> SpawnerSndArray;
+
+	// Hp Percent Event Properties
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "HP GIMIC", meta = (AllowPrivateAccess = "true"))
+	float HpGimicRate;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HP GIMIC", meta = (AllowPrivateAccess = "true"))
+	float HpGimicDuration;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HP GIMIC", meta = (AllowPrivateAccess = "true"))
+	float HpGimicSlowRate;
+	bool bIsHpGimicStart;
 
 public:
 ///Getter
