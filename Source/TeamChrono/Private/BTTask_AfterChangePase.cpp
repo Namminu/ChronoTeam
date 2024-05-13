@@ -4,6 +4,8 @@
 #include "BTTask_AfterChangePase.h"
 #include "BossAIController.h"
 #include "Boss_TimeMaster.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 UBTTask_AfterChangePase::UBTTask_AfterChangePase()
 {
@@ -20,11 +22,13 @@ EBTNodeResult::Type UBTTask_AfterChangePase::ExecuteTask(UBehaviorTreeComponent&
 			{
 				Chrono->Boss2PaseAttachPin();
 
+				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangePase", false);
 			}
 			else if (Chrono->GetBossPase() == 3)
 			{
 				Chrono->Boss3PaseAttachPin();
 
+				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangePase", false);
 			}
 
 			return EBTNodeResult::Succeeded;
