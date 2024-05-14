@@ -56,12 +56,17 @@ public:
 
 	void CheckCurrentPase();
 	void CheckSpawnHpRate();
+	void CheckOpenTimeDelayZone();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OpenOtherBossPortal(int paseNum);
 	
+	//UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	//void StartPlayerSlow(float slowRate, float slowDuration);
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void StartPlayerSlow(float slowRate, float slowDuration);
+	void StartPlayerSlow();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ResizePlayerSlow();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Boss2PaseAttachPin();
@@ -233,8 +238,8 @@ private:
 	int max_SkillCount;
 
 /// Gimic Properties
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
-	int GimicTotalCount;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GIMIC", meta = (AllowPrivateAccess = "true"))
+	int GimicTotalCount = 3;
 
 	// Fst Gimic - Spawn Monster by Hp Rate
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SPAWN", meta = (AllowPrivateAccess = "true"))

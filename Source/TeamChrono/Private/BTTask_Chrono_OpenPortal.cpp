@@ -16,11 +16,12 @@ EBTNodeResult::Type UBTTask_Chrono_OpenPortal::ExecuteTask(UBehaviorTreeComponen
 	{
 		if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
 		{
+			UE_LOG(LogTemp, Error, TEXT("Chrono Open Portal"));
+
 			Chrono->OpenOtherBossPortal(Chrono->GetBossPase());
 
 			return EBTNodeResult::Succeeded;
 		}
-
 	}
 	return EBTNodeResult::Failed;
 }

@@ -86,25 +86,31 @@ void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
 void ABoss_TimeMaster::CheckCurrentPase()
 {
 	// Set Pase 2
-	if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_2PaseHp && (GetBossCurrentHp() / GetBossMaxHp()) > f_3PaseHp)
+	if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= f_2PaseHp && (GetBossCurrentHp() / GetBossMaxHp()) * 100 > f_3PaseHp)
 	{
-		CurrentPase = 2;
 		if (!is2PaseStart)
 		{
 			is2PaseStart = true;
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
-			//OpenOtherBossPortal(CurrentPase);
+			CurrentPase = 2;
+			SetInvincible(true);
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", true);
+
+			ResetAttackTimer();
 		}
 	}
 	// Set Pase 3
-	else if ((GetBossCurrentHp() / GetBossMaxHp()) <= f_3PaseHp)
+	else if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= f_3PaseHp)
 	{
-		CurrentPase = 3;
 		if (!is3PaseStart)
 		{
 			is3PaseStart = true;
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangePase", true);
-			//OpenOtherBossPortal(CurrentPase);
+			CurrentPase = 3;
+			SetInvincible(true);
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
+			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", true);
+
+			ResetAttackTimer();
 		}
 	}
 }
@@ -121,6 +127,19 @@ void ABoss_TimeMaster::CheckSpawnHpRate()
 			beforeHpRate = beforeHpRate - SpawnHpPercent;
 			SpawnMonsterFlip();
 		}
+	}
+}
+
+void ABoss_TimeMaster::CheckOpenTimeDelayZone()
+{
+	if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= HpGimicRate && !bIsHpGimicStart)
+	{
+		bIsHpGimicStart = true;
+		SetInvincible(true);
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", false);
+		ResetAttackTimer();
+		//StartPlayerSlow(HpGimicSlowRate, HpGimicDuration);
 	}
 }
 
@@ -219,13 +238,8 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	CheckCurrentPase();
 	//Check Boss Hp Percent for Spawn Normal Monsters
 	CheckSpawnHpRate();
-
 	//Check Boss Hp Percent for Start Player Slow Scene
-	if ((GetBossCurrentHp()/GetBossMaxHp()) * 100 <= HpGimicRate && !bIsHpGimicStart)
-	{
-		bIsHpGimicStart = true;
-		StartPlayerSlow(HpGimicSlowRate, HpGimicDuration);
-	}
+	CheckOpenTimeDelayZone();
 
 	return 0.0f;
 }
