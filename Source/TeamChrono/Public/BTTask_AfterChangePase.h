@@ -16,4 +16,9 @@ class TEAMCHRONO_API UBTTask_AfterChangePase : public UBTTask_BlackboardBase
 public:
 	UBTTask_AfterChangePase();
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COLOR", meta = (AllowPrivateAccess = "true"))
+	FColor Pase2Color;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "COLOR", meta = (AllowPrivateAccess = "true"))
+	FColor Pase3Color;
 };

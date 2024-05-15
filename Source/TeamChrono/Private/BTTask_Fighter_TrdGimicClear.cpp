@@ -24,6 +24,7 @@ EBTNodeResult::Type UBTTask_Fighter_TrdGimicClear::ExecuteTask(UBehaviorTreeComp
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
 
 	Fighter->SetIsTrdGimicING(false);
+	Fighter->ChangeMoveSpeed(750);
 
 	return EBTNodeResult::Succeeded;
 }

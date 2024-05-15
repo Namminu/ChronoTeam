@@ -76,6 +76,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void TempAttachPin(TSubclassOf<AChrono_JustMeshPin> Weapon, FName WeaponSocket);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ChangeHaloColor(FColor newColor);
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
@@ -207,6 +210,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
 	float f_3PaseHp;
 	bool is3PaseStart;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	class UMaterialInstanceDynamic* HaloMTI;
 
 	// Default Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
@@ -253,13 +258,16 @@ private:
 
 	// Hp Percent Event Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "HP GIMIC", meta = (AllowPrivateAccess = "true"))
-	float HpGimicRate;
+	float FstHpGimicRate;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "HP GIMIC", meta = (AllowPrivateAccess = "true"))
+	float SndHpGimicRate;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HP GIMIC", meta = (AllowPrivateAccess = "true"))
 	float HpGimicDuration;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HP GIMIC", meta = (AllowPrivateAccess = "true"))
 	float HpGimicSlowRate;
-	bool bIsHpGimicStart;
-
+	bool bIsHpGimicFstStart;
+	bool bIsHpGimicSndStart;
+	
 public:
 ///Getter
 	// Default 

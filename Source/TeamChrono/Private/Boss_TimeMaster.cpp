@@ -44,7 +44,10 @@ void ABoss_TimeMaster::BeginPlay()
 	// Reset Boss Hp Rate For Spawn Monster by Hp Rate
 	beforeHpRate = 100;
 	// Reset Boss Hp Gimic Property
-	bIsHpGimicStart = false;
+	bIsHpGimicFstStart = false;
+	bIsHpGimicSndStart = false;
+	// Setup Halo Material Instance
+	HaloMTI = sk_Halo->CreateDynamicMaterialInstance(0);
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
@@ -132,14 +135,22 @@ void ABoss_TimeMaster::CheckSpawnHpRate()
 
 void ABoss_TimeMaster::CheckOpenTimeDelayZone()
 {
-	if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= HpGimicRate && !bIsHpGimicStart)
+	if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= FstHpGimicRate && !bIsHpGimicFstStart)
 	{
-		bIsHpGimicStart = true;
+		bIsHpGimicFstStart = true;
 		SetInvincible(true);
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", false);
 		ResetAttackTimer();
-		//StartPlayerSlow(HpGimicSlowRate, HpGimicDuration);
+	}
+
+	else if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= SndHpGimicRate && !bIsHpGimicSndStart)
+	{
+		bIsHpGimicSndStart = true;
+		SetInvincible(true);
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", false);
+		ResetAttackTimer();
 	}
 }
 
@@ -274,7 +285,7 @@ void ABoss_TimeMaster::SetAttackTimer()
 void ABoss_TimeMaster::ResetAttackTimer()
 {
 	UE_LOG(LogTemp, Error, TEXT("Clear Attack Timer"));
-	GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
+	GetWorld()->GetTimerManager().ClearTimer(AttackTimer); 
 }
 
 void ABoss_TimeMaster::CallAttackBB()

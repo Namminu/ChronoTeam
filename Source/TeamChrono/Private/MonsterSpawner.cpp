@@ -3,6 +3,7 @@
 
 #include "MonsterSpawner.h"
 #include <NotifierDoor.h>
+#include "Monster_Weapon.h"
 
 // Sets default values
 AMonsterSpawner::AMonsterSpawner()
@@ -10,6 +11,12 @@ AMonsterSpawner::AMonsterSpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+}
+
+void AMonsterSpawner::DestroySpawnedMonster()
+{
+	SpawnedMonster->Destroy();
+	SpawnedMonster->GetWeaponInstance_Fst()->Destroy();
 }
 
 // Called when the game starts or when spawned
@@ -50,6 +57,19 @@ void AMonsterSpawner::Tick(float DeltaTime)
 			}
 		}
 	}
+}
+
+void AMonsterSpawner::InitFunc()
+{
+	CurrentSpawn = 0;
+
+	isMonsterDied = true;
+	isAllMonsterDie = false;
+
+	SpawnedMonster->InitFunc();
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::DestroySpawnedMonster, 3.f, false);
 }
 
 void AMonsterSpawner::SpawnMonster_Implementation()

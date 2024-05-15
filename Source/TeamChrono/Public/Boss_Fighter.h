@@ -33,6 +33,9 @@ public:
 
 	void SetFullFMTI();
 
+	UFUNCTION(BlueprintCallable)
+	void ChangeMoveSpeed(float moveSpeed);
+
 // Override Funcs
 	int MeleeAttack_Implementation() override;
 

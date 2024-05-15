@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "MonsterSpawner.h"
 #include "BaseMonster.h"
+#include <TeamChrono/TeamChronoCharacter.h>
 #include "NotifierDoor.generated.h"
 
 UCLASS()
@@ -38,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetPlayerESkillLocation();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void InitFunc_PlayerDie();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawner", meta = (AllowPrivateAccess = "true"))
 	TArray<AMonsterSpawner*> SpawnerArray;
@@ -51,6 +55,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* BoxColl;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool isGetWorked;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
