@@ -16,23 +16,20 @@ EBTNodeResult::Type UBTTask_ChronoLookPlayer::ExecuteTask(UBehaviorTreeComponent
 {
 	if (auto const* const cont = OwnerComp.GetAIOwner())
 	{
-		if (OwnerComp.GetOwner()->ActorHasTag("SHAPA"))
+		if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
 		{
-			if (auto* const Shapa = Cast<ABoss_Chrono_ShadowPartner>(cont->GetPawn()))
-			{
-				Shapa->StayLookPlayer(OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey()), GetRandomFloat(minTime, maxTime));
-			}
+			Chrono->StayLookPlayer(OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey()), GetRandomFloat(minTime, maxTime));
+
+			return EBTNodeResult::Succeeded;
 		}
-		else
+		else if (auto* const Shapa = Cast<ABoss_Chrono_ShadowPartner>(cont->GetPawn()))
 		{
-			if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
-			{
-				Chrono->StayLookPlayer(OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey()), GetRandomFloat(minTime, maxTime));
-			}
-		}	
+			Shapa->StayLookPlayer(OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey()), GetRandomFloat(minTime, maxTime)); 
+
+			return EBTNodeResult::Succeeded;
+		}
 	}
-	
-	return EBTNodeResult::Succeeded;
+	return EBTNodeResult::Failed;
 }
 
 float UBTTask_ChronoLookPlayer::GetRandomFloat(float min, float max)

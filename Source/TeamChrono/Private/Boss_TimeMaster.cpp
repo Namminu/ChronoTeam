@@ -25,6 +25,7 @@ ABoss_TimeMaster::ABoss_TimeMaster()
 void ABoss_TimeMaster::BeginPlay()
 {
 	IsEscape = false;
+	bIsOrbitING = false;
 
 	Super::BeginPlay();
 
@@ -42,6 +43,8 @@ void ABoss_TimeMaster::BeginPlay()
 	is3PaseStart = false;
 	// Reset Boss Hp Rate For Spawn Monster by Hp Rate
 	beforeHpRate = 100;
+	// Reset Boss Hp Gimic Property
+	bIsHpGimicStart = false;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
@@ -62,8 +65,15 @@ void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 int ABoss_TimeMaster::GetRandomAttackNum(int min, int max)
 {
 	int num = FMath::RandRange(min, max);
-	UE_LOG(LogTemp, Error, TEXT("%d"), num);
-	return num;
+	if (BeforeAttackNum == num && num == 1)
+	{
+		return GetRandomAttackNum(min, max);
+	}
+	else
+	{
+		BeforeAttackNum = num;
+		return num;
+	}
 }
 
 void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
@@ -108,7 +118,6 @@ void ABoss_TimeMaster::CheckSpawnHpRate()
 
 		if ((beforeHpRate - currentHpRate) >= SpawnHpPercent)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Spawn Monster Time"));
 			beforeHpRate = beforeHpRate - SpawnHpPercent;
 			SpawnMonsterFlip();
 		}
@@ -166,8 +175,8 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	{
 		bIsGimic = true;
 
-		//GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
-		GimicFunc(3);
+		GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
+		//GimicFunc(2);
 		cur_SkillCount = 0;
 	}
 	// Both Gimic Attack and Strike Attack / Not Normal Attack
@@ -176,7 +185,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 		bIsAttack = true;
 		bIsGimic = true;
 
-		StrikeGimic(GetRandomAttackNum(0, GimicTotalCount));
+		StrikeGimic();
 		cur_StrikeCount = 0;
 		cur_SkillCount = 0;
 	}
@@ -210,6 +219,14 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	CheckCurrentPase();
 	//Check Boss Hp Percent for Spawn Normal Monsters
 	CheckSpawnHpRate();
+
+	//Check Boss Hp Percent for Start Player Slow Scene
+	if ((GetBossCurrentHp()/GetBossMaxHp()) * 100 <= HpGimicRate && !bIsHpGimicStart)
+	{
+		bIsHpGimicStart = true;
+		StartPlayerSlow(HpGimicSlowRate, HpGimicDuration);
+	}
+
 	return 0.0f;
 }
 
@@ -230,7 +247,6 @@ void ABoss_TimeMaster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCo
 
 void ABoss_TimeMaster::AttackEnd()
 {
-	UE_LOG(LogTemp, Error, TEXT("Attack End Called, go back to Not Attack Now BT"));
 	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", false);
 	SetAttackTimer();
 }

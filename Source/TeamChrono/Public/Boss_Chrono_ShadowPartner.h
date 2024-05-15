@@ -45,6 +45,9 @@ public:
 
 /// Local Funcs
 	UFUNCTION(BlueprintCallable)
+	void SetupCenterArrow(class AActor* centerArrow);
+
+	UFUNCTION(BlueprintCallable)
 	void TempAttachPin(TSubclassOf<AChrono_JustMeshPin> Weapon, FName WeaponSocket);
 
 	UFUNCTION(BlueprintCallable)
@@ -53,16 +56,28 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void LoopByChronoPase(int ChronoPase);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetMTI();
+
+	UFUNCTION(BlueprintCallable)
+	void SetPinMeshMTI();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ChangeOpacity(int start, int end);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ClockPinChangeOpacity(int start, int end);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void StayLookPlayer(FVector TargetLocation, float newTime);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void CheckDisappearTime();
+
 /// Timer Funcs	
+	UFUNCTION()
+	void Shapa_AttackEnd();
+
 	UFUNCTION(BlueprintCallable)
 	void SetAttackTimer();
 	UFUNCTION(BlueprintCallable)
@@ -82,6 +97,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default", meta = (AllowPrivateAccess = "true"))
 	class AActor* CenterArrow;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
+	bool shapa_OrbitING;
+
 /// SKM
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "SKM", meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* sk_Halo;
@@ -97,11 +115,20 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MTI", meta = (AllowPrivateAccess = "true"))
 	class UMaterialInstanceDynamic* MTI;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MTI", meta = (AllowPrivateAccess = "true"))
+	TArray<UMaterialInstanceDynamic*> ClockPinMTIArray;
+
 /// Attack Timer
 	FTimerHandle ShapaAttackTimer;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ATTACK", meta = (AllowPrivateAccess = "true"))
 	float ShapaAttackDelay;
 
 public:
+/// Getter
 	AActor* GetCenterArrow() const { return CenterArrow; }
+	bool GetShapaOrbitING() const { return shapa_OrbitING; }
+
+/// Setter
+	UFUNCTION(BlueprintCallable)
+	void SetShapaOrbitING(const bool newBool) { shapa_OrbitING = newBool; }
 };
