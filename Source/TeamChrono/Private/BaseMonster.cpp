@@ -83,6 +83,13 @@ void ABaseMonster::InitFunc_Implementation()
 	{
 		monsterAI->StopAI();
 	}
+
+	//Destroy();
+	//WeaponInstance->Destroy();
+
+	FTimerHandle TimerHandle;
+	float delay = 3.3f;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);
 }
 
 // Called when the game starts or when spawned  
@@ -300,7 +307,8 @@ void ABaseMonster::mon_Death_Implementation()
 
 void ABaseMonster::mon_Destroy()
 {
-	Destroy();	
+	Destroy();
+	WeaponInstance->Destroy();
 }
 
 void ABaseMonster::CreateMTI()

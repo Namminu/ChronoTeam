@@ -59,7 +59,7 @@ void AMonsterSpawner::Tick(float DeltaTime)
 	}
 }
 
-void AMonsterSpawner::InitFunc()
+void AMonsterSpawner::InitFunc_Implementation()
 {
 	CurrentSpawn = 0;
 
@@ -67,9 +67,6 @@ void AMonsterSpawner::InitFunc()
 	isAllMonsterDie = false;
 
 	SpawnedMonster->InitFunc();
-
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::DestroySpawnedMonster, 3.f, false);
 }
 
 void AMonsterSpawner::SpawnMonster_Implementation()

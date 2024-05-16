@@ -49,5 +49,5 @@ void AMonster_Weapon::Wp_Death()
 
 void AMonster_Weapon::Wp_Destroy()
 {
-	Destroy();
+	//Destroy();
 }
