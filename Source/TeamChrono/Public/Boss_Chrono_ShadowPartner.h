@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void Shapa_LaserAttack();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Shapa_ClearLaserAttack();
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
@@ -73,6 +76,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void CheckDisappearTime();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void CalculateLaserAttackRange();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetShapaUpOrDown(const bool isDown);
 
 /// Timer Funcs	
 	UFUNCTION()

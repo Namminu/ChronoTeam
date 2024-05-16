@@ -117,6 +117,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void CalculateStrikeHitRange();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void CalculateLaserAttackRange();
 
 /// Attack Funcs
 	/// <summary>
@@ -130,6 +132,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SpawnDash();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetLaserAttackTimer();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ClearLaserTimer();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetBossUpOrDown(const bool isDown);
+
 
 	// About Timer Funcs
 	UFUNCTION(BlueprintCallable)
