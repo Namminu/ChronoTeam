@@ -27,5 +27,7 @@ EBTNodeResult::Type UBTTask_Fighter_FstGimicClear::ExecuteTask(UBehaviorTreeComp
 	Fighter->SetResumeSndTimer();
 	Fighter->SetIsFstGimicING(false);
 
+	Fighter->ChangeMoveSpeed(750);
+
 	return EBTNodeResult::Succeeded;
 }

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -83,6 +83,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void FocusToPlayer();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void InitFunc();
 
 protected:
 	// Called when the game starts or when spawned
@@ -207,6 +210,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool isMonsterLive;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsCanFight;
+
 public:
 /// Property Getter
 	int GetMonSpeed() const { return monSpeed; }	
@@ -216,6 +222,7 @@ public:
 	int GetMonAtk() const { return monAtk; }
 	bool GetIsBorn() const { return isMonsterBorn; }
 	bool GetMonsterLive() const { return isMonsterLive; }
+	bool GetMonsterCanFight() const { return IsCanFight; }
 
 /// Component Getter
 	UNiagaraComponent* GetAttackEffect() const { return NiagaraAttackEffect; }
@@ -236,4 +243,5 @@ public:
 /// Property Setter
 	void SetMonCurrentHp(const int newHp) { monNowHp = newHp; }
 	void SetMonsterLive(const bool newBool) { isMonsterLive = newBool; }
+	void SetMonsterCanFight(const bool newBool) { IsCanFight = newBool; }
 };

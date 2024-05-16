@@ -26,9 +26,7 @@ void ABoss_Chrono_ShadowPartner::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentAttackCount = 0;
-
-	SetMTI();
-	ChangeOpacity(0, 1);
+	shapa_OrbitING = false;
 }
 
 void ABoss_Chrono_ShadowPartner::Tick(float DeltaTime)
@@ -45,16 +43,11 @@ void ABoss_Chrono_ShadowPartner::EndPlay(const EEndPlayReason::Type EndPlayReaso
 
 int ABoss_Chrono_ShadowPartner::MeleeAttack_Implementation()
 {
-	if (CurrentAttackCount < LifeAttackCount)
-	{
-		CurrentAttackCount++;
-		AttackFunc(GetRandomAttackNum(0, 2));
-	}
-	else if (CurrentAttackCount >= LifeAttackCount)
-	{
-		ChangeOpacity(1, 0);
-	}
+	CurrentAttackCount++;
+	AttackFunc(GetRandomAttackNum(0, 2));
 
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Chrono_ShadowPartner::CheckDisappearTime_Implementation, 4.f, false);
 	return 0;
 }
 
@@ -65,6 +58,11 @@ void ABoss_Chrono_ShadowPartner::Boss_Death_Implementation()
 
 void ABoss_Chrono_ShadowPartner::AttackFunc_Implementation(int caseNum)
 {
+}
+
+void ABoss_Chrono_ShadowPartner::SetupCenterArrow(AActor* centerArrow)
+{
+	CenterArrow = centerArrow;
 }
 
 void ABoss_Chrono_ShadowPartner::TempAttachPin(TSubclassOf<AChrono_JustMeshPin> Weapon, FName WeaponSocket)
@@ -78,22 +76,55 @@ void ABoss_Chrono_ShadowPartner::TempAttachPin(TSubclassOf<AChrono_JustMeshPin> 
 int ABoss_Chrono_ShadowPartner::GetRandomAttackNum(int min, int max)
 {
 	int num = FMath::RandRange(min, max);
-	UE_LOG(LogTemp, Error, TEXT("%d"), num);
 	return num;
 }
 
 void ABoss_Chrono_ShadowPartner::SetMTI()
 {
-	MTI = GetMesh()->CreateDynamicMaterialInstance(0);
+	UMaterialInstanceDynamic* FstMT = GetMesh()->CreateDynamicMaterialInstance(0);
+	SetFlashMTIArray(FstMT);
+
+	UMaterialInstanceDynamic* SndMT = sk_Halo->CreateDynamicMaterialInstance(0);
+	SetFlashMTIArray(SndMT);
+}
+
+void ABoss_Chrono_ShadowPartner::SetPinMeshMTI()
+{
+	for (AChrono_JustMeshPin* PinMT : ClockPinArray)
+	{
+		if (PinMT)
+		{
+			UMaterialInstanceDynamic* PinMTI = PinMT->GetMesh()->CreateDynamicMaterialInstance(0);
+			ClockPinMTIArray.Add(PinMTI);
+		}
+	}
+}
+
+void ABoss_Chrono_ShadowPartner::CheckDisappearTime_Implementation()
+{
+	if (CurrentAttackCount >= LifeAttackCount)
+	{
+		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanFightNow", false);
+		ChangeOpacity(1, 0);
+		ClockPinChangeOpacity(1, 0);
+	}
+}
+
+void ABoss_Chrono_ShadowPartner::Shapa_AttackEnd()
+{
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsAttack", false);
+	SetAttackTimer();
 }
 
 void ABoss_Chrono_ShadowPartner::SetAttackTimer()
 {
+	UE_LOG(LogTemp, Error, TEXT("Shapa Attack Timer Setup"));
 	GetWorld()->GetTimerManager().SetTimer(ShapaAttackTimer, this, &ABoss_Chrono_ShadowPartner::CallAttackBB, ShapaAttackDelay, true);
 }
 
 void ABoss_Chrono_ShadowPartner::ResetAttackTimer()
 {
+	UE_LOG(LogTemp, Error, TEXT("Shapa Attack Timer Clear"));
 	GetWorld()->GetTimerManager().ClearTimer(ShapaAttackTimer);
 }
 

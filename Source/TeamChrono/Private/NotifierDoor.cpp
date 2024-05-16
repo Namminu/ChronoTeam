@@ -25,7 +25,7 @@ ANotifierDoor::ANotifierDoor()
 void ANotifierDoor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	isGetWorked = false;
 
 	BoxColl->OnComponentEndOverlap.AddDynamic(this, &ANotifierDoor::OnOverlapEnd);
