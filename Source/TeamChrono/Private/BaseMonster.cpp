@@ -302,7 +302,6 @@ void ABaseMonster::mon_Death_Implementation()
 	FTimerHandle TimerHandle;
 	float delay = 3.3f;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);	//Destory Actor After DeathDelay
-
 }
 
 void ABaseMonster::mon_Destroy()

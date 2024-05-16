@@ -53,6 +53,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void DamageWeaponFlash();
 
+	void mon_Destroy() override;
+
 /// Overlap Event Function 
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,
