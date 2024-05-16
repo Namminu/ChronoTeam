@@ -73,7 +73,6 @@ void ABaseElite_MagicianMonster::OnRangeOverlapBegin(UPrimitiveComponent* const 
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
-
 		isCanAttack = true;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", true);
 	}
@@ -132,13 +131,16 @@ void ABaseElite_MagicianMonster::mon_Death_Implementation()
 	DeathFunc();
 }
 
-//void ABaseElite_MagicianMonster::mon_Destroy()
-//{
-//	Destroy();
-//	GetWeaponInstance_Fst()->Wp_Destroy();
-//
-//	UE_LOG(LogTemp, Warning, TEXT("Call Destroy Func by MagicianMonster"));
-//}
+void ABaseElite_MagicianMonster::InitFunc_Implementation()
+{
+	Super::InitFunc_Implementation();
+}
+
+void ABaseElite_MagicianMonster::mon_Destroy()
+{
+	Destroy();
+	GetWeaponInstance_Fst()->Destroy();
+}
 
 void ABaseElite_MagicianMonster::RealDestroy()
 {
