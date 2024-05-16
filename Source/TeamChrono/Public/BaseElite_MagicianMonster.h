@@ -145,6 +145,9 @@ private:
 	
 	bool isCanAttack;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ATTACK", meta = (AllowPrivateAccess = "true"))
+	bool isGimic;
+
 public:
 /// Getter Func
 	//USphereComponent* GetBigAttackRange() const { return BigAttackRangeBox; }

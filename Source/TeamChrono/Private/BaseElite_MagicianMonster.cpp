@@ -50,6 +50,7 @@ void ABaseElite_MagicianMonster::BeginPlay()
 
 	//Set BlackBoard Property to true So Can Take Damage Immediately
 	UAIBlueprintHelperLibrary::GetAIController(GetOwner())->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", true);
+	isGimic = false;
 }
 
 void ABaseElite_MagicianMonster::Tick(float DeltaTime)
@@ -200,6 +201,7 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 					UE_LOG(LogTemp, Error, TEXT("First Gimic Start"));
 					SetisFstGimic(true);			//Change Property to Not Take FstGimic Again
 					SetInvincible(true);			//Not for Take Damage
+					isGimic = true;
 
 					//Set BlackBoard Properties to Make Barrier
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
@@ -212,6 +214,7 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 					//
 					SetisSndGimic(true);			//Change Property to Not Take SndGimic Again
 					SetInvincible(true);			//Not for Take Damage
+					isGimic = true;
 
 					//Set BlackBoard Properties to Make Barrier
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
@@ -231,6 +234,7 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 				{
 					SetInvincible(false);
 					GetSpecificEffect()->Deactivate();
+					isGimic = false;
 					UE_LOG(LogTemp, Error, TEXT("Gimic End"));
 					return 0.f;
 				}
