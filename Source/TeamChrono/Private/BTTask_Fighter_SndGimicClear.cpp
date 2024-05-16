@@ -33,6 +33,7 @@ EBTNodeResult::Type UBTTask_Fighter_SndGimicClear::ExecuteTask(UBehaviorTreeComp
 	{
 		Fighter->FstGimic();
 	}
+	else Fighter->ChangeMoveSpeed(750);
 
 	return EBTNodeResult::Succeeded;
 }

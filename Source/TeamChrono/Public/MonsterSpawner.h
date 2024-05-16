@@ -16,6 +16,9 @@ public:
 	// Sets default values for this actor's properties
 	AMonsterSpawner();
 
+	UFUNCTION(BlueprintCallable)
+	void DestroySpawnedMonster();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -43,7 +46,8 @@ public:
 	void RemoveMonster();
 	UFUNCTION(BlueprintImplementableEvent)
 	void RemoveSelf();
-
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void InitFunc();
 
 	TSubclassOf<ABaseMonster> GetMyMonster() const { return myMonster; }
 

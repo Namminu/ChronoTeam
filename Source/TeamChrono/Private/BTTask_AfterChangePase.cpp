@@ -20,15 +20,25 @@ EBTNodeResult::Type UBTTask_AfterChangePase::ExecuteTask(UBehaviorTreeComponent&
 		{
 			if (Chrono->GetBossPase() == 2)
 			{
-				Chrono->Boss2PaseAttachPin();
+				Chrono->Boss2PaseAttachPin(); 
 
-				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangePase", false);
+				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", false);
+				//UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
+				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", false);
+
+				Chrono->SetInvincible(false);
+				Chrono->ChangeHaloColor(Pase2Color);
 			}
 			else if (Chrono->GetBossPase() == 3)
 			{
 				Chrono->Boss3PaseAttachPin();
 
-				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangePase", false);
+				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", false);
+				//UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
+				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", false);
+
+				Chrono->SetInvincible(false);
+				Chrono->ChangeHaloColor(Pase3Color);
 			}
 
 			return EBTNodeResult::Succeeded;

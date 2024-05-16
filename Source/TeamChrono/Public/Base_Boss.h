@@ -124,7 +124,7 @@ public:
 
 private:
 ///Boss Name
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BOSS", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BOSS", meta = (AllowPrivateAccess = "true"))
 	FName n_BossName;
 
 ///Behavior Tree
@@ -189,7 +189,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	UMaterialInstanceDynamic* Fst_FlashMT;
 
-///Arraies
+/// Arraies
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	TArray<UMaterialInstanceDynamic*> MTIArray;
 

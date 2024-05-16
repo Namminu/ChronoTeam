@@ -33,6 +33,9 @@ public:
 
 	void SetFullFMTI();
 
+	UFUNCTION(BlueprintCallable)
+	void ChangeMoveSpeed(float moveSpeed);
+
 // Override Funcs
 	int MeleeAttack_Implementation() override;
 
@@ -138,7 +141,11 @@ public:
 
 	//Death Funcs
 	UFUNCTION(BlueprintImplementableEvent)
-	void SetSwordReverse();
+	void SetSwordReverse();	
+
+/// When This is Spawned by Chrono
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void WhenThisIsClone();
 
 private:
 /// Skeletal Mesh

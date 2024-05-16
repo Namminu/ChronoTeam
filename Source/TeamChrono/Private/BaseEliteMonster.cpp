@@ -84,6 +84,12 @@ void ABaseEliteMonster::ReSetTimer_Implementation()
 {
 }
 
+void ABaseEliteMonster::mon_Destroy()
+{
+	Super::mon_Destroy();
+	WeaponInstance2->Destroy();
+}
+
 void ABaseEliteMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
 	int const OtherBodyIndex, bool const FromSweep, 
