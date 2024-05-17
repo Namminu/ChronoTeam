@@ -79,6 +79,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ChangeHaloColor(FColor newColor);
 
+	UFUNCTION(BlueprintCallable)
+	void ChangeMoveOrbitDirection();
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
@@ -226,15 +229,15 @@ private:
 	// Default Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	float DistanceToCenter;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
-	bool bIsAttack;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
-	bool bIsGimic;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
+	float fRotateSpeed;
 
 	bool IsEscape;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
 	bool bIsOrbitING;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
+	float NormalPC;
 
 	// Normal Attack Properties
 	FTimerHandle AttackTimer;
@@ -284,6 +287,7 @@ public:
 	int GetBossPase() const { return CurrentPase; }
 	int GetCenterByDistance() const { return DistanceToCenter; }
 	AActor* GetCenterArrow() const { return CenterArrow; }
+	float GetRotateSpeed() const { return fRotateSpeed; }
 
 	bool GetEscapse() const { return IsEscape; }
 	bool GetOrbitING() const { return bIsOrbitING; }
@@ -299,4 +303,6 @@ public:
 	void SetEscape(const bool newBool) { IsEscape = newBool; }
 	UFUNCTION(BlueprintCallable)
 	void SetOrbitING(const bool newBool) { bIsOrbitING = newBool; }
+	UFUNCTION(BlueprintCallable)
+	void SetRotateSpeed(const float newFloat) { fRotateSpeed = newFloat; }
 };

@@ -20,7 +20,8 @@ EBTNodeResult::Type UBTTask_StayFromPlayer::ExecuteTask(UBehaviorTreeComponent& 
 		if (auto* const Chrono = Cast<ABoss_TimeMaster>(cont->GetPawn()))
 		{
 			//Chrono->SetFarfromPlayer(Chrono->GetCenterByDistance(), GetRandomFloat(minTime, maxTime));
-			currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
+			//currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
+			currentAngle += Chrono->GetRotateSpeed() * GetWorld()->DeltaTimeSeconds;
 
 			FVector CircleLocation = Chrono->GetCenterArrow()->GetActorLocation()
 				+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);
