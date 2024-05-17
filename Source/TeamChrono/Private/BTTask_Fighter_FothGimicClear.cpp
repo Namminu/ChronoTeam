@@ -28,5 +28,7 @@ EBTNodeResult::Type UBTTask_Fighter_FothGimicClear::ExecuteTask(UBehaviorTreeCom
 	Fighter->SetInvincible(false);
 	Fighter->SetIsFothGimicING(false);
 
+	Fighter->ChangeMoveSpeed(750);
+
 	return EBTNodeResult::Succeeded;
 }

@@ -108,6 +108,11 @@ void ABoss_Golem::Boss_Death_Implementation()
 {
 	Super::Boss_Death_Implementation();
 
+	if (this->ActorHasTag("CLONE"))
+	{
+		WhenThisIsClone();
+	}
+
 	/*FTimerHandle TimerHandle;
 	float delay = 4.3f;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Golem::Golem_Destroy, delay, false);*/

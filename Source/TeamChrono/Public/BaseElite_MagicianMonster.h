@@ -89,6 +89,10 @@ public:
 
 	void mon_Death_Implementation();
 
+	void InitFunc_Implementation() override;
+
+	void mon_Destroy() override;
+
 	//Real Destroy Func - Monster & Weapon
 	UFUNCTION(BlueprintCallable)
 	void RealDestroy();

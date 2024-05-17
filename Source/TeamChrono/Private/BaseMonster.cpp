@@ -63,6 +63,35 @@ ABaseMonster::ABaseMonster()
 	//SetActorRotation(FRotator(GetActorRotation().Roll, GetActorRotation().Pitch, newRotation.Yaw));
 //}
 
+void ABaseMonster::InitFunc_Implementation()
+{
+	SetActorTickEnabled(false);
+	SetMonsterCanFight(false);
+
+	AttackRangeBox->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
+	AttackRangeBox->OnComponentEndOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
+
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	//Stop all Montages Before Death
+	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
+
+	//Stop BT 
+	if (AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController()))
+	{
+		monsterAI->StopAI();
+	}
+
+	//Destroy();
+	//WeaponInstance->Destroy();
+
+	FTimerHandle TimerHandle;
+	float delay = 3.3f;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);
+}
+
 // Called when the game starts or when spawned  
 void ABaseMonster::BeginPlay()
 {
@@ -90,10 +119,12 @@ void ABaseMonster::BeginPlay()
 
 	isUnDamaged = true;
 
+	IsCanFight = true;
+
 	//if (WeaponCollisionBox != nullptr)
 	//{
 	//	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
-	//	//WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
+	//	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
 	//}
 	//else UE_LOG(LogTemp, Error, TEXT("Weapon Collision Box is NULL"));
 
@@ -122,8 +153,6 @@ void ABaseMonster::OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedCom
 
 	if (otherActor->ActorHasTag("PLAYER"))	//히트박스가 플레이어에게 닿았을 경우 = 플레이어 공격 시
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Monster hit Player"));
-
 		UGameplayStatics::ApplyDamage(otherActor, monAtk, nullptr, this, DamageType);
 	}
 }
@@ -143,7 +172,7 @@ void ABaseMonster::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComp
 {
 	if (otherActor == this) return;
 
-	if (otherActor->ActorHasTag("PLAYER"))
+	if (otherActor && otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
 		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
@@ -156,7 +185,7 @@ void ABaseMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompon
 	UPrimitiveComponent* const OtherComponent,
 	int const OtherBodyIndex)
 {
-	if (otherActor->ActorHasTag("PLAYER"))
+	if (otherActor && otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
 		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
@@ -168,6 +197,14 @@ void ABaseMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//if(IsCanFight)
+	//{
+	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanFightNow", true);
+	//}
+	//else if(!IsCanFight)
+	//{
+	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanFightNow", false);
+	//}
 }
 
 // Called to bind functionality to input
@@ -179,7 +216,6 @@ void ABaseMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 int ABaseMonster::MeleeAttack_Implementation()
 {
-	UE_LOG(LogTemp, Error, TEXT("Monster get attack"));
 	if (AtkMontage)
 	{
 		PlayAnimMontage(AtkMontage);
@@ -193,7 +229,6 @@ void ABaseMonster::AttackStart() const
 	//WeaponCollisionBox->SetNotifyRigidBodyCollision(true);
 	//WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
-	UE_LOG(LogTemp, Error, TEXT("Attack Start"));
 }
 
 //void ABaseMonster::AttackEnd() const
@@ -222,7 +257,6 @@ float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 			mon_Death();
 			return DamageAmount;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("BaseMonster Take Damage"));
 		DamageFlash();
 	}
 	return DamageAmount;
@@ -245,6 +279,8 @@ void ABaseMonster::CallNiagaraEffect(UNiagaraComponent* NiaEffect)
 
 void ABaseMonster::mon_Death_Implementation()
 {
+	IsCanFight = false;
+
 	//Stop all Montages Before Death
 	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
 
@@ -266,12 +302,12 @@ void ABaseMonster::mon_Death_Implementation()
 	FTimerHandle TimerHandle;
 	float delay = 3.3f;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);	//Destory Actor After DeathDelay
-
 }
 
 void ABaseMonster::mon_Destroy()
 {
-	Destroy();	
+	Destroy();
+	WeaponInstance->Destroy();
 }
 
 void ABaseMonster::CreateMTI()

@@ -6,6 +6,7 @@
 #include "BossAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Base_BossWeapon.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ABoss_Fighter::ABoss_Fighter()
 {
@@ -218,6 +219,11 @@ void ABoss_Fighter::Boss_Death_Implementation()
 	AttachWeapon(GetBossWeapon()->GetClass(), "Weapon_ReverseSocket");
 
 	Super::Boss_Death_Implementation();
+
+	if (this->ActorHasTag("CLONE"))
+	{
+		WhenThisIsClone();
+	}
 }
 
 void ABoss_Fighter::AttackFunc_Implementation(int caseNum)
@@ -247,6 +253,7 @@ void ABoss_Fighter::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedCom
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
+		ChangeMoveSpeed(GetBossInitSpeed());
 	}
 }
 
@@ -297,6 +304,11 @@ void ABoss_Fighter::SetFullFMTI()
 	SetupFMTI(sk_Chest, 1);
 	//Helm
 	SetupFMTI(sk_Helm, 0);
+}
+
+void ABoss_Fighter::ChangeMoveSpeed(float moveSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = moveSpeed;
 }
 
 void ABoss_Fighter::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -453,8 +465,3 @@ void ABoss_Fighter::CheckHpPercent()
 		}
 	}
 }
-
-/*
-	if (!isFstGimic && !isSndGimic && !isTrdGimic)
-	{
-*/
