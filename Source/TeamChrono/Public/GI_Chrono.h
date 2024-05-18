@@ -14,4 +14,7 @@ class TEAMCHRONO_API UGI_Chrono : public UGameInstance
 {
 	GENERATED_BODY()
 	
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CHORNO", meta = (AllowPrivateAccess = "true"))
+	float ChronoInitHp;
 };
