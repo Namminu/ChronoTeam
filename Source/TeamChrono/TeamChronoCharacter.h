@@ -230,6 +230,14 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stamina", Meta = (AllowPrivateAccess = true))
 	float TabSkillingStamina = 5.0f;
 
+	//Q스킬 쓸 수 있을지 없을지 체크
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SKILL", meta = (AllowPrivateAccess = "true"))
+	bool isCanQSkill;
+	//E스킬 쓸 수 있을지 없을지 체크
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SKILL", meta = (AllowPrivateAccess = "true"))
+	bool isCanESkill;
+
+
 public:
 
 
