@@ -83,6 +83,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void SetShapaUpOrDown(const bool isDown);
 
+	UFUNCTION(BlueprintCallable)
+	void ChangeMoveOrbitDirection();
+
 /// Timer Funcs	
 	UFUNCTION()
 	void Shapa_AttackEnd();
@@ -132,12 +135,21 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ATTACK", meta = (AllowPrivateAccess = "true"))
 	float ShapaAttackDelay;
 
+/// Orbit Properties
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
+	float fRotateSpeed;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "MOVE", meta = (AllowPrivateAccess = "true"))
+	float NormalPC;
+
 public:
 /// Getter
 	AActor* GetCenterArrow() const { return CenterArrow; }
 	bool GetShapaOrbitING() const { return shapa_OrbitING; }
+	float GetRotateSpeed() const { return fRotateSpeed; }
 
 /// Setter
 	UFUNCTION(BlueprintCallable)
 	void SetShapaOrbitING(const bool newBool) { shapa_OrbitING = newBool; }
+	UFUNCTION(BlueprintCallable)
+	void SetRotateSpeed(const float newFloat) { fRotateSpeed = newFloat; }
 };

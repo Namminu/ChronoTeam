@@ -21,8 +21,8 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Orbit Speed", meta = (AllowPrivateAccess = "true"))
 	float OrbitDistance;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Orbit Speed", meta = (AllowPrivateAccess = "true"))
-	float RotateSpeed;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Orbit Speed", meta = (AllowPrivateAccess = "true"))
+	//float RotateSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit Speed", meta = (AllowPrivateAccess = "true"))
 	float UpAmount;
 	float currentAngle;

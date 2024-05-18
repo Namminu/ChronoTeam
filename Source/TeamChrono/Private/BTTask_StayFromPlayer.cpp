@@ -52,7 +52,8 @@ EBTNodeResult::Type UBTTask_StayFromPlayer::ExecuteTask(UBehaviorTreeComponent& 
 		{
 			if (!Shapa->GetShapaOrbitING())
 			{
-				currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
+				//currentAngle += RotateSpeed * GetWorld()->DeltaTimeSeconds;
+				currentAngle += Shapa->GetRotateSpeed() * GetWorld()->DeltaTimeSeconds;
 
 				FVector CircleLocation = Shapa->GetCenterArrow()->GetActorLocation()
 					+ FVector(OrbitDistance * FMath::Cos(currentAngle), OrbitDistance * FMath::Sin(currentAngle), 0);

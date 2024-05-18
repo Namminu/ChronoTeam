@@ -45,6 +45,7 @@ int ABoss_Chrono_ShadowPartner::MeleeAttack_Implementation()
 {
 	CurrentAttackCount++;
 	AttackFunc(GetRandomAttackNum(0, 2));
+	ChangeMoveOrbitDirection();
 
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABoss_Chrono_ShadowPartner::CheckDisappearTime_Implementation, 4.f, false);
@@ -108,6 +109,13 @@ void ABoss_Chrono_ShadowPartner::CheckDisappearTime_Implementation()
 		ChangeOpacity(1, 0);
 		ClockPinChangeOpacity(1, 0);
 	}
+}
+
+void ABoss_Chrono_ShadowPartner::ChangeMoveOrbitDirection()
+{
+	float RandomPC = FMath::FRand() * 100;
+	if (RandomPC < NormalPC) fRotateSpeed = 1.f;
+	else fRotateSpeed = -1.f;
 }
 
 void ABoss_Chrono_ShadowPartner::Shapa_AttackEnd()
