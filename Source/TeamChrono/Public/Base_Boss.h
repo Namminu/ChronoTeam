@@ -232,6 +232,7 @@ public:
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
+	void SetBossMaxHp(const float newHp) { f_bossMaxHp = newHp; }
 	void SetInvincible(const bool newBool) { bisInvincible = newBool; }
 	void SetMontageEnd(const bool newBool) { bIsMontageEnd = newBool; }
 	void SetIsCanFight(const bool newBool) { bCanFightNow = newBool; }

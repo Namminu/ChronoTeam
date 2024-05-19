@@ -76,12 +76,13 @@ void ABoss_TimeMaster::CheckStateFunc()
 		bIsHpGimicFstStart = false;
 		bIsHpGimicSndStart = false;
 		// About Boss Hp Percent Properties
+		SetBossMaxHp(GetMyGI()->GetChronoMaxHp());
 		SetBossCurrentHp(GetMyGI()->GetChronoNowHp());
 		UpdateHpPercent();
 		// Attach Clock Pins for 2Pase
 		Boss2PaseAttachPin();
 		// About Boss Hp for Spawn Monster Properties
-
+		beforeHpRate = GetMyGI()->GetChrono_SpawnHpRate();
 	}
 	//Check is Chrono 3Pase
 	else if (((GetMyGI()->GetChronoNowHp() / GetMyGI()->GetChronoMaxHp()) * 100) <= f_3PaseHp &&
@@ -94,11 +95,32 @@ void ABoss_TimeMaster::CheckStateFunc()
 		// About Hp Gimic Properties
 		bIsHpGimicFstStart = true;
 		bIsHpGimicSndStart = false;
+		// About Boss Hp Percent Properties
+		SetBossMaxHp(GetMyGI()->GetChronoMaxHp());
+		SetBossCurrentHp(GetMyGI()->GetChronoNowHp());
+		UpdateHpPercent();
+		// Attach Clock Pins for 3Pase
+		Boss2PaseAttachPin();
+		Boss3PaseAttachPin();
+		// About Boss Hp for Spawn Monster Properties
+		beforeHpRate = GetMyGI()->GetChrono_SpawnHpRate();
 	}
 	//Check is Chrono 1Pase
 	else
 	{
-
+		// About Pase Properties
+		CurrentPase = 1;
+		is2PaseStart = false;
+		is3PaseStart = false;
+		// About Hp Gimic Properties
+		bIsHpGimicFstStart = false;
+		bIsHpGimicSndStart = false;
+		// About Boss Hp Percent Properties
+		SetBossMaxHp(GetMyGI()->GetChronoMaxHp());
+		SetBossCurrentHp(GetMyGI()->GetChronoNowHp());
+		UpdateHpPercent();
+		// About Boss Hp for Spawn Monster Properties
+		beforeHpRate = GetMyGI()->GetChrono_SpawnHpRate();
 	}
 }
 
@@ -164,8 +186,10 @@ void ABoss_TimeMaster::CheckSpawnHpRate()
 
 		if ((beforeHpRate - currentHpRate) >= SpawnHpPercent)
 		{
-			beforeHpRate = beforeHpRate - SpawnHpPercent;
+			beforeHpRate = beforeHpRate - SpawnHpPercent;			
 			SpawnMonsterFlip();
+			// Update Spawn Hp Rate into Custom Game Instance
+			GetMyGI()->SetChrono_SpawnHpRate(beforeHpRate);
 		}
 	}
 }
