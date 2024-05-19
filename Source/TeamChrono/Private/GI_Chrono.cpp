@@ -3,3 +3,7 @@
 
 #include "GI_Chrono.h"
 
+void UGI_Chrono::Init()
+{
+	ChronoCurrentHp = ChronoInitHp;
+}

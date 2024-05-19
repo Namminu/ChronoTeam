@@ -29,6 +29,9 @@ protected:
 
 public:
 /// Chrono Local Func
+	UFUNCTION(BlueprintCallable)
+	void CheckStateFunc();
+
 	/// <summary>
 	/// To Always Keep Distance from Player
 	/// 거리 유지하도록 만들려고 했다가 공전으로 이동하면서 안쓰는 함수

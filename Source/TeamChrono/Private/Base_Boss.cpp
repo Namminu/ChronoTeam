@@ -29,6 +29,9 @@ void ABase_Boss::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//Cast to Custom Game Instance
+	myGameInstance = Cast<UGI_Chrono>(GetGameInstance());
+
 	BeginLocation = GetActorLocation();
 
 	//Save Boss Init Max Walk Speed

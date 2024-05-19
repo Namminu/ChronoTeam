@@ -7,6 +7,7 @@
 #include "CombatInterface.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include <TeamChrono/TeamChronoCharacter.h>
+#include "GI_Chrono.h"
 #include "Base_Boss.generated.h"
 
 UCLASS()
@@ -193,6 +194,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	TArray<UMaterialInstanceDynamic*> MTIArray;
 
+/// Game Instance
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GAME INSTANCE", meta = (AllowPrivateAccess = "true"))
+	UGI_Chrono* myGameInstance;
+
 public:
 ///Getter
 	float GetBossMaxHp() const { return f_bossMaxHp; }
@@ -221,6 +226,8 @@ public:
 	class ABase_BossWeapon* GetBossWeapon() const { return weaponInstance; }
 
 	UBehaviorTree* GetBehaviorTree() const { return BTree; }
+
+	class UGI_Chrono* GetMyGI() const { return myGameInstance; }
 
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }

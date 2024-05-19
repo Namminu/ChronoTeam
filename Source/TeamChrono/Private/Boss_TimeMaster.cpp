@@ -9,6 +9,7 @@
 #include "Chrono_JustMeshPin.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GI_Chrono.h"
 
 ABoss_TimeMaster::ABoss_TimeMaster()
 {
@@ -22,6 +23,7 @@ ABoss_TimeMaster::ABoss_TimeMaster()
 	ArrowCollBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Coll for Arrow"));
 	ArrowCollBox->SetupAttachment(GetCapsuleComponent());
 }
+
 void ABoss_TimeMaster::BeginPlay()
 {
 	IsEscape = false;
@@ -31,20 +33,23 @@ void ABoss_TimeMaster::BeginPlay()
 
 	// Reset Flash Material For Damage Flash
 	SetFlashMT(GetMesh(), 0);
+	// Setup Halo Material Instance
+	HaloMTI = sk_Halo->CreateDynamicMaterialInstance(0);
 	// Reset Every Attack Count Properties
 	cur_StrikeCount = 0;
 	cur_SkillCount = 0;
-	// Reset Boss Pase Properties
-	CurrentPase = 1;
-	is2PaseStart = false;
-	is3PaseStart = false;
-	// Reset Boss Hp Rate For Spawn Monster by Hp Rate
-	beforeHpRate = 100;
-	// Reset Boss Hp Gimic Property
-	bIsHpGimicFstStart = false;
-	bIsHpGimicSndStart = false;
-	// Setup Halo Material Instance
-	HaloMTI = sk_Halo->CreateDynamicMaterialInstance(0);
+	// Check Boss State Properties by Custom Game Instance
+	CheckStateFunc();
+
+	//// Reset Boss Pase Properties
+	//CurrentPase = 1;
+	//is2PaseStart = false;
+	//is3PaseStart = false;
+	//// Reset Boss Hp Rate For Spawn Monster by Hp Rate
+	//beforeHpRate = 100;
+	//// Reset Boss Hp Gimic Property
+	//bIsHpGimicFstStart = false;
+	//bIsHpGimicSndStart = false;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
@@ -55,6 +60,46 @@ void ABoss_TimeMaster::Tick(float DeltaTime)
 void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
+}
+
+void ABoss_TimeMaster::CheckStateFunc()
+{
+	//Check is Chrono 2Pase
+	if (((GetMyGI()->GetChronoNowHp() / GetMyGI()->GetChronoMaxHp()) * 100) >= f_3PaseHp &&
+		((GetMyGI()->GetChronoNowHp() / GetMyGI()->GetChronoMaxHp()) * 100) <= f_2PaseHp)
+	{
+		// About Pase Properties
+		CurrentPase = 2;
+		is2PaseStart = true;
+		is3PaseStart = false;
+		// About Hp Gimic Properties
+		bIsHpGimicFstStart = false;
+		bIsHpGimicSndStart = false;
+		// About Boss Hp Percent Properties
+		SetBossCurrentHp(GetMyGI()->GetChronoNowHp());
+		UpdateHpPercent();
+		// Attach Clock Pins for 2Pase
+		Boss2PaseAttachPin();
+		// About Boss Hp for Spawn Monster Properties
+
+	}
+	//Check is Chrono 3Pase
+	else if (((GetMyGI()->GetChronoNowHp() / GetMyGI()->GetChronoMaxHp()) * 100) <= f_3PaseHp &&
+		((GetMyGI()->GetChronoNowHp() / GetMyGI()->GetChronoMaxHp()) * 100) <= f_2PaseHp)
+	{
+		// About Pase Properties
+		CurrentPase = 3;
+		is2PaseStart = true;
+		is3PaseStart = true;
+		// About Hp Gimic Properties
+		bIsHpGimicFstStart = true;
+		bIsHpGimicSndStart = false;
+	}
+	//Check is Chrono 1Pase
+	else
+	{
+
+	}
 }
 
 int ABoss_TimeMaster::GetRandomAttackNum(int min, int max)
@@ -209,6 +254,8 @@ float ABoss_TimeMaster::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	{
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 		DamageFlash();
+		//Save Current Chrono Hp into myGI
+		GetMyGI()->SetChronoNowHp(GetBossCurrentHp());
 	}
 	//Check Boss Pase for Damage Change & Load Other Boss Stage
 	CheckCurrentPase();
