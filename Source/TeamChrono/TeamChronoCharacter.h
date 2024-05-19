@@ -232,10 +232,15 @@ private:
 
 	//Q스킬 쓸 수 있을지 없을지 체크
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SKILL", meta = (AllowPrivateAccess = "true"))
-	bool isCanQSkill;
+	bool isCanQSkill = true;
+
 	//E스킬 쓸 수 있을지 없을지 체크
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SKILL", meta = (AllowPrivateAccess = "true"))
-	bool isCanESkill;
+	bool isCanESkill = true;
+
+	//Tab스킬 쓸 수 있을지 없을지 체크
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SKILL", meta = (AllowPrivateAccess = "true"))
+	bool isCanTabSkill = true;
 
 
 public:
