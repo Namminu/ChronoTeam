@@ -205,6 +205,7 @@ void ATeamChronoCharacter::AttackClickStart()
 	}
 	
 }
+
 void ATeamChronoCharacter::AttackClickEnd()
 {
 	//if (!m_bIsDodgingEnd && !IsQSkillBuilding)
