@@ -68,6 +68,9 @@ public:
 
 	//void InitFunc_Implementation() override;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ClearGolem();
+
 // Overlap Events
 	void OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
 		AActor* const otherActor,

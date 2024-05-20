@@ -29,6 +29,9 @@ protected:
 
 public:
 /// Chrono Local Func
+	UFUNCTION(BlueprintCallable)
+	void CheckStateFunc();
+
 	/// <summary>
 	/// To Always Keep Distance from Player
 	/// 거리 유지하도록 만들려고 했다가 공전으로 이동하면서 안쓰는 함수
@@ -225,6 +228,10 @@ private:
 	bool is3PaseStart;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PASE", meta = (AllowPrivateAccess = "true"))
 	class UMaterialInstanceDynamic* HaloMTI;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	FColor Pase2Color;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	FColor Pase3Color;
 
 	// Default Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))

@@ -27,7 +27,6 @@ EBTNodeResult::Type UBTTask_AfterChangePase::ExecuteTask(UBehaviorTreeComponent&
 				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", false);
 
 				Chrono->SetInvincible(false);
-				Chrono->ChangeHaloColor(Pase2Color);
 			}
 			else if (Chrono->GetBossPase() == 3)
 			{
@@ -38,7 +37,6 @@ EBTNodeResult::Type UBTTask_AfterChangePase::ExecuteTask(UBehaviorTreeComponent&
 				UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", false);
 
 				Chrono->SetInvincible(false);
-				Chrono->ChangeHaloColor(Pase3Color);
 			}
 
 			return EBTNodeResult::Succeeded;
