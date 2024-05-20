@@ -201,6 +201,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GAME INSTANCE", meta = (AllowPrivateAccess = "true"))
 	UGI_Chrono* myGameInstance;
 
+/// Sequencer
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SEQUENCER", meta = (AllowPrivateAccess = "true"))
+	bool bIsBeginSequencer = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SEQUENCER", meta = (AllowPrivateAccess = "true"))
+	bool bIsEndSequencer = false;
+
 public:
 ///Getter
 	float GetBossMaxHp() const { return f_bossMaxHp; }
