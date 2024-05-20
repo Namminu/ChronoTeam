@@ -16,15 +16,26 @@ ALevelTransferVolume::ALevelTransferVolume()
 	//TransferVolume->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
 }
 
-void ALevelTransferVolume::NotifyActorBeginOverlap(AActor* OtherActor)
+//void ALevelTransferVolume::NotifyActorBeginOverlap(AActor* OtherActor)
+//{
+//	if (OtherActor->ActorHasTag("PLAYER"))
+//	{
+//		FadeOut();
+//		ChangeLevel();
+//		//FTimerHandle TimerHandle;
+//		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ALevelTransferVolume::ChangeLevel, 0.5f, false);
+//		//UE_LOG(LogTemp, Warning, TEXT("Level Changed"));
+//	}
+//}
+
+void ALevelTransferVolume::OnCollisionOverlapBegin(UPrimitiveComponent* const OverlappedComponent, 
+	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
+	int const OtherBodyIndex, bool const FromSweep, FHitResult const& SweepResult)
 {
-	if (OtherActor->ActorHasTag("PLAYER"))
+	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		//FadeOut();
+		FadeOut();
 		ChangeLevel();
-		//FTimerHandle TimerHandle;
-		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ALevelTransferVolume::ChangeLevel, 0.5f, false);
-		//UE_LOG(LogTemp, Warning, TEXT("Level Changed"));
 	}
 }
 
@@ -38,6 +49,7 @@ void ALevelTransferVolume::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	TransferVolume->OnComponentBeginOverlap.AddDynamic(this, &ALevelTransferVolume::OnCollisionOverlapBegin);
 }
 
 // Called every frame

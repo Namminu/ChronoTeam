@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeMoveSpeed(float moveSpeed);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ClearFighter();
+
 // Override Funcs
 	int MeleeAttack_Implementation() override;
 

@@ -15,8 +15,16 @@ public:
 	// Sets default values for this actor's properties
 	ALevelTransferVolume();
 
+	//UFUNCTION()
+	//void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
 	UFUNCTION()
-	void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void OnCollisionOverlapBegin(UPrimitiveComponent* const OverlappedComponent,
+		AActor* const otherActor,
+		UPrimitiveComponent* const OtherComponent,
+		int const OtherBodyIndex,
+		bool const FromSweep,
+		FHitResult const& SweepResult);
 
 	void ChangeLevel();
 

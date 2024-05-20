@@ -83,6 +83,8 @@ void ABoss_TimeMaster::CheckStateFunc()
 		Boss2PaseAttachPin();
 		// About Boss Hp for Spawn Monster Properties
 		beforeHpRate = GetMyGI()->GetChrono_SpawnHpRate();
+		// About Change Halo Color
+		ChangeHaloColor(Pase2Color);
 	}
 	//Check is Chrono 3Pase
 	else if (((GetMyGI()->GetChronoNowHp() / GetMyGI()->GetChronoMaxHp()) * 100) <= f_3PaseHp &&
@@ -104,6 +106,8 @@ void ABoss_TimeMaster::CheckStateFunc()
 		Boss3PaseAttachPin();
 		// About Boss Hp for Spawn Monster Properties
 		beforeHpRate = GetMyGI()->GetChrono_SpawnHpRate();
+		// About Change Halo Color
+		ChangeHaloColor(Pase3Color);
 	}
 	//Check is Chrono 1Pase
 	else

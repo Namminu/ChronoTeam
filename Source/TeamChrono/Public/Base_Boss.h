@@ -178,6 +178,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	FVector BeginLocation;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DEATH", meta = (AllowPrivateAccess = "true"))
+	float fBossDeathTime;
+
 /// Weapon
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	class ABase_BossWeapon* weaponInstance;

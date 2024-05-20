@@ -228,6 +228,10 @@ private:
 	bool is3PaseStart;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PASE", meta = (AllowPrivateAccess = "true"))
 	class UMaterialInstanceDynamic* HaloMTI;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	FColor Pase2Color;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	FColor Pase3Color;
 
 	// Default Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
