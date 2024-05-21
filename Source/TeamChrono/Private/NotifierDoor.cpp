@@ -76,7 +76,7 @@ void ANotifierDoor::OnOverlapEnd(UPrimitiveComponent* OverlappedComp,
 			isGetWorked = true;
 			SetCloseDoor();
 		}
-
+		Temp_Initialize();
 	}
 }
 

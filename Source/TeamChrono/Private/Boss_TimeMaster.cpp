@@ -85,6 +85,10 @@ void ABoss_TimeMaster::CheckStateFunc()
 		beforeHpRate = GetMyGI()->GetChrono_SpawnHpRate();
 		// About Change Halo Color
 		ChangeHaloColor(Pase2Color);
+		// About Is Enable Player Skill
+		GetPlayerProperty()->SetIsCanESkill(true);
+		GetPlayerProperty()->SetIsCanQSkill(false);
+		GetPlayerProperty()->SetIsCanTabSkill(false);
 	}
 	//Check is Chrono 3Pase
 	else if (((GetMyGI()->GetChronoNowHp() / GetMyGI()->GetChronoMaxHp()) * 100) <= f_3PaseHp &&
@@ -108,6 +112,10 @@ void ABoss_TimeMaster::CheckStateFunc()
 		beforeHpRate = GetMyGI()->GetChrono_SpawnHpRate();
 		// About Change Halo Color
 		ChangeHaloColor(Pase3Color);
+		// About Is Enable Player Skill
+		GetPlayerProperty()->SetIsCanESkill(true);
+		GetPlayerProperty()->SetIsCanQSkill(true);
+		GetPlayerProperty()->SetIsCanTabSkill(false);
 	}
 	//Check is Chrono 1Pase
 	else
@@ -125,6 +133,10 @@ void ABoss_TimeMaster::CheckStateFunc()
 		UpdateHpPercent();
 		// About Boss Hp for Spawn Monster Properties
 		beforeHpRate = GetMyGI()->GetChrono_SpawnHpRate();
+		// About Is Enable Player Skill
+		GetPlayerProperty()->SetIsCanESkill(false);
+		GetPlayerProperty()->SetIsCanQSkill(false);
+		GetPlayerProperty()->SetIsCanTabSkill(false);
 	}
 }
 

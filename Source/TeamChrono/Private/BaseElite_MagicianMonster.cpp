@@ -32,9 +32,9 @@ void ABaseElite_MagicianMonster::BeginPlay()
 
 	SetFlashMTI();		//Set Flash MTI after Change MTI <- Opaque
 
-	//Cast to Player
-	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	if (player == nullptr) UE_LOG(LogTemp, Error, TEXT("Magicball has Cast failed to Player"));
+	////Cast to Player
+	//player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	//if (player == nullptr) UE_LOG(LogTemp, Error, TEXT("Magicball has Cast failed to Player"));
 
 	//isBigAck = false;
 	isMontage = false;
@@ -132,10 +132,10 @@ void ABaseElite_MagicianMonster::mon_Death_Implementation()
 	DeathFunc();
 }
 
-void ABaseElite_MagicianMonster::InitFunc_Implementation()
-{
-	Super::InitFunc_Implementation();
-}
+//void ABaseElite_MagicianMonster::InitFunc_Implementation()
+//{
+//	Super::InitFunc_Implementation();
+//}
 
 void ABaseElite_MagicianMonster::mon_Destroy()
 {

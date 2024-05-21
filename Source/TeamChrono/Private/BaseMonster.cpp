@@ -48,54 +48,41 @@ ABaseMonster::ABaseMonster()
 	NiagaraAttackEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Attack Effect"));
 	NiagaraAttackEffect->SetupAttachment(GetCapsuleComponent());
 }
-//
-//void ABaseMonster::FocusToPlayer()
+
+//void ABaseMonster::InitFunc_Implementation()
 //{
-//	//FVector newTargetLocation = FVector(UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation().X, 
-//	//	UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation().Y, 0.f);
+//	SetActorTickEnabled(false);
+//	SetMonsterCanFight(false);
 //
-//	//SetActorRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Roll, 
-//	//	UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), newTargetLocation).Yaw));
+//	AttackRangeBox->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
+//	AttackRangeBox->OnComponentEndOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
 //
-	//FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(),
-	//	UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation());
-
-	//SetActorRotation(FRotator(GetActorRotation().Roll, GetActorRotation().Pitch, newRotation.Yaw));
+//	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+//	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+//	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+//
+//	//Stop all Montages Before Death
+//	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
+//
+//	////Stop BT 
+//	//if (AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController()))
+//	//{
+//	//	monsterAI->StopAI();
+//	//}
+//	//else UE_LOG(LogTemp, Error, TEXT("Base Monster Cast Failed to AI_Controller"));
+//
+//	//FTimerHandle TimerHandle;
+//	//float delay = 3.3f;
+//	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);
 //}
-
-void ABaseMonster::InitFunc_Implementation()
-{
-	SetActorTickEnabled(false);
-	SetMonsterCanFight(false);
-
-	AttackRangeBox->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
-	AttackRangeBox->OnComponentEndOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
-
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	//Stop all Montages Before Death
-	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
-
-	//Stop BT 
-	if (AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController()))
-	{
-		monsterAI->StopAI();
-	}
-
-	//Destroy();
-	//WeaponInstance->Destroy();
-
-	FTimerHandle TimerHandle;
-	float delay = 3.3f;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);
-}
 
 // Called when the game starts or when spawned  
 void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
+
+	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	if (!player) UE_LOG(LogTemp, Error, TEXT("Cast Failed to Player in BaseMonster"));
 
 	//Begin With Deactivate Niagara Effect
 	if (GetAttackEffect() != nullptr)
@@ -121,22 +108,12 @@ void ABaseMonster::BeginPlay()
 
 	IsCanFight = true;
 
-	//if (WeaponCollisionBox != nullptr)
-	//{
-	//	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
-	//	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
-	//}
-	//else UE_LOG(LogTemp, Error, TEXT("Weapon Collision Box is NULL"));
-
 	if (AttackRangeBox != nullptr)
 	{
 		AttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
 		AttackRangeBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
 	}
 	else UE_LOG(LogTemp, Error, TEXT("Attack Range Box is NULL"));
-
-	//시작 시 무기 소지한 채로 시작
-	//AttachWeapon(monsterWeapon, "Weapon_R");
 
 	//시작 시 애니메이션 재생
 	Change_Opacity(0,1);

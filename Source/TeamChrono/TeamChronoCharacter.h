@@ -244,6 +244,14 @@ private:
 
 
 public:
+	bool GetIsCanQSkill() const { return isCanQSkill; }
+	bool GetIsCanESkill() const { return isCanESkill; }
+	bool GetIsCanTabSkill() const { return isCanTabSkill; }
+
+	void SetIsCanQSkill(const bool newBool) { isCanQSkill = newBool; }
+	void SetIsCanESkill(const bool newBool) { isCanESkill = newBool; }
+	void SetIsCanTabSkill(const bool newBool) { isCanTabSkill = newBool; }
+
 
 
 	//무기 장착 호출 함수

@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "CombatInterface.h"
 #include "Animation/AnimMontage.h"
+#include <TeamChrono/TeamChronoCharacter.h>
 //#include "Monster_Weapon.h"
 #include "BaseMonster.generated.h"
 
@@ -84,8 +85,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void FocusToPlayer();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void InitFunc();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Temp_InitFunc();
+
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	//void InitFunc();
 
 protected:
 	// Called when the game starts or when spawned
@@ -212,6 +216,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool IsCanFight;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
+	ATeamChronoCharacter* player;
 
 public:
 /// Property Getter

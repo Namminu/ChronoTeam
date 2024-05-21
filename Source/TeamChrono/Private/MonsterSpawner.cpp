@@ -66,7 +66,11 @@ void AMonsterSpawner::InitFunc_Implementation()
 	isMonsterDied = true;
 	isAllMonsterDie = false;
 
-	SpawnedMonster->InitFunc();
+	//if (SpawnedMonster)
+	//{
+	//	SpawnedMonster->Temp_InitFunc();
+	//}
+
 }
 
 void AMonsterSpawner::SpawnMonster_Implementation()
