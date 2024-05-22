@@ -37,10 +37,6 @@ public:
 
 	int MeleeAttack_Implementation() override;
 
-	//기본 공격 함수
-	void AttackStart() const;
-	void AttackEnd() const;
-
 	//아처 전용 - 화살 발사 함수
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void FireArrow();
@@ -85,11 +81,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void FocusToPlayer();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void Temp_InitFunc();
-
-	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	//void InitFunc();
+	UFUNCTION(BlueprintCallable)
+	void InitFunc();
 
 protected:
 	// Called when the game starts or when spawned
