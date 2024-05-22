@@ -36,27 +36,27 @@ void AMonsterSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsDoorConnect&& SpawnedMonster)
-	{
-		if (!SpawnedMonster->GetMonsterLive())
-		{
-			isMonsterDied = true;
-			RemoveMonster();
+	//if (IsDoorConnect&& SpawnedMonster)
+	//{
+	//	if (!SpawnedMonster->GetMonsterLive())
+	//	{
+	//		isMonsterDied = true;
+	//		RemoveMonster();
 
-			if (CurrentSpawn < SpawnCount)
-			{
-				//Destory Actor After DeathDelay
-				FTimerHandle TimerHandle;
-				float delay = 1.f;
-				GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::SpawnMonster_Implementation, delay, false);
-			}
-			else
-			{
-				isAllMonsterDie = true;
-				SetActorTickEnabled(false);
-			}
-		}
-	}
+	//		if (CurrentSpawn < SpawnCount)
+	//		{
+	//			//Destory Actor After DeathDelay
+	//			FTimerHandle TimerHandle;
+	//			float delay = 1.f;
+	//			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::SpawnMonster_Implementation, delay, false);
+	//		}
+	//		else
+	//		{
+	//			isAllMonsterDie = true;
+	//			SetActorTickEnabled(false);
+	//		}
+	//	}
+	//}
 }
 
 void AMonsterSpawner::InitFunc_Implementation()
@@ -65,8 +65,6 @@ void AMonsterSpawner::InitFunc_Implementation()
 
 	isMonsterDied = true;
 	isAllMonsterDie = false;
-
-	SpawnedMonster->InitFunc();
 }
 
 void AMonsterSpawner::SpawnMonster_Implementation()

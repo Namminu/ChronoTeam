@@ -19,6 +19,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DestroySpawnedMonster();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Temp_SpawnerInitFunc();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,9 +43,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MonsterSpawn")
 	void SpawnMonster();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void AddMonster();
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void RemoveMonster();
 	UFUNCTION(BlueprintImplementableEvent)
 	void RemoveSelf();
@@ -50,6 +53,9 @@ public:
 	void InitFunc();
 
 	TSubclassOf<ABaseMonster> GetMyMonster() const { return myMonster; }
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Temp_Dispatcher();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (AllowPrivateAccess = "true"))
@@ -64,6 +70,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (EditCondition = "IsDoorConnect", AllowPrivateAccess = "true"))
 	class ANotifierDoor* ConnectDoor;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool isMonsterDied;
 
 	class ANotifierDoor* MyDoor;

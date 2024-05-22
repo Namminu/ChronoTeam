@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void InitFunc_PlayerDie();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void Temp_Initialize();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawner", meta = (AllowPrivateAccess = "true"))
 	TArray<AMonsterSpawner*> SpawnerArray;
