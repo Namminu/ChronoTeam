@@ -70,9 +70,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MONSTER", meta = (EditCondition = "IsDoorConnect", AllowPrivateAccess = "true"))
 	class ANotifierDoor* ConnectDoor;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	bool isMonsterDied;
-
 	class ANotifierDoor* MyDoor;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))

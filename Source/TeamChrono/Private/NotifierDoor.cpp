@@ -38,25 +38,19 @@ void ANotifierDoor::Tick(float DeltaTime)
 
 	if (isGetWorked)
 	{
-		//if (MonsterArray.Num() == 0)
-		//{
-		//	SetOpenDoor();
-		//	SetActorTickEnabled(false);
-		//}
-
-		for (AMonsterSpawner* Spawner : SpawnerArray)
+		if (SpawnerArray.Num() == 0)
 		{
-			if (Spawner->GetAllMonsterDie())
-			{
-				SpawnerArray.Remove(Spawner);
-
-				if (SpawnerArray.Num() == 0)
-				{
-					SetOpenDoor();
-					SetActorTickEnabled(false);
-				}
-			}
+			SetOpenDoor();
+			SetActorTickEnabled(false);
 		}
+
+		//for (AMonsterSpawner* Spawner : SpawnerArray)
+		//{
+		//	if (Spawner->GetAllMonsterDie())
+		//	{
+
+		//	}
+		//}
 	}
 }
 

@@ -11,6 +11,7 @@
 //#include "Monster_Weapon.h"
 #include "BaseMonster.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMonsterDie);
 
 UCLASS()
 class TEAMCHRONO_API ABaseMonster : public ACharacter, public ICombatInterface
@@ -83,6 +84,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void InitFunc();
+
+	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
+	FOnMonsterDie MonsterDie;
 
 protected:
 	// Called when the game starts or when spawned
