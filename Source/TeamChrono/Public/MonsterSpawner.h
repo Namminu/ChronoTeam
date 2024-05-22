@@ -19,9 +19,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DestroySpawnedMonster();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void Temp_SpawnerInitFunc();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

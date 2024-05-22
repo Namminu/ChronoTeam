@@ -18,12 +18,8 @@ ABaseElite_MagicianMonster::ABaseElite_MagicianMonster()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	//BigAttackRangeBox = CreateDefaultSubobject<USphereComponent>(TEXT("Big Attack Range"));
-	//BigAttackRangeBox->SetupAttachment(GetCapsuleComponent());
-
 	DiePortalEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Die Portal"));
 	DiePortalEffect->SetupAttachment(GetCapsuleComponent());
-
 }
 
 void ABaseElite_MagicianMonster::BeginPlay()
@@ -32,11 +28,6 @@ void ABaseElite_MagicianMonster::BeginPlay()
 
 	SetFlashMTI();		//Set Flash MTI after Change MTI <- Opaque
 
-	////Cast to Player
-	//player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	//if (player == nullptr) UE_LOG(LogTemp, Error, TEXT("Magicball has Cast failed to Player"));
-
-	//isBigAck = false;
 	isMontage = false;
 	isCanAttack = false;
 
@@ -87,9 +78,6 @@ void ABaseElite_MagicianMonster::OnRangeOverlapEnd(UPrimitiveComponent* const Ov
 
 	if (otherActor->ActorHasTag("PLAYER"))
 	{
-		//isBigAck = true;
-		//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("isPlayerNormalRange", false);
-
 		isCanAttack = false;
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInAttackRange", false);
 	}
@@ -108,21 +96,17 @@ int ABaseElite_MagicianMonster::MeleeAttack_Implementation()
 /// </summary>
 void ABaseElite_MagicianMonster::mon_Death_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Magician Death Func Called"));
+	//BroadCast Monster Die Event
+	MonsterDie.Broadcast();
 
 	//Stop all Montages Before Death
 	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
-
-	//GetBigAttackRange()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//WhyOnlyUGetDown();
-
 	//Stop Movement
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	//Stop Collision
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
@@ -131,11 +115,6 @@ void ABaseElite_MagicianMonster::mon_Death_Implementation()
 	//Pause Death Montage On Layback
 	DeathFunc();
 }
-
-//void ABaseElite_MagicianMonster::InitFunc_Implementation()
-//{
-//	Super::InitFunc_Implementation();
-//}
 
 void ABaseElite_MagicianMonster::mon_Destroy()
 {
