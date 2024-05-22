@@ -10,6 +10,8 @@
 #include "GI_Chrono.h"
 #include "Base_Boss.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossDie);
+
 UCLASS()
 class TEAMCHRONO_API ABase_Boss : public ACharacter, public ICombatInterface
 {
@@ -122,6 +124,9 @@ public:
 		AActor* const otherActor,
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
+
+	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
+	FOnBossDie BossMonsterDie;
 
 private:
 ///Boss Name

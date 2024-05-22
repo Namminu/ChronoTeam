@@ -40,16 +40,6 @@ void ABoss_TimeMaster::BeginPlay()
 	cur_SkillCount = 0;
 	// Check Boss State Properties by Custom Game Instance
 	CheckStateFunc();
-
-	//// Reset Boss Pase Properties
-	//CurrentPase = 1;
-	//is2PaseStart = false;
-	//is3PaseStart = false;
-	//// Reset Boss Hp Rate For Spawn Monster by Hp Rate
-	//beforeHpRate = 100;
-	//// Reset Boss Hp Gimic Property
-	//bIsHpGimicFstStart = false;
-	//bIsHpGimicSndStart = false;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
@@ -282,6 +272,14 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 void ABoss_TimeMaster::Boss_Death_Implementation()
 {
 	Super::Boss_Death_Implementation();
+	StartChronoEndSequence();
+}
+
+void ABoss_TimeMaster::InitFunc_Implementation(FVector FirstLocation)
+{
+	//Reset Boss Properties by Game Instance
+	GetMyGI()->SetChronoNowHp(GetMyGI()->GetChronoMaxHp());
+	GetMyGI()->SetChrono_SpawnHpRate(100);
 }
 
 void ABoss_TimeMaster::AttackFunc_Implementation(int caseNum)
