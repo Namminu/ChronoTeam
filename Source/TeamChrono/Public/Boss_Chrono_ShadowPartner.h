@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Base_Boss.h"
 #include "Chrono_JustMeshPin.h"
+#include "Chrono_Weapon_ClockPin.h"
 #include "Boss_Chrono_ShadowPartner.generated.h"
 
 /**
@@ -86,6 +87,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeMoveOrbitDirection();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void DestroyShapaSafely();
+
 /// Timer Funcs	
 	UFUNCTION()
 	void Shapa_AttackEnd();
@@ -122,6 +126,9 @@ private:
 /// Weapon
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	TArray<AChrono_JustMeshPin*> ClockPinArray;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	TArray<AChrono_Weapon_ClockPin*> ClockPinWeapon;
 
 /// MTI
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MTI", meta = (AllowPrivateAccess = "true"))

@@ -32,6 +32,9 @@ void ABoss_TimeMaster::BeginPlay()
 
 	Super::BeginPlay();
 
+	// Reset Boss To Can Fight
+	SetIsCanFight(true);
+	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsCanFight", true);
 	// Reset Flash Material For Damage Flash
 	SetFlashMT(GetMesh(), 0);
 	// Setup Halo Material Instance
@@ -154,34 +157,37 @@ void ABoss_TimeMaster::SetFlashMT(USkeletalMeshComponent* skeleton, int index)
 
 void ABoss_TimeMaster::CheckCurrentPase()
 {
-	// Set Pase 2
-	if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= f_2PaseHp && (GetBossCurrentHp() / GetBossMaxHp()) * 100 > f_3PaseHp)
+	if (!(GetBossCurrentHp() <= 0))
 	{
-		if (!is2PaseStart)
+		// Set Pase 2
+		if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= f_2PaseHp && (GetBossCurrentHp() / GetBossMaxHp()) * 100 > f_3PaseHp)
 		{
-			is2PaseStart = true;
-			CurrentPase = 2;
-			SetInvincible(true);
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", true);
+			if (!is2PaseStart)
+			{
+				is2PaseStart = true;
+				CurrentPase = 2;
+				SetInvincible(true);
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", true);
 
-			ResetAttackTimer();
+				ResetAttackTimer();
+			}
 		}
-	}
-	// Set Pase 3
-	else if ((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= f_3PaseHp)
-	{
-		if (!is3PaseStart)
+		// Set Pase 3
+		else if (((GetBossCurrentHp() / GetBossMaxHp()) * 100 <= f_3PaseHp) && is2PaseStart)
 		{
-			is3PaseStart = true;
-			CurrentPase = 3;
-			SetInvincible(true);
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
-			UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", true);
+			if (!is3PaseStart)
+			{
+				is3PaseStart = true;
+				CurrentPase = 3;
+				SetInvincible(true);
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", true);
+				UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsPaseChange", true);
 
-			ResetAttackTimer();
+				ResetAttackTimer();
+			}
 		}
-	}
+	}	
 }
 
 void ABoss_TimeMaster::CheckSpawnHpRate()
@@ -241,11 +247,18 @@ void ABoss_TimeMaster::DestroyAllChrono()
 {
 	for (AChrono_JustMeshPin* PinMesh : ClockPinArray)
 	{
-		PinMesh->Destroy();
+		if (PinMesh)
+		{
+			PinMesh->Destroy();
+		}
+	
 	}
 	for (AChrono_Weapon_ClockPin* ClockWeapon : ClockPinWeapon)
 	{
-		ClockWeapon->Destroy();
+		if (ClockWeapon)
+		{
+			ClockWeapon->Destroy();
+		}	
 	}
 
 	Super::InitFunc_Implementation(GetActorLocation());
