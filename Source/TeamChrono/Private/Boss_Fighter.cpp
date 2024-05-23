@@ -224,7 +224,7 @@ void ABoss_Fighter::Boss_Death_Implementation()
 	{
 		WhenThisIsClone();
 	}
-	else ClearFighter();
+	//else ClearMyBoss();
 }
 
 void ABoss_Fighter::AttackFunc_Implementation(int caseNum)

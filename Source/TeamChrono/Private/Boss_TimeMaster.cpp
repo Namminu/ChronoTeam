@@ -293,6 +293,7 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 void ABoss_TimeMaster::Boss_Death_Implementation()
 {
 	Super::Boss_Death_Implementation();
+	//ClearMyBoss();
 	StartChronoEndSequence();
 }
 

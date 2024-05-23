@@ -112,7 +112,7 @@ void ABoss_Golem::Boss_Death_Implementation()
 	{
 		WhenThisIsClone();
 	}
-	else ClearGolem();
+	//else ClearMyBoss();
 
 	/*FTimerHandle TimerHandle;
 	float delay = 4.3f;
