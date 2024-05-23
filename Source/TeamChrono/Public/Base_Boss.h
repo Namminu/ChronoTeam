@@ -128,6 +128,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
 	FOnBossDie BossMonsterDie;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ClearMyBoss();
+
 private:
 ///Boss Name
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BOSS", meta = (AllowPrivateAccess = "true"))
