@@ -119,6 +119,9 @@ void ABase_Boss::SetFlashMTIArray_Implementation(UMaterialInstanceDynamic* MT)
 
 void ABase_Boss::Boss_Death_Implementation()
 {
+	//BroadCast Boss Monster Die Event
+	BossMonsterDie.Broadcast();
+
 	//Stop all Montages Before Death
 	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
 
@@ -145,10 +148,6 @@ void ABase_Boss::Boss_Death_Implementation()
 
 void ABase_Boss::InitFunc_Implementation(FVector FirstLocation)
 {
-	//f_bossCurrentHp = f_bossMaxHp;
-	//f_bossInitSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	//bCanFightNow = false;
-	
 	SetActorTickEnabled(false);
 	SetIsCanFight(false);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);

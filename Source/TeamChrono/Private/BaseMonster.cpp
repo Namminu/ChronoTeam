@@ -214,6 +214,9 @@ void ABaseMonster::mon_Death_Implementation()
 {
 	IsCanFight = false;
 
+	//BroadCast Monster Die Event
+	MonsterDie.Broadcast();
+
 	//Stop all Montages Before Death
 	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
 

@@ -85,12 +85,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeMoveOrbitDirection();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StartChronoEndSequence();
+
+	UFUNCTION(BlueprintCallable)
+	void DestroyAllChrono();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetSpawner();
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
 	void Boss_Death_Implementation() override;
 
-	//void InitFunc_Implementation() override;
+	void InitFunc_Implementation(FVector FirstLocation) override;
 
 	/// <summary>
 	/// Chrono Attack Func

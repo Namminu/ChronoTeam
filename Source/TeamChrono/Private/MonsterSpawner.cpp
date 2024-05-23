@@ -26,9 +26,7 @@ void AMonsterSpawner::BeginPlay()
 	
 	CurrentSpawn = 0;
 
-	isMonsterDied = true;
 	isAllMonsterDie = false;
-	//MyDoor = ConnectDoor;
 }
 
 // Called every frame
@@ -36,34 +34,12 @@ void AMonsterSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//if (IsDoorConnect&& SpawnedMonster)
-	//{
-	//	if (!SpawnedMonster->GetMonsterLive())
-	//	{
-	//		isMonsterDied = true;
-	//		RemoveMonster();
-
-	//		if (CurrentSpawn < SpawnCount)
-	//		{
-	//			//Destory Actor After DeathDelay
-	//			FTimerHandle TimerHandle;
-	//			float delay = 1.f;
-	//			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMonsterSpawner::SpawnMonster_Implementation, delay, false);
-	//		}
-	//		else
-	//		{
-	//			isAllMonsterDie = true;
-	//			SetActorTickEnabled(false);
-	//		}
-	//	}
-	//}
 }
 
 void AMonsterSpawner::InitFunc_Implementation()
 {
 	CurrentSpawn = 0;
 
-	isMonsterDied = true;
 	isAllMonsterDie = false;
 }
 
@@ -71,10 +47,8 @@ void AMonsterSpawner::SpawnMonster_Implementation()
 {
 	if (myMonster) 
 	{
-		if ((CurrentSpawn < SpawnCount) && isMonsterDied)
+		if (CurrentSpawn < SpawnCount)
 		{
-			isMonsterDied = false;
-
 			// 할당된 액터의 위치와 로테이션 가져오기
 			FVector SpawnLocation = GetActorLocation();
 			FRotator SpawnRotation = GetActorRotation();
@@ -94,6 +68,7 @@ void AMonsterSpawner::SpawnMonster_Implementation()
 
 			CurrentSpawn++;
 		}
+		else isAllMonsterDie = true;
 
 	}
 	else

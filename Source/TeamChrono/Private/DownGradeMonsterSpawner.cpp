@@ -2,6 +2,7 @@
 
 
 #include "DownGradeMonsterSpawner.h"
+#include "Monster_Weapon.h"
 
 // Sets default values
 ADownGradeMonsterSpawner::ADownGradeMonsterSpawner()
@@ -27,6 +28,12 @@ void ADownGradeMonsterSpawner::MonsterSpawn_Implementation()
 		// 액터 스폰
 		SpawnedMonster = GetWorld()->SpawnActor<ABaseMonster>(myMonster, SpawnLocation, SpawnRotation, ActorSpawnParams);
 	}
+}
+
+void ADownGradeMonsterSpawner::SpawnMonsterDestroy()
+{
+	SpawnedMonster->Destroy();
+	SpawnedMonster->GetWeaponInstance_Fst()->Destroy();
 }
 
 // Called when the game starts or when spawned
