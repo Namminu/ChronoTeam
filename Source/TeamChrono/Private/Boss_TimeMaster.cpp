@@ -11,6 +11,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GI_Chrono.h"
 
+
 ABoss_TimeMaster::ABoss_TimeMaster()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -242,6 +243,13 @@ void ABoss_TimeMaster::DestroyAllChrono()
 	{
 		PinMesh->Destroy();
 	}
+	for (AChrono_Weapon_ClockPin* ClockWeapon : ClockPinWeapon)
+	{
+		ClockWeapon->Destroy();
+	}
+
+	Super::InitFunc_Implementation(GetActorLocation());
+
 	Destroy();
 }
 
@@ -254,6 +262,18 @@ void ABoss_TimeMaster::ResetSpawner()
 	for (ADownGradeMonsterSpawner* SpawnerSnd : SpawnerSndArray)
 	{
 		SpawnerSnd->InitFunc();
+	}
+}
+
+void ABoss_TimeMaster::SpawnerInSequence()
+{
+	for (ADownGradeMonsterSpawner* SpawnerFst : SpawnerFstArray)
+	{
+		SpawnerFst->ResetInSequence();
+	}
+	for (ADownGradeMonsterSpawner* SpawnerSnd : SpawnerSndArray)
+	{
+		SpawnerSnd->ResetInSequence();
 	}
 }
 

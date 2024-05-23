@@ -50,7 +50,7 @@ void ABaseMonster::InitFunc()
 	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
 
 	//Stop BT 
-	if (AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController()))
+	if (AAI_Controller_* const monsterAI = Cast<AAI_Controller_>(this->GetController()))
 	{
 		monsterAI->StopAI();
 	}
