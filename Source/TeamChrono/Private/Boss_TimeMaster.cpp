@@ -236,6 +236,27 @@ void ABoss_TimeMaster::ChangeMoveOrbitDirection()
 	else fRotateSpeed = -1.f;
 }
 
+void ABoss_TimeMaster::DestroyAllChrono()
+{
+	for (AChrono_JustMeshPin* PinMesh : ClockPinArray)
+	{
+		PinMesh->Destroy();
+	}
+	Destroy();
+}
+
+void ABoss_TimeMaster::ResetSpawner()
+{
+	for (ADownGradeMonsterSpawner* SpawnerFst : SpawnerFstArray)
+	{
+		SpawnerFst->InitFunc();
+	}
+	for (ADownGradeMonsterSpawner* SpawnerSnd : SpawnerSndArray)
+	{
+		SpawnerSnd->InitFunc();
+	}
+}
+
 int ABoss_TimeMaster::MeleeAttack_Implementation()
 {
 	ResetAttackTimer();
@@ -280,6 +301,8 @@ void ABoss_TimeMaster::InitFunc_Implementation(FVector FirstLocation)
 	//Reset Boss Properties by Game Instance
 	GetMyGI()->SetChronoNowHp(GetMyGI()->GetChronoMaxHp());
 	GetMyGI()->SetChrono_SpawnHpRate(100);
+
+	ResetSpawner();
 }
 
 void ABoss_TimeMaster::AttackFunc_Implementation(int caseNum)

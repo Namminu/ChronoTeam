@@ -88,6 +88,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void StartChronoEndSequence();
 
+	UFUNCTION(BlueprintCallable)
+	void DestroyAllChrono();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetSpawner();
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
