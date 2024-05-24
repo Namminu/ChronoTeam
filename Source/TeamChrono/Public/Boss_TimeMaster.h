@@ -94,6 +94,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ResetSpawner();
 
+	UFUNCTION(BlueprintCallable)
+	void SpawnerInSequence();
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
@@ -214,8 +217,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	TArray<AChrono_JustMeshPin*> ClockPinArray;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-	//TArray<AChrono_Weapon_ClockPin*> ClockPinWeapon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	TArray<AChrono_Weapon_ClockPin*> ClockPinWeapon;
 
 /// For Attack Properties
 	// Flash MTI

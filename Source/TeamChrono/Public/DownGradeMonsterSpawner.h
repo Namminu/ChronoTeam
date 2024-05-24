@@ -25,6 +25,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void InitFunc();
 
+	UFUNCTION(BlueprintCallable)
+	void ResetInSequence();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void BindMonsterDieEvent();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,4 +45,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class ABaseMonster* SpawnedMonster;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TArray<ABaseMonster*> SpawnMosnterArray;
 };
