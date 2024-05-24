@@ -320,7 +320,4 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void IsNotLongAttacking();
-
-	UFUNCTION(BlueprintCallable)
-	void SetGravityMovement(FVector newLocation);
 };

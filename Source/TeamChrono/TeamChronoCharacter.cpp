@@ -406,11 +406,6 @@ void ATeamChronoCharacter::HandleOnMontageNotifyBegin(FName a_nNotifyName, const
 	}
 }
 
-void ATeamChronoCharacter::SetGravityMovement(FVector newLocation)
-{
-	GetCharacterMovement()->SetGravityDirection(newLocation);
-}
-
 void ATeamChronoCharacter::IsNotLongAttacking_Implementation()
 {
 	 LongAttacking = false;
