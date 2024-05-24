@@ -27,13 +27,27 @@ void ADownGradeMonsterSpawner::MonsterSpawn_Implementation()
 
 		// 액터 스폰
 		SpawnedMonster = GetWorld()->SpawnActor<ABaseMonster>(myMonster, SpawnLocation, SpawnRotation, ActorSpawnParams);
+		SpawnMosnterArray.Add(SpawnedMonster);
+
+		BindMonsterDieEvent();
 	}
 }
 
 void ADownGradeMonsterSpawner::SpawnMonsterDestroy()
 {
-	SpawnedMonster->Destroy();
-	SpawnedMonster->GetWeaponInstance_Fst()->Destroy();
+	for (ABaseMonster* const SpawnMonster : SpawnMosnterArray)
+	{
+		SpawnMonster->mon_Destroy();
+	}
+}
+
+void ADownGradeMonsterSpawner::ResetInSequence()
+{
+	for (ABaseMonster* const SpawnMonster : SpawnMosnterArray)
+	{
+		SpawnMonster->InitFunc();
+		SpawnMonster->mon_Destroy();
+	}
 }
 
 // Called when the game starts or when spawned

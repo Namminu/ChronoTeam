@@ -4,6 +4,7 @@
 #include "LevelTransferVolume.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/BoxComponent.h"
+#include <TeamChrono/TeamChronoCharacter.h>
 
 // Sets default values
 ALevelTransferVolume::ALevelTransferVolume()
@@ -32,11 +33,16 @@ void ALevelTransferVolume::OnCollisionOverlapBegin(UPrimitiveComponent* const Ov
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, 
 	int const OtherBodyIndex, bool const FromSweep, FHitResult const& SweepResult)
 {
-	if (otherActor->ActorHasTag("PLAYER"))
+	if (ATeamChronoCharacter* const Player = Cast<ATeamChronoCharacter>(otherActor))
 	{
 		FadeOut();
 		ChangeLevel();
 	}
+	//if (otherActor->ActorHasTag("PLAYER"))
+	//{
+	//	FadeOut();
+	//	ChangeLevel();
+	//}
 }
 
 void ALevelTransferVolume::ChangeLevel()

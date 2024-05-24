@@ -7,6 +7,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+//#include "../../../../../../../../Program Files/Epic Games/UE_5.3/Engine/Plugins/Animation/ControlRig/Source/ControlRig/Public/Rigs/RigHierarchy.h"
+//#include "../../../../../../../../Program Files/Epic Games/UE_5.3/Engine/Plugins/Animation/ControlRig/Source/ControlRig/Public/Rigs/RigHierarchy.h"
 
 ABoss_Chrono_ShadowPartner::ABoss_Chrono_ShadowPartner()
 {
@@ -116,6 +118,29 @@ void ABoss_Chrono_ShadowPartner::ChangeMoveOrbitDirection()
 	float RandomPC = FMath::FRand() * 100;
 	if (RandomPC < NormalPC) fRotateSpeed = 1.f;
 	else fRotateSpeed = -1.f;
+}
+
+void ABoss_Chrono_ShadowPartner::DestroyShapaSafely_Implementation()
+{
+	Super::InitFunc_Implementation(GetActorLocation());
+
+	for (AChrono_JustMeshPin* const PinMesh : ClockPinArray)
+	{
+		if (PinMesh)
+		{
+			PinMesh->Destroy();
+		}
+	}
+	for (AChrono_Weapon_ClockPin* const WeaponPin : ClockPinWeapon)
+	{
+		if (WeaponPin)
+		{
+			WeaponPin->Destroy();
+		}
+	}
+
+	//Destroy Self - Shapa
+	Destroy();
 }
 
 void ABoss_Chrono_ShadowPartner::Shapa_AttackEnd()
