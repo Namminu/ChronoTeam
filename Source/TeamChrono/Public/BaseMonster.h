@@ -7,9 +7,11 @@
 #include "GameFramework/Character.h"
 #include "CombatInterface.h"
 #include "Animation/AnimMontage.h"
+#include <TeamChrono/TeamChronoCharacter.h>
 //#include "Monster_Weapon.h"
 #include "BaseMonster.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMonsterDie);
 
 UCLASS()
 class TEAMCHRONO_API ABaseMonster : public ACharacter, public ICombatInterface
@@ -35,10 +37,6 @@ public:
 	UAnimMontage* GetDeathMontage() const;
 
 	int MeleeAttack_Implementation() override;
-
-	//기본 공격 함수
-	void AttackStart() const;
-	void AttackEnd() const;
 
 	//아처 전용 - 화살 발사 함수
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
@@ -84,8 +82,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void FocusToPlayer();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void InitFunc();
+
+	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
+	FOnMonsterDie MonsterDie;
 
 protected:
 	// Called when the game starts or when spawned
@@ -212,6 +213,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool IsCanFight;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PLAYER", meta = (AllowPrivateAccess = "true"))
+	ATeamChronoCharacter* player;
 
 public:
 /// Property Getter

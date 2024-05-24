@@ -7,7 +7,10 @@
 #include "CombatInterface.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include <TeamChrono/TeamChronoCharacter.h>
+#include "GI_Chrono.h"
 #include "Base_Boss.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBossDie);
 
 UCLASS()
 class TEAMCHRONO_API ABase_Boss : public ACharacter, public ICombatInterface
@@ -122,6 +125,12 @@ public:
 		UPrimitiveComponent* const OtherComponent,
 		int const OtherBodyIndex);
 
+	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
+	FOnBossDie BossMonsterDie;
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void ClearMyBoss();
+
 private:
 ///Boss Name
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BOSS", meta = (AllowPrivateAccess = "true"))
@@ -177,6 +186,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))
 	FVector BeginLocation;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DEATH", meta = (AllowPrivateAccess = "true"))
+	float fBossDeathTime;
+
 /// Weapon
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WEAPON", meta = (AllowPrivateAccess = "true"))
 	class ABase_BossWeapon* weaponInstance;
@@ -192,6 +204,16 @@ private:
 /// Arraies
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DAMAGE FLASH", meta = (AllowPrivateAccess = "true"))
 	TArray<UMaterialInstanceDynamic*> MTIArray;
+
+/// Game Instance
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GAME INSTANCE", meta = (AllowPrivateAccess = "true"))
+	UGI_Chrono* myGameInstance;
+
+/// Sequencer
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SEQUENCER", meta = (AllowPrivateAccess = "true"))
+	bool bIsBeginSequencer = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SEQUENCER", meta = (AllowPrivateAccess = "true"))
+	bool bIsEndSequencer = false;
 
 public:
 ///Getter
@@ -222,9 +244,12 @@ public:
 
 	UBehaviorTree* GetBehaviorTree() const { return BTree; }
 
+	class UGI_Chrono* GetMyGI() const { return myGameInstance; }
+
 ///Setter
 	void SetBossAtkMount(const float newMount) { f_bossAtk = newMount; }
 	void SetBossCurrentHp(const float newHp) { f_bossCurrentHp = newHp; }
+	void SetBossMaxHp(const float newHp) { f_bossMaxHp = newHp; }
 	void SetInvincible(const bool newBool) { bisInvincible = newBool; }
 	void SetMontageEnd(const bool newBool) { bIsMontageEnd = newBool; }
 	void SetIsCanFight(const bool newBool) { bCanFightNow = newBool; }

@@ -29,6 +29,9 @@ protected:
 
 public:
 /// Chrono Local Func
+	UFUNCTION(BlueprintCallable)
+	void CheckStateFunc();
+
 	/// <summary>
 	/// To Always Keep Distance from Player
 	/// 거리 유지하도록 만들려고 했다가 공전으로 이동하면서 안쓰는 함수
@@ -82,12 +85,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeMoveOrbitDirection();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void StartChronoEndSequence();
+
+	UFUNCTION(BlueprintCallable)
+	void DestroyAllChrono();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetSpawner();
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 
 	void Boss_Death_Implementation() override;
 
-	//void InitFunc_Implementation() override;
+	void InitFunc_Implementation(FVector FirstLocation) override;
 
 	/// <summary>
 	/// Chrono Attack Func
@@ -225,6 +237,10 @@ private:
 	bool is3PaseStart;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PASE", meta = (AllowPrivateAccess = "true"))
 	class UMaterialInstanceDynamic* HaloMTI;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	FColor Pase2Color;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PASE", meta = (AllowPrivateAccess = "true"))
+	FColor Pase3Color;
 
 	// Default Properties
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DEFAULT", meta = (AllowPrivateAccess = "true"))

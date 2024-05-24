@@ -215,8 +215,8 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 
 void ABoss_Fighter::Boss_Death_Implementation()
 {
-	GetBossWeapon()->Destroy();
-	AttachWeapon(GetBossWeapon()->GetClass(), "Weapon_ReverseSocket");
+	//GetBossWeapon()->Destroy();
+	//AttachWeapon(GetBossWeapon()->GetClass(), "Weapon_ReverseSocket");
 
 	Super::Boss_Death_Implementation();
 
@@ -224,6 +224,7 @@ void ABoss_Fighter::Boss_Death_Implementation()
 	{
 		WhenThisIsClone();
 	}
+	//else ClearMyBoss();
 }
 
 void ABoss_Fighter::AttackFunc_Implementation(int caseNum)

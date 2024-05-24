@@ -17,8 +17,8 @@ class TEAMCHRONO_API ABaseElite_MagicianMonster : public ABaseEliteMonster
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	ATeamChronoCharacter* player;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	//ATeamChronoCharacter* player;
 
 public:
 	ABaseElite_MagicianMonster();
@@ -88,8 +88,6 @@ public:
 	//void CreateMTI() override;
 
 	void mon_Death_Implementation();
-
-	void InitFunc_Implementation() override;
 
 	void mon_Destroy() override;
 

@@ -25,21 +25,6 @@ ABaseMonster::ABaseMonster()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//if (WeaponCollisionBox)	//Weapon 히트박스 설정
-	//{
-	//	//WeaponCollisionBox->SetBoxExtent(FVector(5.f));
-	//	//FAttachmentTransformRules const Rules{
-	//	//	EAttachmentRule::SnapToTarget,	//location
-	//	//	EAttachmentRule::SnapToTarget,	//rotation
-	//	//	EAttachmentRule::KeepWorld,		//World Scale
-	//	//	false	// Not default Attach to body
-	//	//};
-	//	//WeaponCollisionBox->AttachToComponent(GetMesh(), Rules, "hand_r_Socket");
-	//}
-
-	//WeaponCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Collision Box"));
-	//WeaponCollisionBox->SetupAttachment(GetMesh());
-
 	//Attack Range - Capsule Component Setup
 	AttackRangeBox = CreateDefaultSubobject<USphereComponent>(TEXT("Attack Range Box"));
 	AttackRangeBox->SetupAttachment(GetCapsuleComponent());
@@ -48,25 +33,11 @@ ABaseMonster::ABaseMonster()
 	NiagaraAttackEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Attack Effect"));
 	NiagaraAttackEffect->SetupAttachment(GetCapsuleComponent());
 }
-//
-//void ABaseMonster::FocusToPlayer()
-//{
-//	//FVector newTargetLocation = FVector(UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation().X, 
-//	//	UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation().Y, 0.f);
-//
-//	//SetActorRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Roll, 
-//	//	UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), newTargetLocation).Yaw));
-//
-	//FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(),
-	//	UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation());
 
-	//SetActorRotation(FRotator(GetActorRotation().Roll, GetActorRotation().Pitch, newRotation.Yaw));
-//}
-
-void ABaseMonster::InitFunc_Implementation()
+void ABaseMonster::InitFunc()
 {
 	SetActorTickEnabled(false);
-	SetMonsterCanFight(false);
+	//SetMonsterCanFight(false);
 
 	AttackRangeBox->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
 	AttackRangeBox->OnComponentEndOverlap.RemoveDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
@@ -83,19 +54,18 @@ void ABaseMonster::InitFunc_Implementation()
 	{
 		monsterAI->StopAI();
 	}
+	else UE_LOG(LogTemp, Error, TEXT("Base Monster Cast Failed to AI_Controller"));
 
-	//Destroy();
-	//WeaponInstance->Destroy();
-
-	FTimerHandle TimerHandle;
-	float delay = 3.3f;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);
+	DetachFromControllerPendingDestroy();
 }
 
 // Called when the game starts or when spawned  
 void ABaseMonster::BeginPlay()
 {
 	Super::BeginPlay();
+
+	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+	if (!player) UE_LOG(LogTemp, Error, TEXT("Cast Failed to Player in BaseMonster"));
 
 	//Begin With Deactivate Niagara Effect
 	if (GetAttackEffect() != nullptr)
@@ -121,22 +91,12 @@ void ABaseMonster::BeginPlay()
 
 	IsCanFight = true;
 
-	//if (WeaponCollisionBox != nullptr)
-	//{
-	//	WeaponCollisionBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapBegin);
-	//	WeaponCollisionBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnAttackOverlapEnd);
-	//}
-	//else UE_LOG(LogTemp, Error, TEXT("Weapon Collision Box is NULL"));
-
 	if (AttackRangeBox != nullptr)
 	{
 		AttackRangeBox->OnComponentBeginOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapBegin);
 		AttackRangeBox->OnComponentEndOverlap.AddDynamic(this, &ABaseMonster::OnRangeOverlapEnd);
 	}
 	else UE_LOG(LogTemp, Error, TEXT("Attack Range Box is NULL"));
-
-	//시작 시 무기 소지한 채로 시작
-	//AttachWeapon(monsterWeapon, "Weapon_R");
 
 	//시작 시 애니메이션 재생
 	Change_Opacity(0,1);
@@ -175,7 +135,6 @@ void ABaseMonster::OnRangeOverlapBegin(UPrimitiveComponent* const OverlappedComp
 	if (otherActor && otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", true);
-		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set True"));
 	}
 
 }
@@ -188,7 +147,6 @@ void ABaseMonster::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedCompon
 	if (otherActor && otherActor->ActorHasTag("PLAYER"))
 	{
 		UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("PlayerIsInMeleeRange", false);
-		//UE_LOG(LogTemp, Warning, TEXT("Player in Range set False"));
 	}
 }
 
@@ -197,14 +155,6 @@ void ABaseMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//if(IsCanFight)
-	//{
-	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanFightNow", true);
-	//}
-	//else if(!IsCanFight)
-	//{
-	//	UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanFightNow", false);
-	//}
 }
 
 // Called to bind functionality to input
@@ -222,23 +172,6 @@ int ABaseMonster::MeleeAttack_Implementation()
 	}
 	return 0;
 }
-
-void ABaseMonster::AttackStart() const
-{
-	//WeaponCollisionBox->SetCollisionProfileName("Fist");
-	//WeaponCollisionBox->SetNotifyRigidBodyCollision(true);
-	//WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-
-}
-
-//void ABaseMonster::AttackEnd() const
-//{
-//	WeaponCollisionBox->SetCollisionProfileName("Fist");
-//	WeaponCollisionBox->SetNotifyRigidBodyCollision(false);
-//	WeaponCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-//
-//	UE_LOG(LogTemp, Error, TEXT("Attack End"));
-//}
 
 float ABaseMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
@@ -281,6 +214,9 @@ void ABaseMonster::mon_Death_Implementation()
 {
 	IsCanFight = false;
 
+	//BroadCast Monster Die Event
+	MonsterDie.Broadcast();
+
 	//Stop all Montages Before Death
 	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
 
@@ -290,7 +226,6 @@ void ABaseMonster::mon_Death_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//GetWeaponColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
 	monsterAI->StopAI();	//Stop BT 
