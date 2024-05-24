@@ -24,7 +24,6 @@ EBTNodeResult::Type UBTTask_TimeDelayZoneFinish::ExecuteTask(UBehaviorTreeCompon
 			UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("ChangeSetup", false);
 			UAIBlueprintHelperLibrary::GetAIController(Chrono)->GetBlackboardComponent()->SetValueAsBool("IsAttack", false);
 
-			Chrono->SetInvincible(false);
 			Chrono->SetAttackTimer();
 		}
 	}
