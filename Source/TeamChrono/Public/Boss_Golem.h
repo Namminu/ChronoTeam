@@ -231,6 +231,7 @@ public:
 	float GetGolemCurrentAttackCount() const { return CurrentAtkCount; }
 	float GetGolemMaxAttackCount() const { return MaxAtkCount; }
 
+	bool GetFstGimicStart() const { return isFst_GimicStart; }
 	bool GetFstGimicIng() const { return isFst_GimicIng; }
 
 	bool GetSndJumping() const { return isSnd_JumpCenterIng; }
@@ -250,6 +251,8 @@ public:
 ///Setter
 	UFUNCTION(BlueprintCallable)
 	void SetGolemCurrentAttackCount(const float newCount) { CurrentAtkCount = newCount; }
+	UFUNCTION(BlueprintCallable)
+	void SetFstGimicStart(const bool newBool) { isFst_GimicStart = newBool; }
 	UFUNCTION(BlueprintCallable)
 	void SetFstGimicing(const bool newBool) { isFst_GimicIng = newBool; }
 	UFUNCTION(BlueprintCallable)

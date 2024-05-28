@@ -17,18 +17,19 @@ EBTNodeResult::Type UBTTask_GolemFstGimicSetFuncTime::ExecuteTask(UBehaviorTreeC
 	{
 		if (ABoss_Golem* const Golem = Cast<ABoss_Golem>(cont->GetPawn()))
 		{
-			if (!bFunctionsCalled)
+			if (!Golem->GetFstGimicStart())
 			{
 				//Call Fst Gimic Func
 				Golem->StartFstGimicTimer();
+				Golem->SetFstGimicStart(true);
 
-				// Mark that functions have been called
-				bFunctionsCalled = true;
+				UE_LOG(LogTemp, Error, TEXT("Golem Fst Gimic Called"));
 			}
 
 			//Check Fst Gimic is Playing
-			if (Golem->GetFstGimicIng())
+			if (Golem->GetFstGimicStart())
 			{					
+				UE_LOG(LogTemp, Error, TEXT("Golem Fst Gimic Not Called : true"));
 				//Still Fst Gimic Playing
 				return EBTNodeResult::Failed;
 			}

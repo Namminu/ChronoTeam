@@ -161,7 +161,7 @@ float ABoss_Golem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		//Fst_Gimic Start
 		if (GetBossCurrentHp() <= GetBossMaxHp() * (FstGimic_StartHp / 100) && !isFst_GimicStart)
 		{
-			isFst_GimicStart = true;
+			//isFst_GimicStart = true;
 			isFst_GimicIng = true;
 
 			//
