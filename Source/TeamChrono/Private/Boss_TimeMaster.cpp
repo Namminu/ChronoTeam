@@ -83,6 +83,7 @@ void ABoss_TimeMaster::CheckStateFunc()
 		GetPlayerProperty()->SetIsCanESkill(true);
 		GetPlayerProperty()->SetIsCanQSkill(false);
 		GetPlayerProperty()->SetIsCanTabSkill(false);
+		SetPlayerSKillUI(2);
 	}
 	//Check is Chrono 3Pase
 	else if (((GetMyGI()->GetChronoNowHp() / GetMyGI()->GetChronoMaxHp()) * 100) <= f_3PaseHp &&
@@ -110,6 +111,7 @@ void ABoss_TimeMaster::CheckStateFunc()
 		GetPlayerProperty()->SetIsCanESkill(true);
 		GetPlayerProperty()->SetIsCanQSkill(true);
 		GetPlayerProperty()->SetIsCanTabSkill(false);
+		SetPlayerSKillUI(3);
 	}
 	//Check is Chrono 1Pase
 	else
@@ -131,6 +133,7 @@ void ABoss_TimeMaster::CheckStateFunc()
 		GetPlayerProperty()->SetIsCanESkill(false);
 		GetPlayerProperty()->SetIsCanQSkill(false);
 		GetPlayerProperty()->SetIsCanTabSkill(false);
+		SetPlayerSKillUI(1);
 	}
 }
 

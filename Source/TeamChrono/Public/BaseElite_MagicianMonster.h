@@ -113,6 +113,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void CheckDistancePlayer();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void MakeSoundShieldBreak();
+
 private:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	//USphereComponent* BigAttackRangeBox;

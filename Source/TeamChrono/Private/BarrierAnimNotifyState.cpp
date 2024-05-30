@@ -12,7 +12,7 @@ void UBarrierAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAni
 		{
 			//Set Properties
 			Magician->SetInvincible(true);
-			Magician->SetIsMontage(true);
+			//Magician->SetIsMontage(true);
 			//Call BarrierFunc
 			Magician->beforeGimic();
 			Magician->ReNewBarrierHp();
