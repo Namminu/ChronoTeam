@@ -97,6 +97,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnerInSequence();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void SetPlayerSKillUI(int nowBossPase);
+
 /// Override Funcs
 	int MeleeAttack_Implementation() override;
 

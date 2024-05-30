@@ -181,7 +181,7 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 					SetisFstGimic(true);			//Change Property to Not Take FstGimic Again
 					SetInvincible(true);			//Not for Take Damage
 					isGimic = true;
-
+					isMontage = true;
 					//Set BlackBoard Properties to Make Barrier
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
@@ -194,7 +194,7 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 					SetisSndGimic(true);			//Change Property to Not Take SndGimic Again
 					SetInvincible(true);			//Not for Take Damage
 					isGimic = true;
-
+					isMontage = true;
 					//Set BlackBoard Properties to Make Barrier
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("CanTakeDamage", false);
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);				
@@ -214,7 +214,7 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 					SetInvincible(false);
 					GetSpecificEffect()->Deactivate();
 					isGimic = false;
-					UE_LOG(LogTemp, Error, TEXT("Gimic End"));
+					MakeSoundShieldBreak();
 					return 0.f;
 				}
 				BarrierFlash();
