@@ -49,13 +49,22 @@ void ABaseMonster::InitFunc()
 	//Stop all Montages Before Death
 	GetMesh()->GetAnimInstance()->StopAllMontages(NULL);
 
-	//Stop BT 
-	if (AAI_Controller_* const monsterAI = Cast<AAI_Controller_>(this->GetController()))
-	{
-		monsterAI->StopAI();
-	}
-	else UE_LOG(LogTemp, Error, TEXT("Base Monster Cast Failed to AI_Controller"));
+	////Stop BT 
+	//if (AAI_Controller_* const monsterAI = Cast<AAI_Controller_>(this->GetController()))
+	//{
+	//	monsterAI->StopAI();
+	//}
+	//else UE_LOG(LogTemp, Error, TEXT("Base Monster Cast Failed to AI_Controller"));
 
+	if (AController* cont = this->GetController())
+	{
+		if (AAI_Controller_* const monsterCont = Cast<AAI_Controller_>(cont))
+		{
+			monsterCont->StopAI();
+		}
+		else UE_LOG(LogTemp, Error, TEXT("BaseMonster : Failed to Cast in AI_Controller_"));
+	}
+	else UE_LOG(LogTemp, Error, TEXT("BaseMonster : Failed to Get Controller"));
 	DetachFromControllerPendingDestroy();
 }
 
