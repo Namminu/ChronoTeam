@@ -53,6 +53,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void DamageWeaponFlash();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void PlayShieldBreakSound();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void PlayShieldHitSound();
+
 	void mon_Destroy() override;
 
 /// Overlap Event Function 

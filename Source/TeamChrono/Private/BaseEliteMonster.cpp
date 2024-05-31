@@ -178,9 +178,11 @@ float ABaseEliteMonster::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 				}
 
 				BarrierHp -= DamageAmount;
+				PlayShieldHitSound();
 
 				if (BarrierHp <= 0)
 				{
+					PlayShieldBreakSound();
 					UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsGimicClear", true);
 				}
 			}
