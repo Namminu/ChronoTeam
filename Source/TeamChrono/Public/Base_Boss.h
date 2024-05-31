@@ -131,6 +131,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void ClearMyBoss();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void EyesOnPlayer();
+
 private:
 ///Boss Name
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BOSS", meta = (AllowPrivateAccess = "true"))

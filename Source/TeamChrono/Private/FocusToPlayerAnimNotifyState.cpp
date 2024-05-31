@@ -3,6 +3,7 @@
 
 #include "FocusToPlayerAnimNotifyState.h"
 #include "BaseMonster.h"
+#include "Base_Boss.h"
 #include <Kismet/GameplayStatics.h>
 
 
@@ -28,6 +29,10 @@ void UFocusToPlayerAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp,
 		if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
 		{
 			monster->FocusToPlayer();
+		}
+		else if (ABase_Boss* const Boss = Cast<ABase_Boss>(MeshComp->GetOwner()))
+		{
+			Boss->EyesOnPlayer();
 		}
 	}
 }
