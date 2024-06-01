@@ -17,6 +17,10 @@ class TEAMCHRONO_API UGI_Chrono : public UGameInstance
 	virtual void Init();
 
 private:
+	// About Game
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GAME", meta = (AllowPrivateAccess = "true"))
+	bool isGameClear;
+	// About Chrono
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CHORNO", meta = (AllowPrivateAccess = "true"))
 	float ChronoInitHp;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CHRONO", meta = (AllowPrivateAccess = "true"))
@@ -32,10 +36,14 @@ public:
 	float GetChronoNowHp() const { return ChronoCurrentHp; }
 	UFUNCTION(BlueprintCallable)
 	float GetChrono_SpawnHpRate() const { return Chrono_BeforeSpawnHp; }
+	UFUNCTION(BlueprintCallable)
+	bool GetGameClear() const { return isGameClear; }
 
 /// Setter
 	UFUNCTION(BlueprintCallable)
 	void SetChronoNowHp(const float newFloat) { ChronoCurrentHp = newFloat; }
 	UFUNCTION(BlueprintCallable)
 	void SetChrono_SpawnHpRate(const float newFloat) { Chrono_BeforeSpawnHp = newFloat; }
+	UFUNCTION(BlueprintCallable)
+	void SetGameClear(const bool newBool) { isGameClear = newBool; }
 };

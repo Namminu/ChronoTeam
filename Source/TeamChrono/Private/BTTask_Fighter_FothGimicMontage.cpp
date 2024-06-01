@@ -18,6 +18,7 @@ EBTNodeResult::Type UBTTask_Fighter_FothGimicMontage::ExecuteTask(UBehaviorTreeC
 		{
 			if (!Fighter->GetFothMontageING())
 			{
+				Fighter->SetInvincible(true);
 				Fighter->FothGimicMontage();
 
 				return EBTNodeResult::Failed;

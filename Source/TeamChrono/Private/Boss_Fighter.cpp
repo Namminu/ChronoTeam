@@ -83,13 +83,10 @@ void ABoss_Fighter::BeginPlay()
 	TrdGimicCurrentLightning = 0;
 
 	//Reset Foth Gimic Properties
-	FothGimicHpPercent = 20.f;
-	FothGimic_1stStarted = false;
-	FothGimic_2ndStarted = false;
-	FothGimic_3rdStarted = false;
-	FothGimic_4thStarted = false;
+	BeforeHpPercent = 100;
 	FotheGimic_MontageING = false;
 	FothGimic_MontageEnd = false;
+
 }
 
 void ABoss_Fighter::Tick(float DeltaTime)
@@ -209,7 +206,6 @@ int ABoss_Fighter::MeleeAttack_Implementation()
 		//For Trd Gimic Attack
 		CheckTrdAttackCount();
 	}
-
 	return 0;
 }
 
@@ -370,7 +366,6 @@ void ABoss_Fighter::SetSndGimicTimer()
 
 void ABoss_Fighter::Fst_SpawnArrow_Implementation()
 {
-	UE_LOG(LogTemp, Error, TEXT("Spawn Arrow Func Called"));
 }
 
 void ABoss_Fighter::SetPauseSndTimer()
@@ -419,50 +414,18 @@ void ABoss_Fighter::FothGimic_Implementation()
 
 void ABoss_Fighter::CheckHpPercent()
 {
-	int CurrentPercent = ((GetBossCurrentHp() / GetBossMaxHp()) * 100);
-
-	if (CurrentPercent <= 80 && CurrentPercent > 60 && !FothGimic_1stStarted)
+	if (!(GetBossCurrentHp() <= 0))
 	{
 		if (!isFstGimic && !isSndGimic && !isTrdGimic)
 		{
-			SetInvincible(true);
-			FothGimic_1stStarted = true;
-			FothGimic_Implementation();
+			float currentHpRate = ((GetBossCurrentHp() / GetBossMaxHp()) * 100);
 
-			UE_LOG(LogTemp, Error, TEXT("Foth Gimic 1 Start"));
+			if ((BeforeHpPercent - currentHpRate) >= FothGimicHpPercent)
+			{
+				BeforeHpPercent = BeforeHpPercent - FothGimicHpPercent;
+				FothGimic_Implementation();
+			}
 		}
-	}
-	else if (CurrentPercent <= 60 && CurrentPercent > 40 && !FothGimic_2ndStarted)
-	{
-		if (!isFstGimic && !isSndGimic && !isTrdGimic)
-		{
-			SetInvincible(true);
-			FothGimic_2ndStarted = true;
-			FothGimic_Implementation();
 
-			UE_LOG(LogTemp, Error, TEXT("Foth Gimic 2 Start"));
-		}
-	}
-	else if (CurrentPercent <= 40 && CurrentPercent > 20 && !FothGimic_3rdStarted)
-	{
-		if (!isFstGimic && !isSndGimic && !isTrdGimic)
-		{
-			SetInvincible(true);
-			FothGimic_3rdStarted = true;
-			FothGimic_Implementation();
-
-			UE_LOG(LogTemp, Error, TEXT("Foth Gimic 3 Start"));
-		}
-	}
-	else if (CurrentPercent <= 20 && CurrentPercent > 0 && !FothGimic_4thStarted)
-	{
-		if (!isFstGimic && !isSndGimic && !isTrdGimic)
-		{
-			SetInvincible(true);
-			FothGimic_4thStarted = true;
-			FothGimic_Implementation();
-
-			UE_LOG(LogTemp, Error, TEXT("Foth Gimic 4 Start"));
-		}
 	}
 }

@@ -28,6 +28,9 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void SetChronoGameClear(bool ClearGame);
+
 /// Chrono Local Func
 	UFUNCTION(BlueprintCallable)
 	void CheckStateFunc();

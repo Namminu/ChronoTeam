@@ -56,6 +56,11 @@ void ABoss_TimeMaster::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
+void ABoss_TimeMaster::SetChronoGameClear(bool ClearGame)
+{
+	GetMyGI()->SetGameClear(ClearGame);
+}
+
 void ABoss_TimeMaster::CheckStateFunc()
 {
 	//Check is Chrono 2Pase

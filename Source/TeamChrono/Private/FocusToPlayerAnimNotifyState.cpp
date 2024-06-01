@@ -5,21 +5,16 @@
 #include "BaseMonster.h"
 #include "Base_Boss.h"
 #include <Kismet/GameplayStatics.h>
-
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "BossAIController.h"
 
 void UFocusToPlayerAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-	//Get Player Location
-	player = Cast<ATeamChronoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	//playerLocation = player->GetActorLocation();
-
-	//if (MeshComp && MeshComp->GetOwner())
-	//{
-	//	if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
-	//	{
-	//		monster->GetActorLocation();
-	//	}
-	//}
+	if (ABase_Boss* const Boss = Cast<ABase_Boss>(MeshComp->GetOwner()))
+	{
+		Boss->ResetSimpleMoveTo();
+	}
 }
 
 void UFocusToPlayerAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
@@ -39,11 +34,8 @@ void UFocusToPlayerAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp,
 
 void UFocusToPlayerAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	//if (MeshComp && MeshComp->GetOwner())
-	//{
-	//	if (ABaseMonster* const monster = Cast<ABaseMonster>(MeshComp->GetOwner()))
-	//	{
-	//		monster->FocusToPlayer(false);
-	//	}
-	//}
+	if (ABase_Boss* const Boss = Cast<ABase_Boss>(MeshComp->GetOwner()))
+	{
+		Boss->ResetSimpleMoveTo();
+	}
 }

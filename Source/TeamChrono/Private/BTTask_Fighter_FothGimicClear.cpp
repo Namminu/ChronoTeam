@@ -20,13 +20,14 @@ EBTNodeResult::Type UBTTask_Fighter_FothGimicClear::ExecuteTask(UBehaviorTreeCom
 	Fighter->SetMontageEnd(false);
 	Fighter->SetFothMontageING(false);
 	Fighter->SetFothMontageEnd(false);
+
+	Fighter->SetInvincible(false);
+	Fighter->SetIsFothGimicING(false);
+
 	//Clear Properties
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsFothGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsGimic", false);
 	UAIBlueprintHelperLibrary::GetAIController(Fighter)->GetBlackboardComponent()->SetValueAsBool("IsMontageEnd", false);
-
-	Fighter->SetInvincible(false);
-	Fighter->SetIsFothGimicING(false);
 
 	Fighter->ChangeMoveSpeed(750);
 

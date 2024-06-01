@@ -185,3 +185,16 @@ void ABase_Boss::OnRangeOverlapEnd(UPrimitiveComponent* const OverlappedComponen
 	AActor* const otherActor, UPrimitiveComponent* const OtherComponent, int const OtherBodyIndex)
 {
 }
+
+void ABase_Boss::ResetSimpleMoveTo()
+{
+	if (ABossAIController* BossAI = Cast<ABossAIController>(GetController()))
+	{
+		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(BossAI, GetActorLocation());
+
+		BossAI->StopMovement();
+
+		UE_LOG(LogTemp, Warning, TEXT("BaseBoss : Reset Move to"));
+	}
+	else UE_LOG(LogTemp, Warning, TEXT("BaseBoss : Cast failed to Cont"));
+}
