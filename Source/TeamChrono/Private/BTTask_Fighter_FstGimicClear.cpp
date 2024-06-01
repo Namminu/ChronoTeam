@@ -29,5 +29,7 @@ EBTNodeResult::Type UBTTask_Fighter_FstGimicClear::ExecuteTask(UBehaviorTreeComp
 
 	Fighter->ChangeMoveSpeed(750);
 
+	UE_LOG(LogTemp, Error, TEXT("Fighter Foth Gimic Clear"));
+
 	return EBTNodeResult::Succeeded;
 }

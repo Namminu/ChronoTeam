@@ -238,12 +238,10 @@ private:
 	int TrdGimicCurrentLightning;
 
 	// Foth Gimic Properties
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "FOTH GIMIC", meta = (AllowPrivateAccess = "true"))
-	int FothGimicHpPercent;
-	bool FothGimic_1stStarted;
-	bool FothGimic_2ndStarted;
-	bool FothGimic_3rdStarted;
-	bool FothGimic_4thStarted;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "temp_Foth", meta = (AllowPrivateAccess = "true"))
+	float FothGimicHpPercent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "temp_Foth", meta = (AllowPrivateAccess = "true"))
+	float BeforeHpPercent;
 	bool FotheGimic_MontageING;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "FOTH GIMIC", meta = (AllowPrivateAccess = "true"))
 	bool FothGimic_MontageEnd;

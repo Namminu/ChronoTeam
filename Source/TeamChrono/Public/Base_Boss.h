@@ -134,6 +134,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void EyesOnPlayer();
 
+	UFUNCTION(BlueprintCallable)
+	void ResetSimpleMoveTo();
+
 private:
 ///Boss Name
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BOSS", meta = (AllowPrivateAccess = "true"))
