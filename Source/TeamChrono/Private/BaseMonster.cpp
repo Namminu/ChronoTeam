@@ -236,8 +236,12 @@ void ABaseMonster::mon_Death_Implementation()
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
-	monsterAI->StopAI();	//Stop BT 
+	if (AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController()))
+	{
+		monsterAI->StopAI();
+	}
+	//AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
+	//monsterAI->StopAI();	//Stop BT 
 	DetachFromControllerPendingDestroy();
 
 	PlayAnimMontage(DeathMontage);	//Death Animation	

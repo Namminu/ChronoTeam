@@ -8,7 +8,6 @@
 #include "CombatInterface.h"
 #include "Animation/AnimMontage.h"
 #include <TeamChrono/TeamChronoCharacter.h>
-//#include "Monster_Weapon.h"
 #include "BaseMonster.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMonsterDie);
