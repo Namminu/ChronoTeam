@@ -333,9 +333,10 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 
 void ABoss_TimeMaster::Boss_Death_Implementation()
 {
+	StartChronoEndSequence();
+
 	Super::Boss_Death_Implementation();
 	//ClearMyBoss();
-	StartChronoEndSequence();
 }
 
 void ABoss_TimeMaster::InitFunc_Implementation(FVector FirstLocation)
