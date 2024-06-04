@@ -44,6 +44,9 @@ void ABoss_TimeMaster::BeginPlay()
 	cur_SkillCount = 0;
 	// Check Boss State Properties by Custom Game Instance
 	CheckStateFunc();
+
+	//시연용 수치
+	temp_SkillNum = 1;
 }
 
 void ABoss_TimeMaster::Tick(float DeltaTime)
@@ -317,7 +320,14 @@ int ABoss_TimeMaster::MeleeAttack_Implementation()
 	// Gimic Attack / Not Normal Attack, Not Strike Attack 
 	else if (cur_StrikeCount < max_StrikeCount && cur_SkillCount >= max_SkillCount)
 	{
-		GimicFunc(GetRandomAttackNum(1, GimicTotalCount));
+		//GimicFunc(GetRandomAttackNum(1, GimicTotalCount));		
+		//cur_SkillCount = 0;
+
+
+		//시연용 수치, 추후 삭제
+		if (temp_SkillNum < 4) temp_SkillNum++;
+		else temp_SkillNum = 1;
+		GimicFunc(temp_SkillNum);
 		cur_SkillCount = 0;
 	}
 	else

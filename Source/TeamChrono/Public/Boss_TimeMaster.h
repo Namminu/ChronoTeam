@@ -306,6 +306,9 @@ private:
 	bool bIsHpGimicFstStart;
 	bool bIsHpGimicSndStart;
 	
+	//시연용 공격 카운트 수치
+	int temp_SkillNum;
+
 public:
 ///Getter
 	// Default 
