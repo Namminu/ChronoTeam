@@ -59,7 +59,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void PlayShieldHitSound();
 
-	void mon_Destroy() override;
+	void mon_Destroy();
 
 /// Overlap Event Function 
 	void OnAttackOverlapBegin(UPrimitiveComponent* const OverlappedComponent,

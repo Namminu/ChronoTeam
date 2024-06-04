@@ -108,8 +108,12 @@ void ABaseElite_MagicianMonster::mon_Death_Implementation()
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
-	monsterAI->StopAI();	//Stop BT 
+	////Stop BT 
+	//if (AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController()))
+	//{
+	//	monsterAI->StopAI();
+	//}
+
 	DetachFromControllerPendingDestroy();
 	
 	//Pause Death Montage On Layback

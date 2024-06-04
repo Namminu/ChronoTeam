@@ -67,7 +67,7 @@ public:
 	void mon_Death();
 
 	UFUNCTION(BlueprintCallable)
-	virtual void mon_Destroy();
+	void mon_Destroy();
 
 	//Create Dynamic Material Instance Function
 	UFUNCTION(BlueprintCallable)
