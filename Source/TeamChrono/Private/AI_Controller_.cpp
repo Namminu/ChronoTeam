@@ -15,11 +15,16 @@ AAI_Controller_::AAI_Controller_(FObjectInitializer const& ObjectInitializer)
 
 void AAI_Controller_::StopAI()
 {
-	auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
-	if (nullptr != BehaviorTreeComponent)
+	//auto BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
+	//if (nullptr != BehaviorTreeComponent)
+	//{
+	//	BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+	//	//BehaviorTreeComponent->StopLogic("Dead");
+	//}
+
+	if (UBehaviorTreeComponent* const BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent))
 	{
 		BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
-		//BehaviorTreeComponent->StopLogic("Dead");
 	}
 }
 
@@ -29,7 +34,7 @@ void AAI_Controller_::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 	if (ABaseMonster* const baseMonster = Cast<ABaseMonster>(InPawn))
 	{
-		if (UBehaviorTree* const  BTree = baseMonster->GetBehaviorTree())
+		if (UBehaviorTree* const BTree = baseMonster->GetBehaviorTree())
 		{
 			UBlackboardComponent* bb;
 			UseBlackboard(BTree->BlackboardAsset, bb);

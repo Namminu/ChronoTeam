@@ -236,7 +236,7 @@ void ABaseMonster::mon_Death_Implementation()
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);	
 	GetAttackRangeColl()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	if (AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController()))
+	if (AAI_Controller_* const monsterAI = Cast<AAI_Controller_>(GetController()))
 	{
 		monsterAI->StopAI();
 	}
