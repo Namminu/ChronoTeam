@@ -240,17 +240,11 @@ void ABaseMonster::mon_Death_Implementation()
 	{
 		monsterAI->StopAI();
 	}
-	//AAI_Controller_* monsterAI = Cast<AAI_Controller_>(GetController());
-	//monsterAI->StopAI();	//Stop BT 
 
 	//DetachFromControllerPendingDestroy();
 
 	PlayAnimMontage(DeathMontage);	//Death Animation	
 	Change_Opacity(1, 0);	//Change Opacity to 1 -> 0
-
-	//FTimerHandle TimerHandle;
-	//float delay = 3.3f;
-	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABaseMonster::mon_Destroy, delay, false);	//Destory Actor After DeathDelay
 }
 
 void ABaseMonster::mon_Destroy()
