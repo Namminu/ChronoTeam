@@ -156,7 +156,8 @@ void ABaseElite_MagicianMonster::SpawnMonster()
 	}
 }
 
-float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
+	AController* EventInstigator, AActor* DamageCauser)
 {
 	//Check is Playing Make Barrier Animation
 	if (!isMontage)
@@ -172,7 +173,6 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 				if (GetMonCurrentHp() <= 0)
 				{
 					SetMonsterLive(false);
-					//UAIBlueprintHelperLibrary::GetAIController(this)->GetBlackboardComponent()->SetValueAsBool("IsMonsterLive", false);
 					mon_Death();					//Magician Die
 					return 0.f;
 				}
@@ -226,5 +226,5 @@ float ABaseElite_MagicianMonster::TakeDamage(float DamageAmount, FDamageEvent co
 		}
 	}
 
-	return 0.0f;
+	return 0.f;
 }
