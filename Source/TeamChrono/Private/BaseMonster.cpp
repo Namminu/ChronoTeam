@@ -239,6 +239,13 @@ void ABaseMonster::mon_Death_Implementation()
 	if (AAI_Controller_* const monsterAI = Cast<AAI_Controller_>(GetController()))
 	{
 		monsterAI->StopAI();
+		if (ensure(monsterAI != nullptr))
+		{
+			monsterAI->PawnPendingDestroy(this);
+			monsterAI->UnPossess();
+			Controller = nullptr;
+		}
+		else UE_LOG(LogTemp, Error, TEXT("AI Controller NULL Error After StopAI"));
 	}
 
 	//DetachFromControllerPendingDestroy();
