@@ -43,14 +43,6 @@ void ANotifierDoor::Tick(float DeltaTime)
 			SetOpenDoor();
 			SetActorTickEnabled(false);
 		}
-
-		//for (AMonsterSpawner* Spawner : SpawnerArray)
-		//{
-		//	if (Spawner->GetAllMonsterDie())
-		//	{
-
-		//	}
-		//}
 	}
 }
 
